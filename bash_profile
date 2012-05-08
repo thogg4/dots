@@ -1,4 +1,4 @@
-alias m='choc'
+alias m='vi'
 alias starthyde='VBoxManage startvm hyde --type headless'
 alias stophyde='VBoxManage controlvm hyde poweroff'
 alias sshhyde='ssh hyde@192.168.56.101'
