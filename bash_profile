@@ -26,7 +26,13 @@ alias colorslist="set | egrep 'COLOR_\w*'" # Lists all the colors, uses vars in 
 
 
 # Prompts ----------------------------------------------------------
-# export PS1="\[${COLOR_GREEN}\]\w > \[${COLOR_NC}\]" # Primary prompt with only a path
+
+# old, big prompt
 # export PS1="\[${COLOR_RED}\]\u@\h \[${COLOR_WHITE}\]\w \[${COLOR_NC}\] \n> "
-export PS1="\[${COLOR_RED}\]\W\[${COLOR_NC}\]> "
+
+# jekyll
+# export PS1="\[${COLOR_RED}\]\W\[${COLOR_NC}\]> "
+
+# bindle
+export PS1="\[${COLOR_GREEN}\]\W\[${COLOR_NC}\]> "
 
