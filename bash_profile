@@ -1,13 +1,6 @@
 alias m='vi'
-alias starthyde='VBoxManage startvm hyde --type headless'
-alias stophyde='VBoxManage controlvm hyde poweroff'
-alias sshhyde='ssh hyde@192.168.56.101'
 alias cell='cd ~/Dropbox/rails/cellar/'
 alias goo='cd ~/Google\ Drive/'
-
-alias bd='ruby script/build_dylan.rb'
-
-export EDITOR='m'
 
 
 # Setup some colors to use later in interactive shell or scripts
@@ -33,17 +26,7 @@ alias colorslist="set | egrep 'COLOR_\w*'" # Lists all the colors, uses vars in 
 
 
 # Prompts ----------------------------------------------------------
-#export PS1="\[${COLOR_GREEN}\]\w > \[${COLOR_NC}\]" # Primary prompt with only a path
-export PS1="\[${COLOR_RED}\]\u@\h \[${COLOR_WHITE}\]\w \[${COLOR_NC}\] \n> "
+# export PS1="\[${COLOR_GREEN}\]\w > \[${COLOR_NC}\]" # Primary prompt with only a path
+# export PS1="\[${COLOR_RED}\]\u@\h \[${COLOR_WHITE}\]\w \[${COLOR_NC}\] \n> "
+export PS1="\[${COLOR_RED}\]\W\[${COLOR_NC}\]> "
 
-# This runs before the prompt and sets the title of the xterm* window. If you set the title in the prompt
-# weird wrapping errors occur on some systems, so this method is superior
-export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*} ${PWD}"; echo -ne "\007"' # user@host path
-
-
-
-echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function' >> ~/.bash_profile[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-export CC=/usr/bin/gcc-4.2
-
-
-[ -s "$HOME/.scm_breeze/scm_breeze.sh" ] && source "$HOME/.scm_breeze/scm_breeze.sh"
