@@ -3,6 +3,12 @@ alias cell='cd ~/Dropbox/rails/cellar/'
 alias goo='cd ~/Google\ Drive/'
 
 
+# aliases for git
+alias gs='git status -s'
+alias gp='git pull'
+
+
+
 # Setup some colors to use later in interactive shell or scripts
 export COLOR_NC='\e[0m' # No Color
 export COLOR_WHITE='\e[1;37m'
@@ -31,8 +37,14 @@ alias colorslist="set | egrep 'COLOR_\w*'" # Lists all the colors, uses vars in 
 # export PS1="\[${COLOR_RED}\]\u@\h \[${COLOR_WHITE}\]\w \[${COLOR_NC}\] \n> "
 
 # jekyll
-# export PS1="\[${COLOR_RED}\]\W\[${COLOR_NC}\]> "
+export PS1="\n\[${COLOR_RED}\]\W\[${COLOR_NC}\] > "
 
 # bindle
-export PS1="\[${COLOR_GREEN}\]\W\[${COLOR_NC}\]> "
+# export PS1="\[${COLOR_GREEN}\]\W\[${COLOR_NC}\] > "
 
+
+
+
+
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
