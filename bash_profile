@@ -36,14 +36,12 @@ alias colorslist="set | egrep 'COLOR_\w*'" # Lists all the colors, uses vars in 
 # old, big prompt
 # export PS1="\[${COLOR_RED}\]\u@\h \[${COLOR_WHITE}\]\w \[${COLOR_NC}\] \n> "
 
-# jekyll
-# export PS1="\n\[${COLOR_RED}\]\W\[${COLOR_NC}\] > "
+# hog
+export PS1="\n\[${COLOR_RED}\]\W\[${COLOR_NC}\] > "
 
-# bindle
-export PS1="\n\[${COLOR_GREEN}\]\W\[${COLOR_NC}\] > "
-
-
+# linus
+export PS1="\n\[${COLOR_PURPLE}\]\W\[${COLOR_NC}\] > "
 
 
 
-
+eval "$(rbenv init -)"
