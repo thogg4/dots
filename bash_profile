@@ -56,7 +56,7 @@ git_prompt ()
 }
 
 # Prompts ----------------------------------------------------------
-PROMPT_COMMAND='PS1="\n${COLOR_PURPLE}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
+PROMPT_COMMAND='PS1="\n${COLOR_LIGHT_BLUE}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
 
 
 
