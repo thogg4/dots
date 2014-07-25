@@ -1,13 +1,32 @@
 alias m='vi'
-alias cell='cd ~/Dropbox/rails/cellar/'
 alias goo='cd ~/Google\ Drive/'
+alias be='bundle exec'
+alias download='scp -r thogg4@boiled.whatbox.ca:~/files/download/ .'
+alias what='ssh thogg4@boiled.whatbox.ca'
+alias audio="sudo kill -9 `ps ax|grep 'coreaudio[a-z]' | awk '{print $1}'`"
 
+# for rails
 alias rr='rake routes'
 
 
-# aliases for git
+# for git
 alias gs='git status'
+alias ga='git add -A'
+alias gc='git commit'
 alias gp='git pull'
+
+# Color LS
+colorflag="-G"
+alias ls="command ls ${colorflag}"
+alias l="ls -lF ${colorflag}" # all files, in long format
+alias la="ls -laF ${colorflag}" # all files inc dotfiles, in long format
+alias lsd='ls -lF ${colorflag} | grep "^d"' # only directories
+
+# Quicker navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
 
 
 
@@ -56,24 +75,29 @@ git_prompt ()
 }
 
 # Prompts ----------------------------------------------------------
-PROMPT_COMMAND='PS1="\n${COLOR_LIGHT_BLUE}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
-
+PROMPT_COMMAND='PS1="\n${COLOR_LIGHT_GRAY}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
 
 
 eval "$(rbenv init -)"
-
 
 export PATH=$HOME/bin:./vendor/bundle/bin:$HOME/.rbenv/shims:$PATH
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-### For Postgres
 export PATH="/usr/local/bin:$PATH"
+
+### For Postgres
+export PATH="/Applications/Postgres.app/Contents/MacOS/bin:$PATH"
 
 ### For NodeJs
 export PATH="/usr/local/share/npm/bin:$PATH"
 
-export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
+# export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
+export SSL_CERT_FILE=/usr/local/etc/openssl/certs/cert.pem
 
-#export EDITOR='subl -w'
+
+# oracle stuff
+export NLS_LANG="AMERICAN_AMERICA.UTF8"
+export ORACLE_HOME=/opt/oracle/instantclient
+export DYLD_LIBRARY_PATH=$ORACLE_HOME

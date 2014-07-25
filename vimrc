@@ -1,6 +1,7 @@
-call pathogen#runtime_append_all_bundles()
+call pathogen#incubate()
 set noswapfile
 filetype plugin indent on
+filetype plugin on
 
 " Make Vim remember cursor position
 if has("autocmd")
@@ -65,9 +66,8 @@ set backspace=2            " allow backspacing over everything in insert mode
 set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
-colorscheme blacksea
-set background=dark
-syntax on
+syntax enable
+colorscheme blackhog
 set pastetoggle=<Leader>p
 
 
@@ -91,7 +91,7 @@ set visualbell             " shut the fuck up
 function! StripWhitespace ()
     exec ':%s/ \+$//gc'
 endfunction
-map ,s :call StripWhitespace ()<CR>
+map <Leader>s :call StripWhitespace ()<CR>
 
 
 " ---------------------------------------------------------------------------
@@ -105,4 +105,7 @@ nmap <Leader>m :NERDTreeClose<CR>:NERDTreeFind<CR>
 " ---------------------------------------------------------------------------
 "  CTRL P
 " ---------------------------------------------------------------------------
+let g:ctrlp_map = '<D-p>'
 let g:ctrlp_custom_ignore = 'vendor\/'
+
+

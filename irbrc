@@ -32,18 +32,6 @@ def r
   reload!
 end
 
-
-# Break out of the Bundler jail
-# from https://github.com/ConradIrwin/pry-debundle/blob/master/lib/pry-debundle.rb
-if defined? Bundler
-  begin
-    Gem.post_reset_hooks.reject! { |hook| hook.source_location.first =~ %r{/bundler/} }
-    Gem::Specification.reset
-    load 'rubygems/custom_require.rb'
-  rescue LoadError
-  end
-end
-
 if defined? Rails
   begin
   rescue LoadError
