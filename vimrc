@@ -1,4 +1,4 @@
-call pathogen#incubate()
+call pathogen#infect('bundle/{}')
 set noswapfile
 filetype plugin indent on
 filetype plugin on
