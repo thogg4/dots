@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/Users/hogair/book/dockerfiles/lib'
-let g:netrw_dirhist_2='/Users/hogair/book/dockerfiles'
-let g:netrw_dirhist_3='/Users/hogair/book/nibley/lib'
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/thogg4/projects/br'
+let g:netrw_dirhist_2='/Users/thogg4/rye/imposter'
+let g:netrw_dirhist_3='/Users/thogg4/ss/ccpz/spec'
+let g:netrw_dirhist_4='/Users/thogg4/rye/imposter'

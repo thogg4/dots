@@ -4,6 +4,16 @@ alias be='bundle exec'
 alias download='scp -r thogg4@boiled.whatbox.ca:~/files/download/ .'
 alias what='ssh thogg4@boiled.whatbox.ca'
 alias audio="sudo kill -9 `ps ax|grep 'coreaudio[a-z]' | awk '{print $1}'`"
+alias dm='docker-machine'
+alias dc='docker-compose'
+alias dmenv='eval "$(docker-machine env $1)"'
+
+#cd() {
+#  builtin cd $*
+#  if test -f "${PWD}/docker-machine.sh"; then source docker-machine.sh; fi
+#}
+#eval "$(docker-machine env machine)"
+export POSTGRES_HOST='machine'
 
 # for rails
 alias rr='rake routes'
@@ -14,21 +24,6 @@ alias gs='git status'
 alias ga='git add -A'
 alias gc='git commit'
 alias gp='git pull'
-
-# Color LS
-colorflag="-G"
-alias ls="command ls ${colorflag}"
-alias l="ls -lF ${colorflag}" # all files, in long format
-alias la="ls -laF ${colorflag}" # all files inc dotfiles, in long format
-alias lsd='ls -lF ${colorflag} | grep "^d"' # only directories
-
-# Quicker navigation
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-
-
 
 # Setup some colors to use later in interactive shell or scripts
 export COLOR_NC='\[\e[0m\]' # No Color
@@ -78,8 +73,6 @@ git_prompt ()
 PROMPT_COMMAND='PS1="\n${COLOR_LIGHT_GRAY}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
 
 
-eval "$(rbenv init -)"
-
 export PATH=$HOME/bin:./vendor/bundle/bin:$HOME/.rbenv/shims:$PATH
 
 ### Added by the Heroku Toolbelt
@@ -88,16 +81,8 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="/usr/local/bin:$PATH"
 
 ### For Postgres
-export PATH="/Applications/Postgres.app/Contents/MacOS/bin:$PATH"
+export PATH="/Applications/Postgres.app/Contents/Versions/9.4/bin:$PATH"
 
 ### For NodeJs
 export PATH="/usr/local/share/npm/bin:$PATH"
 
-# export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
-export SSL_CERT_FILE=/usr/local/etc/openssl/certs/cert.pem
-
-
-# oracle stuff
-export NLS_LANG="AMERICAN_AMERICA.UTF8"
-export ORACLE_HOME=/opt/oracle/instantclient
-export DYLD_LIBRARY_PATH=$ORACLE_HOME
