@@ -86,3 +86,6 @@ export PATH="/Applications/Postgres.app/Contents/Versions/9.4/bin:$PATH"
 ### For NodeJs
 export PATH="/usr/local/share/npm/bin:$PATH"
 
+### For rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
