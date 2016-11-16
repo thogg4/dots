@@ -11,10 +11,11 @@ git_bundles = [
   "git://github.com/kchmck/vim-coffee-script.git",
   "git://github.com/altercation/vim-colors-solarized.git",
   "git://github.com/pangloss/vim-javascript.git",
-  "git://github.com/bbommarito/vim-slim.git",
+  "git@github.com:slim-template/vim-slim.git",
   "git://github.com/groenewege/vim-less.git",
   "git://github.com/juvenn/mustache.vim.git",
-  "git://github.com/flazz/vim-colorschemes.git"
+  "git://github.com/flazz/vim-colorschemes.git",
+  "git@github.com:vim-airline/vim-airline.git"
 ]
 
 vim_org_scripts = [
