@@ -1,10 +1,15 @@
-" MIT License. Copyright (c) 2013-2016 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
 
 scriptencoding utf-8
 
-let g:airline#extensions#quickfix#quickfix_text = 'Quickfix'
-let g:airline#extensions#quickfix#location_text = 'Location'
+if !exists('g:airline#extensions#quickfix#quickfix_text')
+  let g:airline#extensions#quickfix#quickfix_text = 'Quickfix'
+endif
+
+if !exists('g:airline#extensions#quickfix#location_text')
+  let g:airline#extensions#quickfix#location_text = 'Location'
+endif
 
 function! airline#extensions#quickfix#apply(...)
   if &buftype == 'quickfix'
@@ -27,6 +32,14 @@ function! airline#extensions#quickfix#inactive_qf_window(...)
 endfunction
 
 function! s:get_text()
+  if exists("*win_getid") && exists("*getwininfo")
+    let dict = getwininfo(win_getid())
+    if len(dict) > 0 && get(dict[0], 'quickfix', 0) && !get(dict[0], 'loclist', 0)
+      return g:airline#extensions#quickfix#quickfix_text
+    elseif len(dict) > 0 && get(dict[0], 'quickfix', 0) && get(dict[0], 'loclist', 0)
+      return g:airline#extensions#quickfix#location_text
+    endif
+  endif
   redir => buffers
   silent ls
   redir END
@@ -43,4 +56,3 @@ function! s:get_text()
   endfor
   return ''
 endfunction
-

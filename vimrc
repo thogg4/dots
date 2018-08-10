@@ -1,4 +1,39 @@
-execute pathogen#infect('bundle/{}')
+" ----------------------------------------------------------------------------
+"  Plugins
+" ----------------------------------------------------------------------------
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'msanders/snipmate.vim'
+Plugin 'thogg4/only-primary-nerdtree'
+Plugin 'tpope/vim-markdown'
+Plugin 'tpope/vim-rails'
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'mileszs/ack.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'pangloss/vim-javascript'
+Plugin 'slim-template/vim-slim'
+Plugin 'groenewege/vim-less'
+Plugin 'juvenn/mustache.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'vim-airline/vim-airline'
+Plugin 'tpope/vim-fugitive'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'janko-m/vim-test'
+Plugin 'elixir-editors/vim-elixir'
+Plugin 'slashmili/alchemist.vim'
+
+"Plugin 'file:///Users/tim/projects/vim-nav'
+
+call vundle#end()
+  
+
 set noswapfile
 filetype plugin indent on
 filetype plugin on
@@ -9,10 +44,11 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
+let g:loaded_netrw = 1
+
 " ----------------------------------------------------------------------------
 "  Text Formatting
 " ----------------------------------------------------------------------------
-
 set autoindent             " automatic indent new lines
 set smartindent            " be smart about it
 inoremap # X<BS>#
@@ -29,7 +65,6 @@ set virtualedit=block      " allow virtual edit in visual block ..
 " ----------------------------------------------------------------------------
 "  Remapping
 " ----------------------------------------------------------------------------
-
 " exit to normal mode with 'jj'
 inoremap jj <ESC>
 
@@ -50,10 +85,14 @@ vnoremap <Up> gk
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
+nmap <S-Up> 10k
+vmap <S-Up> 10k
+nmap <S-Down> 10j
+vmap <S-Down> 10j
+
 " ----------------------------------------------------------------------------
 "  UI
 " ----------------------------------------------------------------------------
-
 set ruler                  " show the cursor position all the time
 set noshowcmd              " don't display incomplete commands
 set nolazyredraw           " turn off lazy redraw
@@ -68,26 +107,28 @@ set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
 syntax enable
 colorscheme blackhog
+hi Normal guibg=NONE ctermbg=NONE " make background transparent
+set mouse-=a
 set pastetoggle=<Leader>p
+set clipboard+=unnamedplus
 
 
 " ----------------------------------------------------------------------------
 " Visual Cues
 " ----------------------------------------------------------------------------
-
 set showmatch              " brackets/braces that is
 set mat=5                  " duration to show matching brace (1/10 sec)
 set incsearch              " do incremental searching
 set laststatus=2           " always show the status line
-set ignorecase             " ignore case when searching
+"set ignorecase             " ignore case when searching
 set nohlsearch             " don't highlight searches
 set visualbell             " shut the fuck up
+set t_vb=
 
 
 " ---------------------------------------------------------------------------
 "  Strip all trailing whitespace in file
 " ---------------------------------------------------------------------------
-
 function! StripWhitespace ()
     exec ':%s/ \+$//gc'
 endfunction
@@ -98,8 +139,6 @@ map <Leader>s :call StripWhitespace ()<CR>
 "  NERDTree
 " ---------------------------------------------------------------------------
 let g:NERDTreeDirArrows=0
-nmap <Leader>n :NERDTreeToggle<CR>
-nmap <Leader>m :NERDTreeClose<CR>:NERDTreeFind<CR>
 
 
 " ---------------------------------------------------------------------------
@@ -108,4 +147,15 @@ nmap <Leader>m :NERDTreeClose<CR>:NERDTreeFind<CR>
 let g:ctrlp_map = '<D-p>'
 let g:ctrlp_custom_ignore = 'vendor\/'
 
+
+" ---------------------------------------------------------------------------
+"  Airline
+" ---------------------------------------------------------------------------
+set ttimeoutlen=10
+
+" ---------------------------------------------------------------------------
+"  Vim Test
+" ---------------------------------------------------------------------------
+let test#ruby#cucumber#options = '-r features/'
+let test#strategy = 'neovim'
 
