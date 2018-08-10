@@ -28,6 +28,7 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'janko-m/vim-test'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
+Plugin 'vim-syntastic/syntastic'
 
 "Plugin 'file:///Users/tim/projects/vim-nav'
 
@@ -153,9 +154,21 @@ let g:ctrlp_custom_ignore = 'vendor\/'
 " ---------------------------------------------------------------------------
 set ttimeoutlen=10
 
+
 " ---------------------------------------------------------------------------
 "  Vim Test
 " ---------------------------------------------------------------------------
 let test#ruby#cucumber#options = '-r features/'
 let test#strategy = 'neovim'
 
+
+" ---------------------------------------------------------------------------
+"  Syntastic
+" ---------------------------------------------------------------------------
+let g:syntastic_ruby_checkers = ['ruby', 'rubocop']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_highlighting = 0
