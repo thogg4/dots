@@ -7,6 +7,9 @@ alias audio="sudo kill -9 `ps ax|grep 'coreaudio[a-z]' | awk '{print $1}'`"
 alias dm='docker-machine'
 alias dc='docker-compose'
 alias dmenv='eval "$(docker-machine env $1)"'
+alias fs='foreman start'
+
+export CHARGIFY_NOTIFY_FRESH=1
 
 #cd() {
 #  builtin cd $*
@@ -66,11 +69,11 @@ git_prompt ()
   else
     git_color="$c_git_dirty"
   fi
-  echo "$git_color[$git_branch]"
+  echo " $git_color+$git_branch+"
 }
 
 # Prompts ----------------------------------------------------------
-PROMPT_COMMAND='PS1="\n${COLOR_LIGHT_GRAY}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
+PROMPT_COMMAND='PS1="\n${COLOR_WHITE}\W${COLOR_NC}$(git_prompt) ${COLOR_WHITE}> "'
 
 
 export PATH=$HOME/bin:./vendor/bundle/bin:$HOME/.rbenv/shims:$PATH
