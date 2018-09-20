@@ -9,7 +9,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'msanders/snipmate.vim'
-Plugin 'thogg4/only-primary-nerdtree'
+"Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
@@ -29,6 +29,8 @@ Plugin 'janko-m/vim-test'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'vimlab/split-term.vim'
+Plugin 'ruanyl/vim-gh-line'
 
 "Plugin 'file:///Users/tim/projects/vim-nav'
 
@@ -60,8 +62,21 @@ set tabstop=4
 set expandtab              " expand tabs to spaces
 set nosmarttab             " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
-"set textwidth=80           " wrap at 80 chars by default
+set textwidth=80           " wrap at 80 chars by default
 set virtualedit=block      " allow virtual edit in visual block ..
+syntax on
+set autoread
+
+" ----------------------------------------------------------------------------
+" Persistent Undo
+" Keep undo history across sessions, by storing in file.
+" Only works all the time.
+" ----------------------------------------------------------------------------
+if has('persistent_undo')
+  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  set undodir=~/.vim/backups
+  set undofile
+endif
 
 " ----------------------------------------------------------------------------
 "  Remapping
@@ -140,13 +155,19 @@ map <Leader>s :call StripWhitespace ()<CR>
 "  NERDTree
 " ---------------------------------------------------------------------------
 let g:NERDTreeDirArrows=0
+nnoremap <silent> <C-N> :NERDTree<cr>
 
 
 " ---------------------------------------------------------------------------
 "  CTRL P
 " ---------------------------------------------------------------------------
-let g:ctrlp_map = '<D-p>'
-let g:ctrlp_custom_ignore = 'vendor\/'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=40
+let g:ctrlp_match_window = 'min:4,max:20,results=100'
+let g:ctrlp_user_command = 'ag %s -l nocolor -g ""'
+let g:ctrlp_use_caching = 0
 
 
 " ---------------------------------------------------------------------------
@@ -167,8 +188,29 @@ let test#strategy = 'neovim'
 " ---------------------------------------------------------------------------
 let g:syntastic_ruby_checkers = ['ruby', 'rubocop']
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
+let g:syntastic_always_populate_loc_list = 3
+let g:syntastic_auto_loc_list = 2
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_enable_highlighting = 0
+
+" ---------------------------------------------------------------------------
+" Splits
+" ---------------------------------------------------------------------------
+set splitbelow
+set splitright
+
+nnoremap <C-A> <C-W>
+nnoremap <C-A>" :sp<cr>
+nnoremap <silent> <C-A>: :vsp<cr>
+
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-Right> <c-w>l
+nnoremap <silent> <C-Left> <c-w>h
+nnoremap <silent> <C-Up> <c-w>k
+nnoremap <silent> <C-Down> <c-w>j
+
+" ---------------------------------------------------------------------------
+" Terminal
+" ---------------------------------------------------------------------------
+nnoremap <silent> <C-T> :VTerm<cr>

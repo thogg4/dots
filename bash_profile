@@ -1,4 +1,4 @@
-alias m='vi'
+alias m='nvim'
 alias goo='cd ~/Google\ Drive/'
 alias be='bundle exec'
 alias download='scp -r thogg4@boiled.whatbox.ca:~/files/download/ .'
@@ -69,7 +69,7 @@ git_prompt ()
   else
     git_color="$c_git_dirty"
   fi
-  echo " $git_color+$git_branch+"
+  echo " $git_color|$git_branch|"
 }
 
 # Prompts ----------------------------------------------------------
@@ -92,3 +92,17 @@ export PATH="/usr/local/share/npm/bin:$PATH"
 ### For rbenv
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# Change colors for ssh
+function tabc() {
+  NAME=$1; if [ -z "$NAME" ]; then NAME="Default"; fi
+  echo -e "\033]50;SetProfile=$NAME\a"
+}
+
+function colorssh() {
+  tabc SSH
+  ssh $*
+  tabc
+}
+
+alias ssh="colorssh"
