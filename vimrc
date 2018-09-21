@@ -138,7 +138,7 @@ set incsearch              " do incremental searching
 set laststatus=2           " always show the status line
 "set ignorecase             " ignore case when searching
 set nohlsearch             " don't highlight searches
-set visualbell             " shut the fuck up
+set visualbell             " shut up
 set t_vb=
 
 
@@ -165,8 +165,8 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files=0
 let g:ctrlp_max_depth=40
-let g:ctrlp_match_window = 'min:4,max:20,results=100'
-let g:ctrlp_user_command = 'ag %s -l nocolor -g ""'
+let g:ctrlp_match_window = 'min:4,max:30,results=100'
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 let g:ctrlp_use_caching = 0
 
 
