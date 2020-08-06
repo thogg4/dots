@@ -15,6 +15,20 @@ describe "Indenting" do
         .method_two
         .method_three
     EOF
+
+    assert_correct_indenting <<~EOF
+      some_object&.
+        method_one&.
+        method_two&.
+        method_three
+    EOF
+
+    assert_correct_indenting <<~EOF
+      some_object
+        &.method_one
+        &.method_two
+        &.method_three
+    EOF
   end
 
   specify "arrays" do
@@ -43,6 +57,7 @@ describe "Indenting" do
   end
 
   specify "continuations after round braces" do
+    vim.command 'let g:ruby_indent_block_style = "expression"'
     assert_correct_indenting <<~EOF
       opts.on('--coordinator host=HOST[,port=PORT]',
               'Specify the HOST and the PORT of the coordinator') do |str|
@@ -53,10 +68,6 @@ describe "Indenting" do
   end
 
   describe "assignments" do
-    after :each do
-      vim.command 'let g:ruby_indent_assignment_style = "hanging"'
-    end
-
     specify "continuations after assignment" do
       assert_correct_indenting <<~EOF
         variable =
@@ -298,6 +309,15 @@ describe "Indenting" do
         puts string
         puts string
       end
+    EOF
+  end
+
+  specify "wrong continuation within regex character class" do
+    # See https://github.com/vim-ruby/vim-ruby/issues/405 for details
+
+    assert_correct_indenting <<~EOF
+      extname = file.extname(url).split(/[?#]/).first
+      target_file = tempfile.new()
     EOF
   end
 end

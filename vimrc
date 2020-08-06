@@ -9,7 +9,6 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'msanders/snipmate.vim'
-"Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-rails'
 Plugin 'vim-ruby/vim-ruby'
@@ -24,13 +23,15 @@ Plugin 'juvenn/mustache.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-airline/vim-airline'
 Plugin 'tpope/vim-fugitive'
-Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'janko-m/vim-test'
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'vimlab/split-term.vim'
 Plugin 'ruanyl/vim-gh-line'
+Plugin 'junegunn/fzf', { 'rtp': '/usr/local/opt/fzf' }
+Plugin 'junegunn/fzf.vim'
+Plugin 'tpope/vim-eunuch'
 
 "Plugin 'file:///Users/tim/projects/vim-nav'
 
@@ -159,16 +160,18 @@ nnoremap <silent> <C-N> :NERDTree<cr>
 
 
 " ---------------------------------------------------------------------------
-"  CTRL P
+"  FZF
 " ---------------------------------------------------------------------------
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_max_files=0
-let g:ctrlp_max_depth=40
-let g:ctrlp_match_window = 'min:4,max:30,results=100'
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-let g:ctrlp_use_caching = 0
+set rtp+=/usr/local/opt/fzf
 
+function! s:find_git_root()
+  return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
+endfunction
+
+command! ProjectFiles execute 'Files' s:find_git_root()
+
+nnoremap <c-p> :ProjectFiles<CR>
+let $FZF_DEFAULT_COMMAND = 'ag --hidden -g ""'
 
 " ---------------------------------------------------------------------------
 "  Airline

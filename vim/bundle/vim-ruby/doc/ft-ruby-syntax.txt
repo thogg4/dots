@@ -1,7 +1,9 @@
 RUBY						*ruby.vim* *ft-ruby-syntax*
+							*vim-ruby-syntax*
 
     Ruby: Operator highlighting		|ruby_operators|
     Ruby: Whitespace errors		|ruby_space_errors|
+    Ruby: Syntax errors			|ruby_syntax_errors|
     Ruby: Folding			|ruby_fold| |ruby_foldable_groups|
     Ruby: Reducing expensive operations	|ruby_no_expensive| |ruby_minlines|
     Ruby: Spellchecking strings		|ruby_spellcheck_strings|
@@ -9,10 +11,13 @@ RUBY						*ruby.vim* *ft-ruby-syntax*
 						*ruby_operators*
  Ruby: Operator highlighting ~
 
-Operators can be highlighted by defining "ruby_operators": >
+Operators, and pseudo operators, can be highlighted by defining: >
 
-	:let ruby_operators = 1
+	:let ruby_operators        = 1
+	:let ruby_pseudo_operators = 1
 <
+The supported pseudo operators are ., &., ::, *, **, &, <, << and ->.
+
 						*ruby_space_errors*
  Ruby: Whitespace errors ~
 
@@ -25,7 +30,16 @@ as errors.  This can be refined by defining "ruby_no_trail_space_error" and
 "ruby_no_tab_space_error" which will ignore trailing whitespace and tabs after
 spaces respectively.
 
-					*ruby_fold*
+						*ruby_syntax_errors*
+ Ruby: Syntax errors ~
+
+Redundant line continuations and predefined global variable look-alikes (such
+as $# and $-z) can be highlighted as errors by defining:
+>
+	:let ruby_line_continuation_error = 1
+	:let ruby_global_variable_error   = 1
+<
+						*ruby_fold*
  Ruby: Folding ~
 
 Folding can be enabled by defining "ruby_fold": >
@@ -67,6 +81,8 @@ The value is a space-separated list of keywords:
     #          Multiline comment
     <<         Here documents
     __END__    Source code after "__END__" directive
+
+NONE and ALL have priority, in that order, over all other folding groups.
 
 						*ruby_no_expensive*
  Ruby: Reducing expensive operations ~
