@@ -12,14 +12,14 @@ let colors_name = "blackhog"
 
 " General colors
 hi Normal           ctermfg=white        ctermbg=black        cterm=NONE
-hi NonText          ctermfg=black       ctermbg=NONE        cterm=NONE
+hi NonText          ctermfg=white       ctermbg=NONE        cterm=NONE
 
 hi Cursor           ctermfg=black       ctermbg=white       cterm=reverse
 hi LineNr           ctermfg=10    ctermbg=NONE        cterm=NONE
 
 hi VertSplit        ctermfg=darkgray    ctermbg=darkgray    cterm=NONE
 hi StatusLine       ctermfg=15       ctermbg=160    cterm=NONE
-hi StatusLineNC     ctermfg=15        ctermbg=160    cterm=NONE  
+hi StatusLineNC     ctermfg=white        ctermbg=white    cterm=NONE  
 
 hi Folded           ctermfg=NONE        ctermbg=NONE        cterm=NONE
 hi Title            ctermfg=NONE        ctermbg=NONE        cterm=NONE

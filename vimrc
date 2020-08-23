@@ -6,7 +6,6 @@ filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'msanders/snipmate.vim'
 Plugin 'tpope/vim-markdown'
@@ -21,9 +20,15 @@ Plugin 'slim-template/vim-slim'
 Plugin 'groenewege/vim-less'
 Plugin 'juvenn/mustache.vim'
 Plugin 'flazz/vim-colorschemes'
+
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
 Plugin 'tpope/vim-fugitive'
+
 Plugin 'janko-m/vim-test'
+Plugin 'kassio/neoterm'
+
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
 Plugin 'vim-syntastic/syntastic'
@@ -32,11 +37,8 @@ Plugin 'ruanyl/vim-gh-line'
 Plugin 'junegunn/fzf', { 'rtp': '/usr/local/opt/fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-eunuch'
-
-"Plugin 'file:///Users/tim/projects/vim-nav'
-
+Plugin 'majutsushi/tagbar'
 call vundle#end()
-  
 
 set noswapfile
 filetype plugin indent on
@@ -51,6 +53,13 @@ endif
 let g:loaded_netrw = 1
 
 " ----------------------------------------------------------------------------
+"  Airline
+" ----------------------------------------------------------------------------
+let g:airline_section_b = ''
+set ttimeoutlen=10
+let g:airline_theme = 'wombat'
+
+" ----------------------------------------------------------------------------
 "  Text Formatting
 " ----------------------------------------------------------------------------
 set autoindent             " automatic indent new lines
@@ -61,9 +70,9 @@ set softtabstop=2          " yep, two
 set shiftwidth=2           " ..
 set tabstop=4
 set expandtab              " expand tabs to spaces
-set nosmarttab             " fuck tabs
+set nosmarttab             " no tabs
 set formatoptions+=n       " support for numbered/bullet lists
-set textwidth=80           " wrap at 80 chars by default
+set textwidth=120          " wrap at 80 chars by default
 set virtualedit=block      " allow virtual edit in visual block ..
 syntax on
 set autoread
@@ -82,10 +91,6 @@ endif
 " ----------------------------------------------------------------------------
 "  Remapping
 " ----------------------------------------------------------------------------
-" exit to normal mode with 'jj'
-inoremap jj <ESC>
-
-
 " reflow paragraph with Q in normal and visual mode
 nnoremap Q gqap
 vnoremap Q gq
@@ -103,9 +108,27 @@ inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
 nmap <S-Up> 10k
-vmap <S-Up> 10k
 nmap <S-Down> 10j
+
+vmap <S-Up> 10k
 vmap <S-Down> 10j
+
+imap <S-Up> <Esc>10ki
+imap <S-Down> <Esc>10ji
+
+
+" ----------------------------------------------------------------------------
+" Debuggers
+" ----------------------------------------------------------------------------
+
+imap <silent> <Leader>b <Esc>obinding.pry<Esc>:w<CR>
+nmap <silent> <Leader>b obinding.pry<Esc>:w<CR>
+
+function! ClearDebuggers ()
+  exec ':%s/binding.pry//gi'
+endfunction
+nmap <silent> <Leader>B :call ClearDebuggers ()<CR>
+
 
 " ----------------------------------------------------------------------------
 "  UI
@@ -137,7 +160,7 @@ set showmatch              " brackets/braces that is
 set mat=5                  " duration to show matching brace (1/10 sec)
 set incsearch              " do incremental searching
 set laststatus=2           " always show the status line
-"set ignorecase             " ignore case when searching
+"set ignorecase            " ignore case when searching
 set nohlsearch             " don't highlight searches
 set visualbell             " shut up
 set t_vb=
@@ -153,13 +176,6 @@ map <Leader>s :call StripWhitespace ()<CR>
 
 
 " ---------------------------------------------------------------------------
-"  NERDTree
-" ---------------------------------------------------------------------------
-let g:NERDTreeDirArrows=0
-nnoremap <silent> <C-N> :NERDTree<cr>
-
-
-" ---------------------------------------------------------------------------
 "  FZF
 " ---------------------------------------------------------------------------
 set rtp+=/usr/local/opt/fzf
@@ -170,20 +186,32 @@ endfunction
 
 command! ProjectFiles execute 'Files' s:find_git_root()
 
-nnoremap <c-p> :ProjectFiles<CR>
+nnoremap <C-P> :ProjectFiles<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden -g ""'
-
-" ---------------------------------------------------------------------------
-"  Airline
-" ---------------------------------------------------------------------------
-set ttimeoutlen=10
 
 
 " ---------------------------------------------------------------------------
 "  Vim Test
 " ---------------------------------------------------------------------------
 let test#ruby#cucumber#options = '-r features/'
-let test#strategy = 'neovim'
+let test#strategy = 'neoterm'
+
+nmap <silent> <Leader>t :TestNearest<CR>
+nmap <silent> <Leader>T :TestFile<CR>
+nmap <silent> <Leader>l :TestLast<CR>
+
+" ---------------------------------------------------------------------------
+"  Neoterm
+" ---------------------------------------------------------------------------
+let g:neoterm_shell = '$SHELL -l' " use the login shell
+let g:neoterm_default_mod = 'belowright' " open the split below and to the right
+let g:neoterm_autoscroll = 1      " autoscroll to the bottom
+let g:neoterm_fixedsize = 1       " fixed size. The autosizing was wonky for me
+let g:neoterm_keep_term_open = 0  " when buffer closes, exit the terminal too.
+
+tnoremap <Esc> <C-\><C-N>
+
+nnoremap <Leader>c :TcloseAll<CR>
 
 
 " ---------------------------------------------------------------------------
@@ -208,8 +236,8 @@ nnoremap <C-A>" :sp<cr>
 nnoremap <silent> <C-A>: :vsp<cr>
 
 let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-Right> <c-w>l
-nnoremap <silent> <C-Left> <c-w>h
+nnoremap <C-Right> <c-w>l
+nnoremap <C-Left> <c-w>h
 nnoremap <silent> <C-Up> <c-w>k
 nnoremap <silent> <C-Down> <c-w>j
 
