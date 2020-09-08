@@ -10,8 +10,8 @@ set __fish_git_prompt_showdirtystate 'yes'
 set __fish_git_prompt_showstashstate 'yes'
 set __fish_git_prompt_showuntrackedfiles 'yes'
 set __fish_git_prompt_showupstream 'yes'
-set __fish_git_prompt_color_branch yellow
-set __fish_git_prompt_color_upstream_ahead green
+set __fish_git_prompt_color_branch green
+set __fish_git_prompt_color_upstream_ahead magenta
 set __fish_git_prompt_color_upstream_behind red
 
 # Status Chars
@@ -26,7 +26,8 @@ function fish_prompt
   set -l last_status $status
 
   set_color $fish_color_cwd
-  echo -n (prompt_pwd)
+  echo -n (pwd | cut -d'/' -f5)
+  echo -n ' --'
   set_color normal
 
   fish_git_prompt

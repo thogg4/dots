@@ -61,3 +61,7 @@ status --is-interactive; and source (rbenv init -|psub)
 #export PATH="/usr/local/opt/node@10/bin:$PATH"
 #export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
+function ctags
+  set -l pref (brew --prefix)
+  $pref/bin/ctags
+end
