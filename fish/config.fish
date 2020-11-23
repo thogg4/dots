@@ -65,3 +65,5 @@ function ctags
   set -l pref (brew --prefix)
   $pref/bin/ctags
 end
+
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=(brew --prefix openssl@1.1)"
