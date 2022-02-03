@@ -16,6 +16,10 @@ if ! brew ls --versions fish > /dev/null; then
 	brew install fish
 fi
 
+if ! brew ls --versions fzf > /dev/null; then
+	brew install fzf
+fi
+
 touch $HOME/.config
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
