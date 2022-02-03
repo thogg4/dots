@@ -34,7 +34,7 @@ alias ctags="`brew --prefix`/bin/ctags"
 #export PATH="/usr/local/share/npm/bin:$PATH"
 
 # rbenv
-status --is-interactive; and source (rbenv init -|psub)
+status --is-interactive; and rbenv init - fish | source
 
 # Change colors for ssh
 #function tabc() {

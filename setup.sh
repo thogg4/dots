@@ -19,4 +19,9 @@ fi
 touch $HOME/.config
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
-source $HOME/.config/fish/config.fish
+
+rm -rf $HOME/.vim
+git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+rm -rf $HOME/.config/nvim
+ln -s $HOME/dots/nvim $HOME/.config/nvim
+nvim +PluginInstall +qall
