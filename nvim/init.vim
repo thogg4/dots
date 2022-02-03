@@ -14,7 +14,6 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'pangloss/vim-javascript'
 Plugin 'slim-template/vim-slim'
 Plugin 'groenewege/vim-less'
@@ -31,13 +30,14 @@ Plugin 'kassio/neoterm'
 
 Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
-Plugin 'vim-syntastic/syntastic'
 Plugin 'vimlab/split-term.vim'
 Plugin 'ruanyl/vim-gh-line'
 Plugin 'junegunn/fzf', { 'rtp': '/usr/local/opt/fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-eunuch'
 Plugin 'majutsushi/tagbar'
+
+"Plugin 'dense-analysis/ale'
 call vundle#end()
 
 set noswapfile
@@ -51,6 +51,18 @@ if has("autocmd")
 endif
 
 let g:loaded_netrw = 1
+
+
+" ----------------------------------------------------------------------------
+"  Ale
+" ----------------------------------------------------------------------------
+let g:ale_linters = {
+      \  'javascript': ['standard']
+      \}
+
+let g:ale_fixers = {
+      \  'javascript': ['standard']
+      \}
 
 " ----------------------------------------------------------------------------
 "  Airline
@@ -188,7 +200,7 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 
 nnoremap <C-P> :ProjectFiles<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden -g ""'
-
+let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.5, 'relative': v:true, 'yoffset': 0.9 } }
 
 " ---------------------------------------------------------------------------
 "  Vim Test
@@ -217,7 +229,7 @@ nnoremap <Leader>c :TcloseAll<CR>
 " ---------------------------------------------------------------------------
 "  Syntastic
 " ---------------------------------------------------------------------------
-let g:syntastic_ruby_checkers = ['ruby', 'rubocop']
+let g:syntastic_ruby_checkers = ['ruby', 'reek']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_always_populate_loc_list = 3
 let g:syntastic_auto_loc_list = 2

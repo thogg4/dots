@@ -9,8 +9,6 @@ alias fs='foreman start'
 alias os='overmind start'
 alias agr='ag --ruby'
 
-set CHARGIFY_NOTIFY_FRESH 1
-
 # rails
 alias rr='rake routes'
 
@@ -19,6 +17,9 @@ alias gs='git status'
 alias ga='git add -A'
 alias gc='git commit'
 alias gp='git pull'
+
+# ruby
+#set RUBYOPT -rbumbler/go
 
 # get away from apple ctags
 alias ctags="`brew --prefix`/bin/ctags"
@@ -65,5 +66,3 @@ function ctags
   set -l pref (brew --prefix)
   $pref/bin/ctags
 end
-
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=(brew --prefix openssl@1.1)"
