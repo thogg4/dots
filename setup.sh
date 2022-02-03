@@ -20,6 +20,10 @@ if ! brew ls --versions fzf > /dev/null; then
 	brew install fzf
 fi
 
+if ! brew ls --versions the_silver_searcher > /dev/null; then
+  brew install the_silver_searcher
+fi
+
 touch $HOME/.config
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
