@@ -200,7 +200,7 @@ command! ProjectFiles execute 'Files' s:find_git_root()
 
 nnoremap <C-P> :ProjectFiles<CR>
 let $FZF_DEFAULT_COMMAND = 'ag --hidden -g ""'
-let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.5, 'relative': v:true, 'yoffset': 0.9 } }
+let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.5, 'relative': v:false, 'yoffset': 0.9 } }
 
 " ---------------------------------------------------------------------------
 "  Vim Test
