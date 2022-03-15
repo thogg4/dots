@@ -34,9 +34,6 @@ alias ctags="`brew --prefix`/bin/ctags"
 ## nodeJS
 #export PATH="/usr/local/share/npm/bin:$PATH"
 
-# rbenv
-status --is-interactive; and rbenv init - fish | source
-
 # Change colors for ssh
 #function tabc() {
   #NAME=$1; if [ -z "$NAME" ]; then NAME="Default"; fi
@@ -65,4 +62,10 @@ status --is-interactive; and rbenv init - fish | source
 function ctags
   set -l pref (brew --prefix)
   $pref/bin/ctags
+end
+
+source /opt/homebrew/opt/asdf/libexec/asdf.fish
+
+if status --is-interactive
+  eval (/opt/homebrew/bin/brew shellenv)
 end

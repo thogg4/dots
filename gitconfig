@@ -1,0 +1,6 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Tim Hogg
+	email = thogg@gmail.com
+[push]
+	default = current
