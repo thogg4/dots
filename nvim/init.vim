@@ -32,12 +32,10 @@ Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
 Plugin 'vimlab/split-term.vim'
 Plugin 'ruanyl/vim-gh-line'
-Plugin 'junegunn/fzf', { 'rtp': '/usr/local/opt/fzf' }
+Plugin 'junegunn/fzf', { 'rtp': '/opt/homebrew/opt/fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-eunuch'
 Plugin 'majutsushi/tagbar'
-
-"Plugin 'dense-analysis/ale'
 call vundle#end()
 
 set noswapfile
@@ -187,7 +185,7 @@ map <Leader>s :call StripWhitespace ()<CR>
 " ---------------------------------------------------------------------------
 "  FZF
 " ---------------------------------------------------------------------------
-set rtp+=/usr/local/opt/fzf
+set rtp+=/opt/homebrew/opt/fzf
 
 function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]
