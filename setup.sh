@@ -29,6 +29,9 @@ fi
 if ! brew ls --versions nvim > /dev/null; then
   brew install nvim
 fi
+
+mkdir $HOME/.config
+
 rm -rf $HOME/.vim
 git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
 rm -rf $HOME/.config/nvim
@@ -44,7 +47,6 @@ if ! brew ls --versions fish > /dev/null; then
 fi
 echo /usr/local/bin/fish | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/fish
-touch $HOME/.config
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
 
@@ -76,7 +78,7 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 # Set a blazingly fast keyboard repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain KeyRepeat -int 3
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 # Save screenshots to downloads
@@ -91,7 +93,7 @@ defaults write com.apple.finder NewWindowTarget -string "PfDe"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
 
 # Finder: show all filename extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool false
 
 # Use icon view in all Finder windows by default
 # Four-letter codes for all view modes: `Nlsv`, `icnv`, `clmv`, `glyv`
@@ -156,6 +158,19 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGest
 defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2
 
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 1
+
+# Bluetooth trackpad
+# Don't show notification center when swiping right with 2 fingers
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0
+
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
+
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
+
+# Show seconds in menubar
+defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  h:mm:ss a"
+defaults write com.apple.menuextra.clock ShowSeconds -bool true
 
 # Set custom key mappings in iTerm2
 defaults write com.googlecode.iterm2 GlobalKeyMap '<dict>
