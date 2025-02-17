@@ -7,7 +7,7 @@ if ! brew --version > /dev/null; then
     echo 'eval "$(/usr/local/bin/brew shellenv)"' >> /Users/tim/.profile
     eval "$(/usr/local/bin/brew shellenv)"
 fi
-brew updgrade
+brew upgrade
 
 say "Setting up rbenv"
 if ! brew ls --versions rbenv > /dev/null; then
