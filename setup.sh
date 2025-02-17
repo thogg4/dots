@@ -4,8 +4,8 @@ say "Setting up this computer"
 
 if ! brew --version > /dev/null; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/usr/local/bin/brew shellenv)"' >> /Users/tim/.profile
-    eval "$(/usr/local/bin/brew shellenv)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/tim/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 brew upgrade
 
@@ -43,14 +43,14 @@ say "Setting up fish - this requires your password"
 if ! brew ls --versions fish > /dev/null; then
     brew install fish
 fi
-echo /usr/local/bin/fish | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/fish
+echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/fish
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
 
 say "Installing some apps. This might require a password"
 brew install --cask discord
-brew install --cask chrome
+brew install --cask google-chrome
 brew install --cask iterm2
 brew install --cask 1password
 brew install --cask 1password-cli

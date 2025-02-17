@@ -18,7 +18,6 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'slim-template/vim-slim'
 Plugin 'groenewege/vim-less'
 Plugin 'juvenn/mustache.vim'
-Plugin 'flazz/vim-colorschemes'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -32,10 +31,12 @@ Plugin 'elixir-editors/vim-elixir'
 Plugin 'slashmili/alchemist.vim'
 Plugin 'vimlab/split-term.vim'
 Plugin 'ruanyl/vim-gh-line'
-Plugin 'junegunn/fzf', { 'rtp': '/usr/local/opt/fzf' }
+Plugin 'junegunn/fzf', { 'rtp': '/opt/homebrew/opt/fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-eunuch'
 Plugin 'majutsushi/tagbar'
+
+Plugin 'navarasu/onedark.nvim'
 call vundle#end()
 
 set noswapfile
@@ -153,7 +154,10 @@ set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
 syntax enable
-colorscheme blackhog
+let g:onedark_config = {
+    \ 'style': 'darker',
+\}
+colorscheme onedark
 hi Normal guibg=NONE ctermbg=NONE " make background transparent
 set mouse-=a
 set pastetoggle=<Leader>p
@@ -185,7 +189,7 @@ map <Leader>s :call StripWhitespace ()<CR>
 " ---------------------------------------------------------------------------
 "  FZF
 " ---------------------------------------------------------------------------
-set rtp+=/usr/local/opt/fzf
+set rtp+=/opt/homebrew/opt/fzf
 
 function! s:find_git_root()
   return system('git rev-parse --show-toplevel 2> /dev/null')[:-2]

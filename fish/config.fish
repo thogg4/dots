@@ -26,8 +26,8 @@ alias ctags="`brew --prefix`/bin/ctags"
 
 # Heroku Toolbelt
 #
-#export PATH="/usr/local/heroku/bin:$PATH"
-#export PATH="/usr/local/bin:$PATH"
+#export PATH="/opt/homebrew/heroku/bin:$PATH"
+#export PATH="/opt/homebrew/bin:$PATH"
 
 # Change colors for ssh
 #function tabc() {
@@ -49,7 +49,7 @@ function ctags
 end
 
 if status --is-interactive
-  eval (/usr/local/bin/brew shellenv)
+  eval (/opt/homebrew/bin/brew shellenv)
 end
 
 status --is-interactive; and rbenv init - --no-rehash fish | source
