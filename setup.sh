@@ -7,15 +7,13 @@ if ! brew --version > /dev/null; then
     echo 'eval "$(/usr/local/bin/brew shellenv)"' >> /Users/tim/.profile
     eval "$(/usr/local/bin/brew shellenv)"
 fi
+brew updgrade
 
-say "Setting up asdf"
-if ! brew ls --versions asdf > /dev/null; then
-    brew install asdf
+say "Setting up rbenv"
+if ! brew ls --versions rbenv > /dev/null; then
+    brew install rbenv
+    brew upgrade ruby-build
 fi
-asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
-asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-rm -rf $HOME/.asdfrc
-ln -s $HOME/dots/asdfrc $HOME/.asdfrc
 
 say "Setting up neovim and searching"
 if ! brew ls --versions fzf > /dev/null; then
@@ -50,9 +48,9 @@ chsh -s /usr/local/bin/fish
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
 
-say "Installing some apps"
+say "Installing some apps. This might require a password"
 brew install --cask discord
-brew install --cask firefox
+brew install --cask chrome
 brew install --cask iterm2
 brew install --cask 1password
 brew install --cask 1password-cli

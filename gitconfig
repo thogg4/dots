@@ -1,6 +1,8 @@
 # This is Git's per-user configuration file.
 [user]
 	name = Tim Hogg
-	email = thogg@gmail.com
+	email = thogg4@gmail.com
 [push]
-	default = current
+  default = current
+[pull]
+  rebase = true

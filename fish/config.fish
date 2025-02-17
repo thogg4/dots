@@ -4,7 +4,7 @@ set fish_greeting
 # system
 alias m='nvim'
 alias be='bundle exec'
-alias what='ssh thogg4@boiled.whatbox.ca'
+alias what='ssh thogg4@ceres.whatbox.ca'
 alias fs='foreman start'
 alias os='overmind start'
 alias agr='ag --ruby'
@@ -48,8 +48,8 @@ function ctags
   $pref/bin/ctags
 end
 
-source /usr/local/opt/asdf/libexec/asdf.fish
-
 if status --is-interactive
   eval (/usr/local/bin/brew shellenv)
 end
+
+status --is-interactive; and rbenv init - --no-rehash fish | source
