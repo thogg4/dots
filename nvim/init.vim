@@ -35,8 +35,6 @@ Plugin 'junegunn/fzf', { 'rtp': '/opt/homebrew/opt/fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-eunuch'
 Plugin 'majutsushi/tagbar'
-
-Plugin 'navarasu/onedark.nvim'
 call vundle#end()
 
 set noswapfile
@@ -154,10 +152,7 @@ set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
 syntax enable
-let g:onedark_config = {
-    \ 'style': 'darker',
-\}
-colorscheme onedark
+colorscheme blackhog
 hi Normal guibg=NONE ctermbg=NONE " make background transparent
 set mouse-=a
 set pastetoggle=<Leader>p

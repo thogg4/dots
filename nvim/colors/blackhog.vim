@@ -1,129 +1,76 @@
-set background=dark
 hi clear
+syntax reset
+let g:colors_name = "scheme"
+set background=dark
+set t_Co=256
+hi Normal guifg=#dadada ctermbg=NONE guibg=#000000 gui=NONE
 
-if exists("syntax_on")
-  syntax reset
-endif
+hi DiffText guifg=#fc7575 guibg=NONE
+hi ErrorMsg guifg=#fc7575 guibg=NONE
+hi WarningMsg guifg=#fc7575 guibg=NONE
+hi PreProc guifg=#fc7575 guibg=NONE
+hi Exception guifg=#fc7575 guibg=NONE
+hi Error guifg=#fc7575 guibg=NONE
+hi DiffDelete guifg=#fc7575 guibg=NONE
+hi GitGutterDelete guifg=#fc7575 guibg=NONE
+hi GitGutterChangeDelete guifg=#fc7575 guibg=NONE
+hi cssIdentifier guifg=#fc7575 guibg=NONE
+hi cssImportant guifg=#fc7575 guibg=NONE
+hi Type guifg=#fc7575 guibg=NONE
+hi Identifier guifg=#fc7575 guibg=NONE
+hi PMenuSel guifg=#6ef8be guibg=NONE
+hi Constant guifg=#6ef8be guibg=NONE
+hi Repeat guifg=#6ef8be guibg=NONE
+hi DiffAdd guifg=#6ef8be guibg=NONE
+hi GitGutterAdd guifg=#6ef8be guibg=NONE
+hi cssIncludeKeyword guifg=#6ef8be guibg=NONE
+hi Keyword guifg=#6ef8be guibg=NONE
+hi IncSearch guifg=#e9ff81 guibg=NONE
+hi Title guifg=#e9ff81 guibg=NONE
+hi PreCondit guifg=#e9ff81 guibg=NONE
+hi Debug guifg=#e9ff81 guibg=NONE
+hi SpecialChar guifg=#e9ff81 guibg=NONE
+hi Conditional guifg=#e9ff81 guibg=NONE
+hi Todo guifg=#e9ff81 guibg=NONE
+hi Special guifg=#e9ff81 guibg=NONE
+hi Label guifg=#e9ff81 guibg=NONE
+hi Delimiter guifg=#e9ff81 guibg=NONE
+hi Number guifg=#e9ff81 guibg=NONE
+hi CursorLineNR guifg=#e9ff81 guibg=NONE
+hi Define guifg=#e9ff81 guibg=NONE
+hi MoreMsg guifg=#e9ff81 guibg=NONE
+hi Tag guifg=#e9ff81 guibg=NONE
+hi String guifg=#e9ff81 guibg=NONE
+hi MatchParen guifg=#e9ff81 guibg=NONE
+hi Macro guifg=#e9ff81 guibg=NONE
+hi DiffChange guifg=#e9ff81 guibg=NONE
+hi GitGutterChange guifg=#e9ff81 guibg=NONE
+hi cssColor guifg=#e9ff81 guibg=NONE
+hi Function guifg=#6aa2ff guibg=NONE
+hi Directory guifg=#c481ff guibg=NONE
+hi markdownLinkText guifg=#c481ff guibg=NONE
+hi javaScriptBoolean guifg=#c481ff guibg=NONE
+hi Include guifg=#c481ff guibg=NONE
+hi Storage guifg=#c481ff guibg=NONE
+hi cssClassName guifg=#c481ff guibg=NONE
+hi cssClassNameDot guifg=#c481ff guibg=NONE
+hi Statement guifg=#6de5ff guibg=NONE
+hi Operator guifg=#6de5ff guibg=NONE
+hi cssAttr guifg=#6de5ff guibg=NONE
 
-let colors_name = "blackhog"
 
-
-"hi Example         guifg=NONE        guibg=NONE        gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
-
-" General colors
-hi Normal           ctermfg=white        ctermbg=black        cterm=NONE
-hi NonText          ctermfg=white       ctermbg=NONE        cterm=NONE
-
-hi Cursor           ctermfg=black       ctermbg=white       cterm=reverse
-hi LineNr           ctermfg=10    ctermbg=NONE        cterm=NONE
-
-hi VertSplit        ctermfg=darkgray    ctermbg=darkgray    cterm=NONE
-hi StatusLine       ctermfg=15       ctermbg=160    cterm=NONE
-hi StatusLineNC     ctermfg=white        ctermbg=white    cterm=NONE  
-
-hi Folded           ctermfg=NONE        ctermbg=NONE        cterm=NONE
-hi Title            ctermfg=NONE        ctermbg=NONE        cterm=NONE
-hi Visual           ctermfg=NONE        ctermbg=NONE        cterm=REVERSE
-
-hi SpecialKey       ctermfg=NONE        ctermbg=NONE        cterm=NONE
-
-hi WildMenu         ctermfg=black       ctermbg=yellow      cterm=NONE
-hi PmenuSbar        ctermfg=black       ctermbg=white       cterm=NONE
-hi Error            ctermfg=white       ctermbg=red         cterm=NONE     guisp=#FF6C60 " undercurl color
-hi ErrorMsg         ctermfg=white       ctermbg=red         cterm=NONE
-hi WarningMsg       ctermfg=white       ctermbg=red         cterm=NONE
-hi LongLineWarning  ctermfg=NONE        ctermbg=NONE	      cterm=underline
-
-" Message displayed in lower left, such as --INSERT--
-hi ModeMsg          ctermfg=white       ctermbg=160        cterm=BOLD
-
-hi CursorLine     guifg=NONE        guibg=#121212     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=BOLD
-hi CursorColumn   guifg=NONE        guibg=#121212     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=BOLD
-hi MatchParen     guifg=#f6f3e8     guibg=#857b6f     gui=BOLD      ctermfg=white       ctermbg=darkgray    cterm=NONE
-hi Pmenu          guifg=#f6f3e8     guibg=#444444     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
-hi PmenuSel       guifg=#000000     guibg=#cae682     gui=NONE      ctermfg=NONE        ctermbg=NONE        cterm=NONE
-hi Search         guifg=NONE        guibg=#2F2F00     gui=underline ctermfg=NONE        ctermbg=NONE	      cterm=underline
-
-" Syntax highlighting
-hi Comment          ctermfg=8    ctermbg=NONE        cterm=NONE
-hi String           ctermfg=10       ctermbg=NONE        cterm=NONE
-hi Number           ctermfg=13     ctermbg=NONE        cterm=NONE
-
-hi Keyword          ctermfg=160        ctermbg=NONE        cterm=NONE
-hi PreProc          ctermfg=160        ctermbg=NONE        cterm=NONE
-hi Conditional      ctermfg=12        ctermbg=NONE        cterm=NONE  " if else end
-
-hi Todo             ctermfg=10         ctermbg=NONE        cterm=NONE
-hi Constant         ctermfg=160        ctermbg=NONE        cterm=NONE
-
-hi Identifier       ctermfg=160        ctermbg=NONE        cterm=NONE
-hi Function         ctermfg=13       ctermbg=NONE        cterm=NONE
-hi Type             ctermfg=12      ctermbg=NONE        cterm=NONE
-hi Statement        ctermfg=160   ctermbg=NONE        cterm=NONE
-
-hi Special          ctermfg=160       ctermbg=NONE        cterm=NONE
-hi Delimiter        ctermfg=cyan        ctermbg=NONE        cterm=NONE
-hi Operator         ctermfg=white       ctermbg=NONE        cterm=NONE
-
-hi Directory        ctermfg=white       ctermbg=black        cterm=NONE
-
-hi link Character       Constant
-hi link Boolean         Constant
-hi link Float           Number
-hi link Repeat          Statement
-hi link Label           Statement
-hi link Exception       Statement
-hi link Include         PreProc
-hi link Define          PreProc
-hi link Macro           PreProc
-hi link PreCondit       PreProc
-hi link StorageClass    Type
-hi link Structure       Type
-hi link Typedef         Type
-hi link Tag             Special
-hi link SpecialChar     Special
-hi link SpecialComment  Special
-hi link Debug           Special
-
-" Special for Ruby
-hi rubyRegexp                  ctermfg=12          ctermbg=NONE      cterm=NONE
-hi rubyRegexpDelimiter         ctermfg=12          ctermbg=NONE      cterm=NONE
-hi rubyEscape                  ctermfg=12        ctermbg=NONE      cterm=NONE
-hi rubyInterpolationDelimiter  ctermfg=12          ctermbg=NONE      cterm=NONE
-hi rubyControl                 ctermfg=12          ctermbg=NONE      cterm=NONE  "and break, etc
-hi rubyGlobalVariable          ctermfg=12          ctermbg=NONE      cterm=NONE  "yield
-hi rubyStringDelimiter         ctermfg=160        ctermbg=NONE      cterm=NONE
-hi link rubyClass             Keyword 
-hi link rubyModule            Keyword 
-hi link rubyKeyword           Keyword 
-hi link rubyOperator          Operator
-hi link rubyIdentifier        Identifier
-hi link rubyInstanceVariable  Identifier
-hi link rubyGlobalVariable    Identifier
-hi link rubyClassVariable     Identifier
-hi link rubyConstant          Type  
-
-" Special for Java
-hi link javaScopeDecl         Identifier 
-hi link javaCommentTitle      javaDocSeeTag 
-hi link javaDocTags           javaDocSeeTag 
-hi link javaDocParam          javaDocSeeTag 
-hi link javaDocSeeTagParam    javaDocSeeTag 
-hi javaDocSeeTag              ctermfg=darkgray    ctermbg=NONE        cterm=NONE
-hi javaDocSeeTag              ctermfg=darkgray    ctermbg=NONE        cterm=NONE
-
-" Special for XML
-hi link xmlTag          Keyword 
-hi link xmlTagName      Conditional 
-hi link xmlEndTag       Identifier 
-
-" Special for HTML
-hi link htmlTag         Keyword 
-hi link htmlTagName     Conditional 
-hi link htmlEndTag      Identifier 
-
-" Special for Javascript
-hi link javaScriptNumber      Number 
-
-" Special for CSharp
-hi  link csXmlTag             Keyword      
+hi Pmenu guifg=#dadada guibg=#454545
+hi SignColumn guibg=#000000
+hi Title guifg=#dadada
+hi LineNr guifg=#747474 guibg=#000000
+hi NonText guifg=#c481ff guibg=NONE
+hi Comment guifg=#c481ff gui=italic
+hi SpecialComment guifg=#c481ff gui=italic guibg=NONE
+hi CursorLine guibg=#454545
+hi TabLineFill gui=NONE guibg=#454545
+hi TabLine guifg=#747474 guibg=#454545 gui=NONE
+hi StatusLine gui=bold guibg=#454545 guifg=#dadada
+hi StatusLineNC gui=NONE guibg=#000000 guifg=#dadada
+hi Search guibg=#c481ff guifg=#dadada
+hi VertSplit gui=NONE guifg=#454545 guibg=NONE
+hi Visual gui=NONE guibg=#454545
