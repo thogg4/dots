@@ -24,7 +24,7 @@ hi Repeat guifg=#6ef8be guibg=NONE
 hi DiffAdd guifg=#6ef8be guibg=NONE
 hi GitGutterAdd guifg=#6ef8be guibg=NONE
 hi cssIncludeKeyword guifg=#6ef8be guibg=NONE
-hi Keyword guifg=#6ef8be guibg=NONE
+hi Keyword guifg=#fc7575 guibg=NONE
 hi IncSearch guifg=#e9ff81 guibg=NONE
 hi Title guifg=#e9ff81 guibg=NONE
 hi PreCondit guifg=#e9ff81 guibg=NONE
