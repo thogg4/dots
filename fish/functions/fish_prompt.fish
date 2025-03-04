@@ -25,13 +25,14 @@ set __fish_git_prompt_char_upstream_behind '-'
 function fish_prompt
   set -l last_status $status
 
-  set_color $fish_color_cwd
-  echo -n (pwd | cut -d'/' -f3-82)
-  echo -n ' --'
+  set_color red
+  echo -n $(prompt_pwd --full-length-dirs=3)
+  echo -n ' -'
   set_color normal
 
   fish_git_prompt
 
-  echo -n ' > '
+  set_color red
+  echo -n ' | '
   set_color normal
 end

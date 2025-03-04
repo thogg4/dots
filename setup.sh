@@ -39,6 +39,11 @@ nvim +PluginInstall +qall
 rm -rf $HOME/.gitconfig
 ln -s $HOME/dots/gitconfig $HOME/.gitconfig
 
+rm -rf $HOME/.gitmessage
+ln -s $HOME/dots/gitmessage $HOME/.gitmessage
+git config --global commit.template $HOME/.gitmessage
+
+
 say "Setting up fish - this requires your password"
 if ! brew ls --versions fish > /dev/null; then
     brew install fish
