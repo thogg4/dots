@@ -25,7 +25,7 @@ set __fish_git_prompt_char_upstream_behind '-'
 function fish_prompt
   set -l last_status $status
 
-  set_color red
+  set_color magenta
   echo -n $(prompt_pwd --full-length-dirs=3)
   echo -n ' -'
   set_color normal
