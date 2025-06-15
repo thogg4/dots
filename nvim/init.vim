@@ -155,7 +155,6 @@ syntax enable
 colorscheme blackhog
 hi Normal guibg=NONE ctermbg=NONE " make background transparent
 set mouse-=a
-set pastetoggle=<Leader>p
 set clipboard+=unnamedplus
 
 

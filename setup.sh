@@ -29,6 +29,7 @@ if ! brew ls --versions nvim > /dev/null; then
 fi
 
 mkdir $HOME/.config
+mkdir $HOME/.claude
 
 rm -rf $HOME/.vim
 git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
@@ -43,6 +44,7 @@ rm -rf $HOME/.gitmessage
 ln -s $HOME/dots/gitmessage $HOME/.gitmessage
 git config --global commit.template $HOME/.gitmessage
 
+ln -s $HOME/dots/claude $HOME/.claude
 
 say "Setting up fish - this requires your password"
 if ! brew ls --versions fish > /dev/null; then

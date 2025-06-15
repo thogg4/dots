@@ -1,0 +1,5 @@
+{
+  "env": {
+    "SHELL": "/usr/local/bin/fish"
+  }
+}
