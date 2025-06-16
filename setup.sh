@@ -4,7 +4,7 @@ say "Setting up this computer"
 
 if ! brew --version > /dev/null; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/tim/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 brew upgrade
@@ -13,6 +13,8 @@ say "Setting up rbenv"
 if ! brew ls --versions rbenv > /dev/null; then
     brew install rbenv
     brew upgrade ruby-build
+    echo 'eval "$(rbenv init -)"' >> $HOME/.zprofile
+    eval "$(rbenv init -)"
 fi
 
 say "Setting up neovim and searching"
