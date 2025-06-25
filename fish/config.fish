@@ -4,10 +4,10 @@ set fish_greeting
 # system
 alias m='nvim'
 alias be='bundle exec'
-alias what='ssh thogg4@ceres.whatbox.ca'
 alias fs='foreman start'
 alias os='overmind start'
 alias agr='ag --ruby'
+alias c='claude'
 
 # rails
 alias rr='rake routes'
