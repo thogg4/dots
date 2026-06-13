@@ -22,6 +22,11 @@ if ! brew ls --versions the_silver_searcher > /dev/null; then
   brew install the_silver_searcher
 fi
 
+# ripgrep is used by telescope for live_grep
+if ! brew ls --versions ripgrep > /dev/null; then
+  brew install ripgrep
+fi
+
 if ! brew ls --versions nvim > /dev/null; then
   brew install nvim
 fi
@@ -29,11 +34,9 @@ fi
 mkdir $HOME/.config
 mkdir $HOME/.claude
 
-rm -rf $HOME/.vim
-git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim
+# lazy.nvim bootstraps itself on first nvim launch — no separate install step needed
 rm -rf $HOME/.config/nvim
 ln -s $HOME/dots/nvim $HOME/.config/nvim
-nvim +PluginInstall +qall
 
 rm -rf $HOME/.gitconfig
 ln -s $HOME/dots/gitconfig $HOME/.gitconfig
@@ -87,6 +90,10 @@ defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int
 # Set a blazingly fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 13
+
+# Remove CMD space keyboard shortcuts
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
 
 # Save screenshots to downloads
 defaults write com.apple.screencapture location -string "${HOME}/Downloads"
@@ -208,6 +215,45 @@ wallpaper set wallpaper.jpg
 
 # Configure iTerm2
 /usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Transparency" 0.15' ~/Library/Preferences/com.googlecode.iterm2.plist
+
+# Apply Tokyo Night Storm color theme to the iTerm2 default profile.
+# Downloads the .itermcolors plist and reads each value with PlistBuddy.
+
+curl -sLo /tmp/tokyonight_storm.itermcolors \
+  "https://raw.githubusercontent.com/folke/tokyonight.nvim/main/extras/iterm/tokyonight_storm.itermcolors"
+
+ITERM_PLIST=~/Library/Preferences/com.googlecode.iterm2.plist
+PRESET=/tmp/tokyonight_storm.itermcolors
+
+apply_iterm_color() {
+  local key="$1"
+  local r g b a cs p
+  r=$(/usr/libexec/PlistBuddy -c "Print :'${key}':'Red Component'"   "$PRESET" 2>/dev/null) || return 0
+  g=$(/usr/libexec/PlistBuddy -c "Print :'${key}':'Green Component'" "$PRESET" 2>/dev/null) || return 0
+  b=$(/usr/libexec/PlistBuddy -c "Print :'${key}':'Blue Component'"  "$PRESET" 2>/dev/null) || return 0
+  a=$(/usr/libexec/PlistBuddy -c "Print :'${key}':'Alpha Component'" "$PRESET" 2>/dev/null || echo "1")
+  cs=$(/usr/libexec/PlistBuddy -c "Print :'${key}':'Color Space'"    "$PRESET" 2>/dev/null || echo "sRGB")
+  p="'New Bookmarks':0:'${key}'"
+  /usr/libexec/PlistBuddy -c "Delete :${p}"                            "$ITERM_PLIST" 2>/dev/null
+  /usr/libexec/PlistBuddy -c "Add :${p} dict"                          "$ITERM_PLIST"
+  /usr/libexec/PlistBuddy -c "Add :${p}:'Red Component'   real ${r}"   "$ITERM_PLIST"
+  /usr/libexec/PlistBuddy -c "Add :${p}:'Green Component' real ${g}"   "$ITERM_PLIST"
+  /usr/libexec/PlistBuddy -c "Add :${p}:'Blue Component'  real ${b}"   "$ITERM_PLIST"
+  /usr/libexec/PlistBuddy -c "Add :${p}:'Alpha Component' real ${a}"   "$ITERM_PLIST"
+  /usr/libexec/PlistBuddy -c "Add :${p}:'Color Space'     string ${cs}" "$ITERM_PLIST"
+}
+
+for i in $(seq 0 15); do
+  apply_iterm_color "Ansi ${i} Color"
+done
+
+for key in \
+  "Background Color" "Foreground Color" \
+  "Bold Color" "Cursor Color" "Cursor Text Color" \
+  "Cursor Guide Color" "Selection Color" "Selected Text Color" \
+  "Badge Color" "Link Color"; do
+  apply_iterm_color "$key"
+done
 /usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Show Mark Indicators" 0' ~/Library/Preferences/com.googlecode.iterm2.plist
 /usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Use Separate Colors for Light and Dark Mode" 0' ~/Library/Preferences/com.googlecode.iterm2.plist
 /usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Unlimited Scrollback" 1' ~/Library/Preferences/com.googlecode.iterm2.plist
