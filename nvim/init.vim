@@ -35,6 +35,8 @@ Plugin 'junegunn/fzf', { 'rtp': '/opt/homebrew/opt/fzf' }
 Plugin 'junegunn/fzf.vim'
 Plugin 'tpope/vim-eunuch'
 Plugin 'majutsushi/tagbar'
+
+Plugin 'folke/tokyonight.nvim'
 call vundle#end()
 
 set noswapfile
@@ -152,7 +154,7 @@ set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
 syntax enable
-colorscheme blackhog
+colorscheme tokyonight-storm
 hi Normal guibg=NONE ctermbg=NONE " make background transparent
 set mouse-=a
 set clipboard+=unnamedplus

@@ -1,7 +1,5 @@
 #!/bin/sh
 
-say "Setting up this computer"
-
 if ! brew --version > /dev/null; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
@@ -9,7 +7,6 @@ if ! brew --version > /dev/null; then
 fi
 brew upgrade
 
-say "Setting up rbenv"
 if ! brew ls --versions rbenv > /dev/null; then
     brew install rbenv
     brew upgrade ruby-build
@@ -17,7 +14,6 @@ if ! brew ls --versions rbenv > /dev/null; then
     eval "$(rbenv init -)"
 fi
 
-say "Setting up neovim and searching"
 if ! brew ls --versions fzf > /dev/null; then
     brew install fzf
 fi
@@ -48,7 +44,6 @@ git config --global commit.template $HOME/.gitmessage
 
 ln -s $HOME/dots/claude $HOME/.claude
 
-say "Setting up fish - this requires your password"
 if ! brew ls --versions fish > /dev/null; then
     brew install fish
 fi
@@ -57,17 +52,22 @@ chsh -s /opt/homebrew/bin/fish
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
 
-say "Installing some apps. This might require a password"
 brew install --cask discord
+brew install --cask firefox
 brew install --cask google-chrome
 brew install --cask iterm2
 brew install --cask 1password
 brew install --cask 1password-cli
-brew install --cask alfred
+brew install --cask raycast
 brew install --cask microsoft-teams
+brew install --cask microsoft-outlook
 brew install --cask slack
+brew install --cask orbstack
+brew install --cask nikitabobko/tap/aerospace
+brew install --cask jordanbaird-ice
+brew install --cask claude-code
+brew install wallpaper
 
-say "Setting system preferences"
 osascript -e 'tell application "System Preferences" to quit'
 
 # Disable the “Are you sure you want to open this application?” dialog
@@ -78,7 +78,7 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
-# Disable “natural” (Lion-style) scrolling
+# Disable “natural” scroll
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
 # Increase sound quality for Bluetooth headphones/headsets
@@ -96,8 +96,8 @@ defaults write com.apple.screencapture type -string "png"
 
 # Set Downloads as the default location for new Finder windows
 # For other paths, use `PfLo` and `file:///full/path/here/`
-defaults write com.apple.finder NewWindowTarget -string "PfDe"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
 
 # Finder: show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool false
@@ -124,6 +124,34 @@ defaults write com.apple.dock show-recents -bool false
 # Disable the Launchpad gesture (pinch with thumb and three fingers)
 defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
 
+# Clean up dock apps
+defaults write com.apple.dock persistent-apps -array
+defaults delete com.apple.dock persistent-others
+
+# Then set them up
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/iTerm.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Outlook.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+
+defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+
+# Restart the Dock
+killall Dock
+
+# Setup login items
+osascript -e 'tell application "System Events" to delete every login item'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Firefox.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Messages.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/iTerm.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Outlook.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Raycast.app", hidden:false}'
+
 # Enable the WebKit Developer Tools in the Mac App Store
 defaults write com.apple.appstore WebKitDeveloperExtras -bool true
 
@@ -141,9 +169,6 @@ defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
 
 # Install System data files & security updates
 defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
-
-# Automatically download apps purchased on other Macs
-defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
 
 # Turn on app auto-update
 defaults write com.apple.commerce AutoUpdate -bool true
@@ -178,6 +203,14 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeF
 # Show seconds in menubar
 defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  h:mm:ss a"
 defaults write com.apple.menuextra.clock ShowSeconds -bool true
+
+wallpaper set wallpaper.jpg
+
+# Configure iTerm2
+/usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Transparency" 0.15' ~/Library/Preferences/com.googlecode.iterm2.plist
+/usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Show Mark Indicators" 0' ~/Library/Preferences/com.googlecode.iterm2.plist
+/usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Use Separate Colors for Light and Dark Mode" 0' ~/Library/Preferences/com.googlecode.iterm2.plist
+/usr/libexec/PlistBuddy -c 'Set :"New Bookmarks":0:"Unlimited Scrollback" 1' ~/Library/Preferences/com.googlecode.iterm2.plist
 
 # Set custom key mappings in iTerm2
 defaults write com.googlecode.iterm2 GlobalKeyMap '<dict>
@@ -274,3 +307,5 @@ defaults write com.googlecode.iterm2 GlobalKeyMap '<dict>
         <string></string>
     </dict>
   </dict>'
+
+sudo reboot
