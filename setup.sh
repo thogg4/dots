@@ -4,16 +4,33 @@
 # Run once after cloning this repo. Safe to re-run (most steps are idempotent).
 # =============================================================================
 
+printf "sudo password: "
+stty -echo
+read SUDO_PASSWORD
+stty echo
+printf "\n"
+
+# Validate the password up front so the script fails immediately if wrong.
+if ! echo "$SUDO_PASSWORD" | sudo -S true 2>/dev/null; then
+    echo "Incorrect password." >&2
+    exit 1
+fi
+echo "Password validated."
+
 # -----------------------------------------------------------------------------
 # Homebrew
 # Install if missing, then upgrade everything that's already installed.
 # The arm64 prefix is /opt/homebrew; shellenv wires up PATH/MANPATH/etc.
 # -----------------------------------------------------------------------------
-if ! brew --version > /dev/null; then
+if ! brew --version > /dev/null 2>&1; then
+    echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+    echo "Homebrew already installed."
 fi
+echo "Upgrading Homebrew packages..."
 brew upgrade
 
 # -----------------------------------------------------------------------------
@@ -22,32 +39,55 @@ brew upgrade
 # We upgrade ruby-build separately so new Ruby versions stay available.
 # -----------------------------------------------------------------------------
 if ! brew ls --versions rbenv > /dev/null; then
+    echo "Installing rbenv..."
     brew install rbenv
-    brew upgrade ruby-build
     echo 'eval "$(rbenv init -)"' >> $HOME/.zprofile
     eval "$(rbenv init -)"
+else
+    echo "rbenv already installed, upgrading..."
+    brew upgrade rbenv ruby-build 2>/dev/null || true
 fi
 
-rbenv install 4.0.5
-rbenv global 4.0.5
+RUBY_VERSION="$(rbenv install --list | grep -E '^\s*[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')"
+if ! rbenv versions --bare | grep -qx "$RUBY_VERSION"; then
+    echo "Installing Ruby $RUBY_VERSION..."
+    rbenv install "$RUBY_VERSION"
+else
+    echo "Ruby $RUBY_VERSION already installed, skipping."
+fi
+echo "Setting Ruby $RUBY_VERSION as global..."
+rbenv global "$RUBY_VERSION"
 
-gem install kamal
+if gem list kamal -i > /dev/null 2>&1 && gem outdated | grep -q "^kamal "; then
+    echo "Updating kamal gem..."
+    gem update kamal
+elif gem list kamal -i > /dev/null 2>&1; then
+    echo "kamal gem already up to date, skipping."
+else
+    echo "Installing kamal gem..."
+    gem install kamal
+fi
 
 # -----------------------------------------------------------------------------
 # Config directory and Claude directory
 # mkdir is intentionally without -p so it fails loudly if something unexpected
 # is already at that path (e.g. a file instead of a directory).
 # -----------------------------------------------------------------------------
-mkdir $HOME/.config
-mkdir $HOME/.claude
-mkdir $HOME/.ssh
-mkdir $HOME/work
+for dir in "$HOME/.config" "$HOME/.claude" "$HOME/.ssh" "$HOME/work"; do
+    if [ -d "$dir" ]; then
+        echo "$dir already exists, skipping."
+    else
+        echo "Creating $dir..."
+        mkdir "$dir"
+    fi
+done
 
 # -----------------------------------------------------------------------------
 # Neovim config — symlink the whole nvim/ directory
 # Wipe any existing config first so the symlink is clean on re-runs.
 # lazy.nvim bootstraps itself on first launch; no separate install needed.
 # -----------------------------------------------------------------------------
+echo "Linking ~/.config/nvim -> ~/dots/nvim..."
 rm -rf $HOME/.config/nvim
 ln -s $HOME/dots/nvim $HOME/.config/nvim
 
@@ -58,14 +98,16 @@ ln -s $HOME/dots/nvim $HOME/.config/nvim
 # The `git config` call writes the absolute path into .gitconfig so it works
 # even before the symlink is in place on a fresh clone.
 # -----------------------------------------------------------------------------
+echo "Linking ~/.gitconfig -> ~/dots/gitconfig..."
 rm -rf $HOME/.gitconfig
 ln -s $HOME/dots/gitconfig $HOME/.gitconfig
 
+echo "Linking ~/.gitmessage -> ~/dots/gitmessage..."
 rm -rf $HOME/.gitmessage
 ln -s $HOME/dots/gitmessage $HOME/.gitmessage
 git config --global commit.template $HOME/.gitmessage
 
-# Claude Code settings (slash commands, hooks, MCP config, etc.)
+echo "Linking ~/.claude -> ~/dots/claude..."
 ln -s $HOME/dots/claude $HOME/.claude
 
 # -----------------------------------------------------------------------------
@@ -80,32 +122,52 @@ ln -s $HOME/dots/claude $HOME/.claude
 # jordanbaird-ice — menu bar management
 # orbstack   — lightweight Docker/Linux VM alternative to Docker Desktop
 # -----------------------------------------------------------------------------
-brew install fish
-brew install fzf
-brew install the_silver_searcher
-brew install ripgrep
-brew install nvim
-brew install --cask discord
-brew install --cask firefox
-brew install --cask google-chrome
-brew install --cask 1password
-brew install --cask 1password-cli
-brew install --cask raycast
-brew install --cask microsoft-teams
-brew install --cask microsoft-outlook
-brew install --cask slack
-brew install --cask orbstack
-brew install --cask nikitabobko/tap/aerospace
-brew install --cask jordanbaird-ice
-brew install --cask claude-code
-brew install --cask ghostty
-brew install --cask postgres-unofficial
-brew install wallpaper
-brew install defaultbrowser
+formula() {
+    if brew list "$1" > /dev/null 2>&1; then
+        echo "  [skip] $1 — already installed"
+    else
+        echo "  [install] $1"
+        brew install "$@"
+    fi
+}
+cask() {
+    _name="${1##*/}"
+    if brew list --cask "$_name" > /dev/null 2>&1; then
+        echo "  [skip] $_name — already installed"
+    else
+        echo "  [install] $_name"
+        brew install --cask "$@"
+    fi
+}
+
+echo "Installing packages..."
+formula fish
+formula fzf
+formula the_silver_searcher
+formula ripgrep
+formula nvim
+cask discord
+cask firefox
+cask google-chrome
+cask 1password
+cask 1password-cli
+cask raycast
+cask microsoft-teams
+cask microsoft-outlook
+cask slack
+cask orbstack
+cask nikitabobko/tap/aerospace
+cask jordanbaird-ice
+cask claude-code
+cask ghostty
+cask postgres-unofficial
+formula wallpaper
+formula defaultbrowser
 
 
 # — Ghostty terminal ——————————————————————————————————————————————————————————
 # Symlink the whole ghostty/ directory so all config is tracked here.
+echo "Linking ~/.config/ghostty -> ~/dots/ghostty..."
 rm -rf $HOME/.config/ghostty
 ln -s $HOME/dots/ghostty $HOME/.config/ghostty
 
@@ -114,8 +176,11 @@ ln -s $HOME/dots/ghostty $HOME/.config/ghostty
 # Add fish to /etc/shells so chsh accepts it, then make it the login shell.
 # Symlink the whole fish/ directory (config.fish, functions/, conf.d/).
 # -----------------------------------------------------------------------------
-echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells
-chsh -s /opt/homebrew/bin/fish
+echo "Adding fish to /etc/shells..."
+echo "$SUDO_PASSWORD" | sudo -S sh -c 'echo /opt/homebrew/bin/fish | tee -a /etc/shells' 2>/dev/null
+echo "Setting fish as login shell..."
+echo "$SUDO_PASSWORD" | sudo -S chsh -s /opt/homebrew/bin/fish "$USER" 2>/dev/null
+echo "Linking ~/.config/fish -> ~/dots/fish..."
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
 
@@ -123,46 +188,55 @@ ln -s $HOME/dots/fish $HOME/.config/fish
 # macOS System Preferences — close the GUI so defaults writes take effect
 # cleanly without the app overwriting them on quit.
 # -----------------------------------------------------------------------------
+echo "Closing System Preferences..."
 osascript -e 'tell application "System Preferences" to quit'
 
 # — Security ——————————————————————————————————————————————————————————————————
 # Suppress the "Are you sure you want to open this application?" Gatekeeper
 # dialog for apps downloaded from the internet.
+echo "Applying macOS defaults: security..."
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # — Trackpad ——————————————————————————————————————————————————————————————————
 # Tap to click (applies to both the current user and the login screen).
+echo "Applying macOS defaults: trackpad tap-to-click..."
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # Use "natural" scroll direction: false = old-school (scroll up = content moves up).
+echo "Applying macOS defaults: scroll direction..."
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
 # — Audio —————————————————————————————————————————————————————————————————————
 # Raise the Bluetooth audio codec bitpool floor so headphones use a higher
 # quality codec instead of dropping to the lowest common denominator.
+echo "Applying macOS defaults: Bluetooth audio quality..."
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 # — Keyboard ——————————————————————————————————————————————————————————————————
 # KeyRepeat: delay between repeated keys when held (lower = faster).
 # InitialKeyRepeat: pause before repetition starts.
 # These values are lower than the UI allows.
+echo "Applying macOS defaults: keyboard repeat rate..."
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 13
 
 # Disable Spotlight's Cmd-Space and Cmd-Shift-Space shortcuts (keys 64/65)
 # so Raycast can own that hotkey without conflict.
+echo "Applying macOS defaults: Spotlight shortcuts..."
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
 
 # — Screenshots ———————————————————————————————————————————————————————————————
+echo "Applying macOS defaults: screenshots..."
 defaults write com.apple.screencapture location -string "${HOME}/Downloads"
 defaults write com.apple.screencapture type -string "png"
 
 # — Finder ————————————————————————————————————————————————————————————————————
 # Open new windows to Downloads instead of the default "Recents" view.
 # PfLo = "Path from Location" (a custom folder), as opposed to PfHm (home).
+echo "Applying macOS defaults: Finder..."
 defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
 
@@ -177,6 +251,7 @@ defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 # — Dock ——————————————————————————————————————————————————————————————————————
 # "scale" shrinks the window into the app icon rather than doing a genie effect.
+echo "Applying macOS defaults: Dock..."
 defaults write com.apple.dock mineffect -string "scale"
 
 # Minimise into the app's icon instead of a separate Dock tile.
@@ -208,11 +283,13 @@ defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type
 defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 
 # Apply all Dock changes.
+echo "Restarting Dock..."
 killall Dock
 
 # — Login items ———————————————————————————————————————————————————————————————
 # Clear existing login items, then add the ones we want.
 # hidden:false = the app window is visible at login (not launched in background).
+echo "Setting login items..."
 osascript -e 'tell application "System Events" to delete every login item'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Firefox.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Messages.app", hidden:false}'
@@ -223,10 +300,12 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Raycast.app", hidden:false}'
 
 # — App Store —————————————————————————————————————————————————————————————————
+echo "Applying macOS defaults: App Store..."
 defaults write com.apple.appstore WebKitDeveloperExtras -bool true  # WebKit devtools in App Store
 defaults write com.apple.appstore ShowDebugMenu -bool true           # Debug menu in App Store
 
 # — Software Update ———————————————————————————————————————————————————————————
+echo "Applying macOS defaults: Software Update..."
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true  # Check daily
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1          # 1 = daily (default is weekly)
 defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1           # Download in background
@@ -236,6 +315,7 @@ defaults write com.apple.commerce AutoUpdateRestartRequired -bool true     # All
 
 # — Trackpad gestures —————————————————————————————————————————————————————————
 # Drag with lock: lets you drag windows by tapping twice and locking the drag.
+echo "Applying macOS defaults: trackpad gestures..."
 defaults write com.apple.AppleMultitouchTrackpad Dragging -bool true
 defaults write com.apple.AppleMultitouchTrackpad DragLock -bool true
 
@@ -260,11 +340,13 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFi
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
 
 # Set Firefox as the default browser (requires `brew install defaultbrowser`).
-defaultbrowser firefox
+echo "Setting Firefox as default browser..."
+echo "$SUDO_PASSWORD" | sudo -S defaultbrowser firefox 2>/dev/null
 
 # — Raycast ———————————————————————————————————————————————————————————————————
 # Apply preferences that aren't stored in the raycast.json export.
 # set_plist tries Add first (for a fresh plist) then falls back to Set.
+echo "Configuring Raycast preferences..."
 RAYCAST_PLIST="$HOME/Library/Preferences/com.raycast.macos.plist"
 set_plist() {
     /usr/libexec/PlistBuddy -c "Add :$1 $2 $3" "$RAYCAST_PLIST" 2>/dev/null || true
@@ -277,20 +359,24 @@ set_plist "raycastShouldFollowSystemAppearance" integer 1
 set_plist "useHyperKeyIcon"                     integer 0
 
 # Kill Raycast so it picks up the new plist values on next launch.
+echo "Restarting Raycast..."
 killall Raycast 2>/dev/null || true
 
 # Import extensions, quicklinks, snippets, and remaining preferences from the
 # tracked raycast.json. The import format is gzipped JSON with a .rayconfig
 # extension. We generate it on the fly so only the canonical .json is committed.
+echo "Importing Raycast config..."
+rm -f "$HOME/dots/raycast.json.rayconfig"
 gzip --keep --suffix .rayconfig "$HOME/dots/raycast.json"
 open -a Raycast --args import "$HOME/dots/raycast.json"
 
 # — Menu bar clock ————————————————————————————————————————————————————————————
-# Show day, date, time with seconds in the menu bar clock.
+echo "Applying macOS defaults: menu bar clock..."
 defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  h:mm:ss a"
 defaults write com.apple.menuextra.clock ShowSeconds -bool true
 
 # Set desktop wallpaper (requires `brew install wallpaper`).
+echo "Setting desktop wallpaper..."
 wallpaper set wallpaper.jpg
 
 # Let the wallpaper get set
@@ -299,5 +385,5 @@ sleep 5
 printf "Reboot now? [y/N] "
 read REPLY
 case "$REPLY" in
-    y|Y) sudo reboot ;;
+    y|Y) echo "$SUDO_PASSWORD" | sudo -S reboot ;;
 esac
