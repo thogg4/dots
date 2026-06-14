@@ -54,3 +54,7 @@ if status --is-interactive
 end
 
 status --is-interactive; and rbenv init - --no-rehash fish | source
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :

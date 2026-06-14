@@ -35,6 +35,8 @@ fi
 # -----------------------------------------------------------------------------
 mkdir $HOME/.config
 mkdir $HOME/.claude
+mkdir $HOME/.ssh
+mkdir $HOME/work
 
 # -----------------------------------------------------------------------------
 # Neovim config — symlink the whole nvim/ directory
