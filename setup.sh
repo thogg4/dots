@@ -28,6 +28,8 @@ if ! brew ls --versions rbenv > /dev/null; then
     eval "$(rbenv init -)"
 fi
 
+gem install kamal
+
 # -----------------------------------------------------------------------------
 # Config directory and Claude directory
 # mkdir is intentionally without -p so it fails loudly if something unexpected
