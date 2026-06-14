@@ -279,6 +279,9 @@ defaults write com.apple.menuextra.clock ShowSeconds -bool true
 # Set desktop wallpaper (requires `brew install wallpaper`).
 wallpaper set wallpaper.jpg
 
+# Let the wallpaper get set
+sleep 5
+
 # — Ghostty terminal ——————————————————————————————————————————————————————————
 # Symlink the whole ghostty/ directory so all config is tracked here.
 rm -rf $HOME/.config/ghostty
