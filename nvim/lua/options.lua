@@ -73,7 +73,7 @@ opt.smartcase = true    -- override ignorecase: if you type a capital, match bec
 
 opt.ttimeoutlen = 10    -- milliseconds to wait for a key sequence after Esc
                         -- low value means Esc feels instant in insert mode
-opt.timeoutlen = 300    -- milliseconds to wait for a mapped key sequence (e.g. <Leader>t)
+opt.timeoutlen = 1000   -- milliseconds to wait for a mapped key sequence (e.g. <Leader>t)
 opt.updatetime = 250    -- ms of inactivity before CursorHold fires and swap file is written
                         -- lower = faster gitsigns/LSP hover triggers
 

@@ -1,0 +1,8 @@
+theme = TokyoNight Storm
+background-opacity = 0.85
+scrollback-limit = 100000
+cursor-style = block
+cursor-style-blink = false
+maximize = true
+keybind = cmd+shift+right=next_tab
+keybind = cmd+shift+left=previous_tab

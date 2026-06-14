@@ -54,7 +54,7 @@ require("lazy").setup({
       require("tokyonight").setup({
         style = "storm",    -- variants: "storm" | "moon" | "night" | "day"
         transparent = true, -- make the Normal background transparent so the
-                            -- terminal's own background shows through
+        -- terminal's own background shows through
       })
       vim.cmd("colorscheme tokyonight-storm")
       -- Explicitly clear the background highlight groups so transparent = true
@@ -164,16 +164,16 @@ require("lazy").setup({
         group = vim.api.nvim_create_augroup("lsp_keymaps", { clear = true }),
         callback = function(args)
           local opts = { noremap = true, silent = true, buffer = args.buf }
-          vim.keymap.set("n", "gd",         vim.lsp.buf.definition,     opts)
-          vim.keymap.set("n", "gD",         vim.lsp.buf.declaration,    opts)
-          vim.keymap.set("n", "gr",         vim.lsp.buf.references,     opts)
-          vim.keymap.set("n", "gi",         vim.lsp.buf.implementation, opts)
-          vim.keymap.set("n", "K",          vim.lsp.buf.hover,          opts)
-          vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename,         opts)
-          vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action,    opts)
-          vim.keymap.set("n", "<Leader>e",  vim.diagnostic.open_float,  opts)
-          vim.keymap.set("n", "[d",         vim.diagnostic.goto_prev,   opts)
-          vim.keymap.set("n", "]d",         vim.diagnostic.goto_next,   opts)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "<Leader>ca", vim.lsp.buf.code_action, opts)
+          vim.keymap.set("n", "<Leader>e", vim.diagnostic.open_float, opts)
+          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
         end,
       })
 
@@ -276,22 +276,22 @@ require("lazy").setup({
           expand = function(args) luasnip.lsp_expand(args.body) end,
         },
         mapping = cmp.mapping.preset.insert({
-          ["<C-b>"]     = cmp.mapping.scroll_docs(-4),    -- scroll docs up
-          ["<C-f>"]     = cmp.mapping.scroll_docs(4),     -- scroll docs down
-          ["<C-Space>"] = cmp.mapping.complete(),          -- force-open menu
+          ["<C-b>"]     = cmp.mapping.scroll_docs(-4),            -- scroll docs up
+          ["<C-f>"]     = cmp.mapping.scroll_docs(4),             -- scroll docs down
+          ["<C-Space>"] = cmp.mapping.complete(),                 -- force-open menu
           ["<CR>"]      = cmp.mapping.confirm({ select = true }), -- confirm top item
           -- Tab: advance through completion items OR through snippet placeholders
-          ["<Tab>"] = cmp.mapping(function(fallback)
+          ["<Tab>"]     = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
               luasnip.expand_or_jump() -- expand snippet or jump to next placeholder
             else
-              fallback() -- default Tab behaviour (indent)
+              fallback()               -- default Tab behaviour (indent)
             end
           end, { "i", "s" }),
           -- S-Tab: reverse direction
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
+          ["<S-Tab>"]   = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
@@ -330,9 +330,9 @@ require("lazy").setup({
   --   <Leader>fr   — recently opened files
   {
     "nvim-telescope/telescope.nvim",
-    cmd = "Telescope", -- lazy-load: only when :Telescope is called OR a keymap fires
+    cmd = "Telescope",         -- lazy-load: only when :Telescope is called OR a keymap fires
     dependencies = {
-      "nvim-lua/plenary.nvim",  -- utility library required by telescope
+      "nvim-lua/plenary.nvim", -- utility library required by telescope
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
     keys = {
@@ -347,18 +347,18 @@ require("lazy").setup({
         end,
         desc = "Project files",
       },
-      { "<Leader>fg", function() require("telescope.builtin").live_grep() end,    desc = "Live grep" },
-      { "<Leader>fb", function() require("telescope.builtin").buffers() end,      desc = "Buffers" },
-      { "<Leader>fh", function() require("telescope.builtin").help_tags() end,    desc = "Help" },
-      { "<Leader>fd", function() require("telescope.builtin").diagnostics() end,  desc = "Diagnostics" },
-      { "<Leader>fr", function() require("telescope.builtin").oldfiles() end,     desc = "Recent files" },
+      { "<Leader>fg", function() require("telescope.builtin").live_grep() end,   desc = "Live grep" },
+      { "<Leader>fb", function() require("telescope.builtin").buffers() end,     desc = "Buffers" },
+      { "<Leader>fh", function() require("telescope.builtin").help_tags() end,   desc = "Help" },
+      { "<Leader>fd", function() require("telescope.builtin").diagnostics() end, desc = "Diagnostics" },
+      { "<Leader>fr", function() require("telescope.builtin").oldfiles() end,    desc = "Recent files" },
     },
     config = function()
       local telescope = require("telescope")
       telescope.setup({
         defaults = {
-          layout_strategy = "bottom_pane",          -- panel opens at the bottom
-          layout_config = { height = 0.5 },         -- takes up half the screen height
+          layout_strategy = "bottom_pane",  -- panel opens at the bottom
+          layout_config = { height = 0.5 }, -- takes up half the screen height
           file_ignore_patterns = { "%.git/", "node_modules/" },
         },
       })
@@ -397,10 +397,10 @@ require("lazy").setup({
         on_attach = function(bufnr)
           local gs = package.loaded.gitsigns
           local opts = { buffer = bufnr, silent = true }
-          vim.keymap.set("n", "]g",         gs.next_hunk,  opts)
-          vim.keymap.set("n", "[g",         gs.prev_hunk,  opts)
+          vim.keymap.set("n", "]g", gs.next_hunk, opts)
+          vim.keymap.set("n", "[g", gs.prev_hunk, opts)
           vim.keymap.set("n", "<Leader>gp", gs.preview_hunk, opts)
-          vim.keymap.set("n", "<Leader>gb", gs.blame_line,  opts)
+          vim.keymap.set("n", "<Leader>gb", gs.blame_line, opts)
         end,
       })
     end,
@@ -423,11 +423,11 @@ require("lazy").setup({
       require("lualine").setup({
         options = {
           theme = "tokyonight",
-          section_separators = "",    -- no powerline-style arrows
-          component_separators = "",  -- no separators between components either
+          section_separators = "",   -- no powerline-style arrows
+          component_separators = "", -- no separators between components either
         },
         sections = {
-          lualine_b = {},              -- hide branch/diff/diagnostics (keep it minimal)
+          lualine_b = {},             -- hide branch/diff/diagnostics (keep it minimal)
           lualine_x = { "filetype" }, -- only show filetype on the right side
         },
       })
@@ -455,14 +455,22 @@ require("lazy").setup({
   -- Uses treesitter to detect the correct comment syntax for the current
   -- language, including embedded languages (e.g. JS inside an ERB template).
   --
-  -- Keymaps (built-in, no config needed):
-  --   gcc    — toggle comment on the current line (normal mode)
-  --   gc     — toggle comment on a visual selection (visual mode)
-  --   gcap   — comment the entire paragraph
+  -- Keymaps:
+  --   <Leader>cc   — comment current line / selection
+  --   <Leader>uc   — uncomment current line / selection
   {
     "numToStr/Comment.nvim",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {},
+    lazy = false,
+    config = function()
+      require("Comment").setup({
+        toggler  = { line = "<Leader>cc" },
+        opleader = { line = "<Leader>c" },
+        mappings = { basic = true, extra = false },
+      })
+      -- <Leader>uc mirrors <Leader>cc (both toggle, so uc uncomments commented lines)
+      vim.keymap.set("n", "<Leader>uc", "<Leader>cc", { remap = true, silent = true, desc = "Uncomment line" })
+      vim.keymap.set("x", "<Leader>uc", "<Leader>c", { remap = true, silent = true, desc = "Uncomment selection" })
+    end,
   },
 
   -- ---------------------------------------------------------------------------
@@ -556,11 +564,11 @@ require("lazy").setup({
     keys = { { "<C-T>", "<cmd>ToggleTerm direction=horizontal<CR>", desc = "Toggle terminal" } },
     config = function()
       require("toggleterm").setup({
-        size = 15,               -- height of the terminal split in rows
+        size = 15,            -- height of the terminal split in rows
         direction = "horizontal",
-        shell = vim.o.shell,     -- use whatever shell is set in $SHELL
-        auto_scroll = true,      -- scroll to the bottom as output appears
-        close_on_exit = true,    -- close the terminal buffer when the shell exits
+        shell = vim.o.shell,  -- use whatever shell is set in $SHELL
+        auto_scroll = true,   -- scroll to the bottom as output appears
+        close_on_exit = true, -- close the terminal buffer when the shell exits
       })
       vim.keymap.set("n", "<Leader>c", ":ToggleTermToggleAll<CR>",
         { silent = true, desc = "Close all terminals" })
@@ -586,7 +594,7 @@ require("lazy").setup({
       { "<Leader>l", "<cmd>TestLast<CR>",    desc = "Test last" },
     },
     config = function()
-      vim.g["test#strategy"] = "toggleterm"            -- run tests in toggleterm
+      vim.g["test#strategy"] = "toggleterm"                -- run tests in toggleterm
       vim.g["test#ruby#cucumber#options"] = "-r features/" -- load step definitions
     end,
   },
@@ -621,8 +629,8 @@ require("lazy").setup({
           lua        = { "stylua" },
         },
         format_on_save = {
-          timeout_ms = 500,       -- give the formatter 500ms before giving up
-          lsp_fallback = true,    -- fall back to LSP formatting if no formatter found
+          timeout_ms = 500,    -- give the formatter 500ms before giving up
+          lsp_fallback = true, -- fall back to LSP formatting if no formatter found
         },
       })
     end,
@@ -700,7 +708,7 @@ require("lazy").setup({
 
 }, {
   -- lazy.nvim manager options
-  ui = { border = "rounded" },               -- rounded border in the :Lazy UI popup
+  ui = { border = "rounded" },                  -- rounded border in the :Lazy UI popup
   checker = { enabled = true, notify = false }, -- check for plugin updates silently
-                                               -- run :Lazy update when you want to apply them
+  -- run :Lazy update when you want to apply them
 })

@@ -87,6 +87,11 @@ map("n", "<Leader>s", function()
 end, { desc = "Strip trailing whitespace" })
 
 -- -----------------------------------------------------------------------------
+-- Format JSON — pipe buffer through jq
+-- -----------------------------------------------------------------------------
+map("n", "<Leader>jq", ":%!jq .<CR>", { silent = true, desc = "Format JSON with jq" })
+
+-- -----------------------------------------------------------------------------
 -- Clear search highlight
 -- After searching, pressing Esc in normal mode removes the lingering highlights.
 -- (opt.hlsearch is off by default, but this handles the case where you

@@ -1,0 +1,1913 @@
+{
+  "builtin_package_translator": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_fileSearch": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_open-ai": {
+    "aiCommands": [],
+    "provider_schemaVersion": 1,
+    "aiChatPresets": [],
+    "aiChats": []
+  },
+  "builtin_package_reminders": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_nodeExtension": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_developer": {
+    "provider_schemaVersion": 1
+  },
+  "raycast_user_activity": {
+    "activities": [
+      {
+        "type": "appOpen",
+        "id": 1,
+        "date": "2026-06-13T21:36:20.930Z"
+      },
+      {
+        "id": 2,
+        "type": "appClose",
+        "date": "2026-06-13T21:36:23.104Z"
+      },
+      {
+        "id": 3,
+        "type": "appOpen",
+        "date": "2026-06-13T21:36:50.624Z"
+      },
+      {
+        "id": 4,
+        "type": "appClose",
+        "date": "2026-06-13T21:36:51.293Z"
+      },
+      {
+        "type": "appOpen",
+        "date": "2026-06-13T21:37:03.725Z",
+        "id": 5
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-13T21:37:13.313Z",
+        "id": 6
+      },
+      {
+        "type": "appOpen",
+        "id": 7,
+        "date": "2026-06-13T21:40:16.491Z"
+      },
+      {
+        "infoId": 1,
+        "id": 8,
+        "type": "openQuickLink",
+        "date": "2026-06-13T21:40:22.579Z"
+      },
+      {
+        "id": 9,
+        "type": "appClose",
+        "date": "2026-06-13T21:40:22.691Z"
+      },
+      {
+        "id": 10,
+        "date": "2026-06-13T21:42:18.541Z",
+        "type": "appOpen"
+      },
+      {
+        "id": 11,
+        "type": "appClose",
+        "date": "2026-06-13T21:42:20.671Z"
+      },
+      {
+        "date": "2026-06-13T21:51:50.069Z",
+        "id": 12,
+        "type": "appOpen"
+      },
+      {
+        "id": 13,
+        "date": "2026-06-13T21:51:56.883Z",
+        "type": "appClose"
+      },
+      {
+        "id": 14,
+        "type": "appOpen",
+        "date": "2026-06-13T23:38:52.038Z"
+      },
+      {
+        "id": 15,
+        "date": "2026-06-13T23:38:53.709Z",
+        "type": "appClose"
+      },
+      {
+        "date": "2026-06-13T23:39:04.066Z",
+        "type": "appOpen",
+        "id": 16
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-13T23:39:42.470Z",
+        "id": 17
+      },
+      {
+        "date": "2026-06-13T23:40:07.745Z",
+        "id": 18,
+        "type": "appOpen"
+      },
+      {
+        "date": "2026-06-13T23:40:29.194Z",
+        "type": "appOpen",
+        "id": 19
+      },
+      {
+        "id": 20,
+        "type": "appClose",
+        "date": "2026-06-13T23:40:31.645Z"
+      },
+      {
+        "type": "appOpen",
+        "date": "2026-06-13T23:41:36.567Z",
+        "id": 21
+      },
+      {
+        "date": "2026-06-13T23:41:46.429Z",
+        "type": "openQuickLink",
+        "id": 22,
+        "infoId": 1
+      },
+      {
+        "type": "appClose",
+        "id": 23,
+        "date": "2026-06-13T23:41:46.505Z"
+      },
+      {
+        "date": "2026-06-13T23:53:46.757Z",
+        "id": 24,
+        "type": "appOpen"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-13T23:53:48.172Z",
+        "id": 25
+      },
+      {
+        "id": 26,
+        "type": "appOpen",
+        "date": "2026-06-13T23:59:04.078Z"
+      },
+      {
+        "id": 27,
+        "type": "appOpen",
+        "date": "2026-06-13T23:59:10.089Z"
+      },
+      {
+        "date": "2026-06-13T23:59:12.128Z",
+        "type": "appClose",
+        "id": 28
+      },
+      {
+        "type": "appOpen",
+        "id": 29,
+        "date": "2026-06-14T00:07:20.672Z"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:07:24.976Z",
+        "id": 30
+      },
+      {
+        "date": "2026-06-14T00:07:39.768Z",
+        "id": 31,
+        "type": "appOpen"
+      },
+      {
+        "id": 32,
+        "date": "2026-06-14T00:07:42.104Z",
+        "type": "appClose"
+      },
+      {
+        "id": 33,
+        "date": "2026-06-14T00:07:43.332Z",
+        "type": "appOpen"
+      },
+      {
+        "id": 34,
+        "infoId": 2,
+        "type": "openRaycastCommand",
+        "date": "2026-06-14T00:07:47.289Z"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:07:47.320Z",
+        "id": 35
+      },
+      {
+        "date": "2026-06-14T00:07:48.893Z",
+        "id": 36,
+        "type": "appOpen"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:08:09.630Z",
+        "id": 37
+      },
+      {
+        "type": "appOpen",
+        "id": 38,
+        "date": "2026-06-14T00:08:56.206Z"
+      },
+      {
+        "type": "appClose",
+        "id": 39,
+        "date": "2026-06-14T00:14:01.148Z"
+      },
+      {
+        "id": 40,
+        "type": "appOpen",
+        "date": "2026-06-14T00:14:01.677Z"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:14:59.671Z",
+        "id": 41
+      },
+      {
+        "id": 42,
+        "type": "appOpen",
+        "date": "2026-06-14T00:15:01.888Z"
+      },
+      {
+        "type": "appClose",
+        "id": 43,
+        "date": "2026-06-14T00:15:40.855Z"
+      },
+      {
+        "date": "2026-06-14T00:15:41.900Z",
+        "type": "appOpen",
+        "id": 44
+      },
+      {
+        "type": "openRaycastCommand",
+        "date": "2026-06-14T00:15:44.966Z",
+        "infoId": 3,
+        "id": 45
+      },
+      {
+        "date": "2026-06-14T00:16:35.262Z",
+        "id": 46,
+        "type": "appClose"
+      },
+      {
+        "id": 47,
+        "type": "appOpen",
+        "date": "2026-06-14T00:17:35.111Z"
+      },
+      {
+        "id": 48,
+        "date": "2026-06-14T00:17:42.544Z",
+        "type": "appClose"
+      },
+      {
+        "type": "appOpen",
+        "date": "2026-06-14T00:17:45.182Z",
+        "id": 49
+      },
+      {
+        "date": "2026-06-14T00:19:27.028Z",
+        "id": 50,
+        "infoId": 4,
+        "type": "storeInstallExtension"
+      },
+      {
+        "id": 51,
+        "date": "2026-06-14T00:19:53.324Z",
+        "type": "storeInstallExtension",
+        "infoId": 5
+      },
+      {
+        "id": 52,
+        "infoId": 6,
+        "type": "storeInstallExtension",
+        "date": "2026-06-14T00:20:31.338Z"
+      },
+      {
+        "id": 53,
+        "infoId": 7,
+        "date": "2026-06-14T00:21:16.081Z",
+        "type": "storeInstallExtension"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:21:36.845Z",
+        "id": 54
+      },
+      {
+        "type": "appOpen",
+        "id": 55,
+        "date": "2026-06-14T00:21:50.588Z"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:22:00.412Z",
+        "id": 56
+      },
+      {
+        "type": "appOpen",
+        "date": "2026-06-14T00:23:26.826Z",
+        "id": 57
+      },
+      {
+        "id": 58,
+        "type": "appClose",
+        "date": "2026-06-14T00:24:05.073Z"
+      },
+      {
+        "id": 59,
+        "type": "appOpen",
+        "date": "2026-06-14T00:24:05.581Z"
+      },
+      {
+        "date": "2026-06-14T00:24:12.044Z",
+        "infoId": 8,
+        "id": 60,
+        "type": "openRaycastCommand"
+      },
+      {
+        "id": 61,
+        "date": "2026-06-14T00:24:12.091Z",
+        "type": "appClose"
+      },
+      {
+        "type": "appOpen",
+        "date": "2026-06-14T00:24:30.683Z",
+        "id": 62
+      },
+      {
+        "id": 63,
+        "type": "openRaycastCommand",
+        "date": "2026-06-14T00:24:34.304Z",
+        "infoId": 8
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:24:34.346Z",
+        "id": 64
+      },
+      {
+        "id": 65,
+        "type": "appOpen",
+        "date": "2026-06-14T00:24:47.342Z"
+      },
+      {
+        "date": "2026-06-14T00:25:24.563Z",
+        "id": 66,
+        "type": "appClose"
+      },
+      {
+        "type": "appOpen",
+        "id": 67,
+        "date": "2026-06-14T00:25:33.837Z"
+      },
+      {
+        "id": 68,
+        "date": "2026-06-14T00:25:37.707Z",
+        "type": "openRaycastCommand",
+        "infoId": 9
+      },
+      {
+        "id": 69,
+        "type": "appClose",
+        "date": "2026-06-14T00:25:53.531Z"
+      },
+      {
+        "date": "2026-06-14T00:25:55.434Z",
+        "type": "appOpen",
+        "id": 70
+      },
+      {
+        "id": 71,
+        "type": "openRaycastCommand",
+        "date": "2026-06-14T00:26:06.399Z",
+        "infoId": 10
+      },
+      {
+        "id": 72,
+        "date": "2026-06-14T00:26:15.531Z",
+        "type": "appClose"
+      },
+      {
+        "date": "2026-06-14T00:28:19.760Z",
+        "id": 73,
+        "type": "appOpen"
+      },
+      {
+        "date": "2026-06-14T00:28:23.981Z",
+        "id": 74,
+        "type": "appOpen"
+      },
+      {
+        "type": "appClose",
+        "id": 75,
+        "date": "2026-06-14T00:28:26.204Z"
+      },
+      {
+        "type": "appOpen",
+        "id": 76,
+        "date": "2026-06-14T00:37:14.974Z"
+      },
+      {
+        "id": 77,
+        "type": "openQuickLink",
+        "date": "2026-06-14T00:37:32.323Z",
+        "infoId": 1
+      },
+      {
+        "id": 78,
+        "type": "appClose",
+        "date": "2026-06-14T00:37:32.434Z"
+      },
+      {
+        "type": "appOpen",
+        "id": 79,
+        "date": "2026-06-14T00:37:38.487Z"
+      },
+      {
+        "type": "appClose",
+        "date": "2026-06-14T00:37:43.680Z",
+        "id": 80
+      },
+      {
+        "type": "appOpen",
+        "date": "2026-06-14T00:54:45.152Z",
+        "id": 81
+      },
+      {
+        "date": "2026-06-14T00:54:51.583Z",
+        "id": 82,
+        "type": "appClose"
+      },
+      {
+        "type": "appOpen",
+        "id": 83,
+        "date": "2026-06-14T00:54:59.193Z"
+      },
+      {
+        "type": "appOpen",
+        "id": 84,
+        "date": "2026-06-14T00:55:04.253Z"
+      }
+    ],
+    "activityInfo": [
+      {
+        "key": "raycastQuicklink_C8247648-F3C4-4898-A17E-26779459697F",
+        "title": "Search Google",
+        "id": 1
+      },
+      {
+        "id": 2,
+        "key": "builtin_command_windowManagementMaximize",
+        "title": "Maximize"
+      },
+      {
+        "title": "My Schedule",
+        "key": "builtin_command_calendar_schedule",
+        "id": 3
+      },
+      {
+        "key": "ba9ecf89-7162-4f6a-a417-5087d8d48a98",
+        "title": "1Password",
+        "id": 4
+      },
+      {
+        "key": "89648e03-cceb-4205-9f40-75fcb039a4c6",
+        "title": "GitHub",
+        "id": 5
+      },
+      {
+        "title": "Format JSON",
+        "key": "2278bb97-e6f6-44ef-bdcd-937fc20bd0c2",
+        "id": 6
+      },
+      {
+        "id": 7,
+        "key": "f872e5ef-af26-4086-8b11-261e5c6f6c93",
+        "title": "Messages"
+      },
+      {
+        "id": 8,
+        "title": "Raycast Notes",
+        "key": "builtin_command_raycastNotes_toggle"
+      },
+      {
+        "title": "Create Snippet",
+        "id": 9,
+        "key": "builtin_command_createSnippet"
+      },
+      {
+        "title": "Download Repository",
+        "id": 10,
+        "key": "thomaslombart/github/download-repository"
+      }
+    ],
+    "aiChatActivities": [],
+    "focusActivities": [],
+    "provider_schemaVersion": 1
+  },
+  "remote_package_gpt_image": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_clipboardHistory": {
+    "clipboardHistoryDisabledApplicationsVersion": 2,
+    "clipboardHistoryDisabledApplications": [
+      "com.apple.Passwords",
+      "com.apple.keychainaccess"
+    ],
+    "clipboardHistoryRecords": [
+      {
+        "category": "text",
+        "text": "defaults write com.googlecode.iterm2 GlobalKeyMap",
+        "modifiedAt": "2026-06-13T20:46:50Z",
+        "createdAt": "2026-06-13T20:46:50Z",
+        "copyCount": 1,
+        "applicationPath": "/Applications/iTerm.app"
+      },
+      {
+        "createdAt": "2026-06-13T20:48:01Z",
+        "modifiedAt": "2026-06-13T20:50:06Z",
+        "text": "/usr/libexec/PlistBuddy -c 'Set :\"New Bookmarks\":0:\"Unlimited Scrollback\" 1' ~/Library/Preferences/com.googlecode.iterm2.plist\n",
+        "category": "text",
+        "copyCount": 2,
+        "applicationPath": "/Applications/iTerm.app"
+      },
+      {
+        "category": "text",
+        "text": "#!/bin/sh\n\nif ! brew --version > /dev/null; then\n    /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n    echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> $HOME/.zprofile\n    eval \"$(/opt/homebrew/bin/brew shellenv)\"\nfi\nbrew upgrade\n\nif ! brew ls --versions rbenv > /dev/null; then\n    brew install rbenv\n    brew upgrade ruby-build\n    echo 'eval \"$(rbenv init -)\"' >> $HOME/.zprofile\n    eval \"$(rbenv init -)\"\nfi\n\nif ! brew ls --versions fzf > /dev/null; then\n    brew install fzf\nfi\n\nif ! brew ls --versions the_silver_searcher > /dev/null; then\n  brew install the_silver_searcher\nfi\n\n# ripgrep is used by telescope for live_grep\nif ! brew ls --versions ripgrep > /dev/null; then\n  brew install ripgrep\nfi\n\nif ! brew ls --versions nvim > /dev/null; then\n  brew install nvim\nfi\n\nmkdir $HOME/.config\nmkdir $HOME/.claude\n\n# lazy.nvim bootstraps itself on first nvim launch — no separate install step needed\nrm -rf $HOME/.config/nvim\nln -s $HOME/dots/nvim $HOME/.config/nvim\n\nrm -rf $HOME/.gitconfig\nln -s $HOME/dots/gitconfig $HOME/.gitconfig\n\nrm -rf $HOME/.gitmessage\nln -s $HOME/dots/gitmessage $HOME/.gitmessage\ngit config --global commit.template $HOME/.gitmessage\n\nln -s $HOME/dots/claude $HOME/.claude\n\nif ! brew ls --versions fish > /dev/null; then\n    brew install fish\nfi\necho /opt/homebrew/bin/fish | sudo tee -a /etc/shells\nchsh -s /opt/homebrew/bin/fish\nrm -rf $HOME/.config/fish\nln -s $HOME/dots/fish $HOME/.config/fish\n\nbrew install --cask discord\nbrew install --cask firefox\nbrew install --cask google-chrome\nbrew install --cask iterm2\nbrew install --cask 1password\nbrew install --cask 1password-cli\nbrew install --cask raycast\nbrew install --cask microsoft-teams\nbrew install --cask microsoft-outlook\nbrew install --cask slack\nbrew install --cask orbstack\nbrew install --cask nikitabobko/tap/aerospace\nbrew install --cask jordanbaird-ice\nbrew install --cask claude-code\nbrew install wallpaper\n\nosascript -e 'tell application \"System Preferences\" to quit'\n\n# Disable the “Are you sure you want to open this application?” dialog\ndefaults write com.apple.LaunchServices LSQuarantine -bool false\n\n# Trackpad: enable tap to click for this user and for the login screen\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true\ndefaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1\ndefaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1\n\n# Disable “natural” scroll\ndefaults write NSGlobalDomain com.apple.swipescrolldirection -bool false\n\n# Increase sound quality for Bluetooth headphones/headsets\ndefaults write com.apple.BluetoothAudioAgent \"Apple Bitpool Min (editable)\" -int 40\n\n# Set a blazingly fast keyboard repeat rate\ndefaults write NSGlobalDomain KeyRepeat -int 2\ndefaults write NSGlobalDomain InitialKeyRepeat -int 13\n\n# Remove CMD space keyboard shortcuts\ndefaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'\ndefaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'\n\n# Save screenshots to downloads\ndefaults write com.apple.screencapture location -string \"${HOME}/Downloads\"\n\n# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)\ndefaults write com.apple.screencapture type -string \"png\"\n\n# Set Downloads as the default location for new Finder windows\n# For other paths, use `PfLo` and `file:///full/path/here/`\ndefaults write com.apple.finder NewWindowTarget -string \"PfLo\"\ndefaults write com.apple.finder NewWindowTargetPath -string \"file://${HOME}/Downloads/\"\n\n# Finder: show all filename extensions\ndefaults write NSGlobalDomain AppleShowAllExtensions -bool false\n\n# Use icon view in all Finder windows by default\n# Four-letter codes for all view modes: `Nlsv`, `icnv`, `clmv`, `glyv`\ndefaults write com.apple.finder FXPreferredViewStyle -string \"icnv\"\n\n# Disable the warning before emptying the Trash\ndefaults write com.apple.finder WarnOnEmptyTrash -bool false\n\n# Change minimize/maximize window effect\ndefaults write com.apple.dock mineffect -string \"scale\"\n\n# Minimize windows into their application’s icon\ndefaults write com.apple.dock minimize-to-application -bool true\n\n# Autohide dock\ndefaults write com.apple.dock autohide -bool true\n\n# Don't show recent applications\ndefaults write com.apple.dock show-recents -bool false\n\n# Disable the Launchpad gesture (pinch with thumb and three fingers)\ndefaults write com.apple.dock showLaunchpadGestureEnabled -int 0\n\n# Clean up dock apps\ndefaults write com.apple.dock persistent-apps -array\ndefaults delete com.apple.dock persistent-others\n\n# Then set them up\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/iTerm.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Outlook.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\n\ndefaults write com.apple.dock persistent-others -array-add \"<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-others -array-add \"<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\n\n# Restart the Dock\nkillall Dock\n\n# Setup login items\nosascript -e 'tell application \"System Events\" to delete every login item'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Firefox.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/System/Applications/Messages.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/iTerm.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Slack.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Microsoft Teams.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Microsoft Outlook.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}'\n\n# Enable the WebKit Developer Tools in the Mac App Store\ndefaults write com.apple.appstore WebKitDeveloperExtras -bool true\n\n# Enable Debug Menu in the Mac App Store\ndefaults write com.apple.appstore ShowDebugMenu -bool true\n\n# Enable the automatic update check\ndefaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true\n\n# Check for software updates daily, not just once per week\ndefaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1\n\n# Download newly available updates in background\ndefaults write com.apple.SoftwareUpdate AutomaticDownload -int 1\n\n# Install System data files & security updates\ndefaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1\n\n# Turn on app auto-update\ndefaults write com.apple.commerce AutoUpdate -bool true\n\n# Allow the App Store to reboot machine on macOS updates\ndefaults write com.apple.commerce AutoUpdateRestartRequired -bool true\n\n# Enable trackpad draglock\ndefaults write com.apple.AppleMultitouchTrackpad Dragging -bool true\ndefaults write com.apple.AppleMultitouchTrackpad DragLock -bool true\n\n# Speed up trackpad\ndefaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.5\n\n# Don't show notification center when swiping right with 2 fingers\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0\n\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2\n\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 1\n\n# Bluetooth trackpad\n# Don't show notification center when swiping right with 2 fingers\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0\n\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2\n\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1\n\n# Show seconds in menubar\ndefaults write com.apple.menuextra.clock DateFormat -string \"EEE MMM d  h:mm:ss a\"\ndefaults write com.apple.menuextra.clock ShowSeconds -bool true\n\nwallpaper set wallpaper.jpg\n",
+        "createdAt": "2026-06-13T20:52:11Z",
+        "copyCount": 1,
+        "modifiedAt": "2026-06-13T20:52:11Z",
+        "applicationPath": "/Applications/iTerm.app"
+      },
+      {
+        "modifiedAt": "2026-06-13T20:52:38Z",
+        "applicationPath": "/Applications/iTerm.app",
+        "category": "text",
+        "text": "#!/bin/sh\n\nif ! brew --version > /dev/null; then\n    /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n    echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> $HOME/.zprofile\n    eval \"$(/opt/homebrew/bin/brew shellenv)\"\nfi\nbrew upgrade\n\nif ! brew ls --versions rbenv > /dev/null; then\n    brew install rbenv\n    brew upgrade ruby-build\n    echo 'eval \"$(rbenv init -)\"' >> $HOME/.zprofile\n    eval \"$(rbenv init -)\"\nfi\n\nif ! brew ls --versions fzf > /dev/null; then\n    brew install fzf\nfi\n\nif ! brew ls --versions the_silver_searcher > /dev/null; then\n  brew install the_silver_searcher\nfi\n\n# ripgrep is used by telescope for live_grep\nif ! brew ls --versions ripgrep > /dev/null; then\n  brew install ripgrep\nfi\n\nif ! brew ls --versions nvim > /dev/null; then\n  brew install nvim\nfi\n\nmkdir $HOME/.config\nmkdir $HOME/.claude\n\n# lazy.nvim bootstraps itself on first nvim launch — no separate install step needed\nrm -rf $HOME/.config/nvim\nln -s $HOME/dots/nvim $HOME/.config/nvim\n\nrm -rf $HOME/.gitconfig\nln -s $HOME/dots/gitconfig $HOME/.gitconfig\n\nrm -rf $HOME/.gitmessage\nln -s $HOME/dots/gitmessage $HOME/.gitmessage\ngit config --global commit.template $HOME/.gitmessage\n\nln -s $HOME/dots/claude $HOME/.claude\n\nif ! brew ls --versions fish > /dev/null; then\n    brew install fish\nfi\necho /opt/homebrew/bin/fish | sudo tee -a /etc/shells\nchsh -s /opt/homebrew/bin/fish\nrm -rf $HOME/.config/fish\nln -s $HOME/dots/fish $HOME/.config/fish\n\nbrew install --cask discord\nbrew install --cask firefox\nbrew install --cask google-chrome\nbrew install --cask iterm2\nbrew install --cask 1password\nbrew install --cask 1password-cli\nbrew install --cask raycast\nbrew install --cask microsoft-teams\nbrew install --cask microsoft-outlook\nbrew install --cask slack\nbrew install --cask orbstack\nbrew install --cask nikitabobko/tap/aerospace\nbrew install --cask jordanbaird-ice\nbrew install --cask claude-code\nbrew install wallpaper\n\nosascript -e 'tell application \"System Preferences\" to quit'\n\n# Disable the “Are you sure you want to open this application?” dialog\ndefaults write com.apple.LaunchServices LSQuarantine -bool false\n\n# Trackpad: enable tap to click for this user and for the login screen\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true\ndefaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1\ndefaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1\n\n# Disable “natural” scroll\ndefaults write NSGlobalDomain com.apple.swipescrolldirection -bool false\n\n# Increase sound quality for Bluetooth headphones/headsets\ndefaults write com.apple.BluetoothAudioAgent \"Apple Bitpool Min (editable)\" -int 40\n\n# Set a blazingly fast keyboard repeat rate\ndefaults write NSGlobalDomain KeyRepeat -int 2\ndefaults write NSGlobalDomain InitialKeyRepeat -int 13\n\n# Remove CMD space keyboard shortcuts\ndefaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'\ndefaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'\n\n# Save screenshots to downloads\ndefaults write com.apple.screencapture location -string \"${HOME}/Downloads\"\n\n# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)\ndefaults write com.apple.screencapture type -string \"png\"\n\n# Set Downloads as the default location for new Finder windows\n# For other paths, use `PfLo` and `file:///full/path/here/`\ndefaults write com.apple.finder NewWindowTarget -string \"PfLo\"\ndefaults write com.apple.finder NewWindowTargetPath -string \"file://${HOME}/Downloads/\"\n\n# Finder: show all filename extensions\ndefaults write NSGlobalDomain AppleShowAllExtensions -bool false\n\n# Use icon view in all Finder windows by default\n# Four-letter codes for all view modes: `Nlsv`, `icnv`, `clmv`, `glyv`\ndefaults write com.apple.finder FXPreferredViewStyle -string \"icnv\"\n\n# Disable the warning before emptying the Trash\ndefaults write com.apple.finder WarnOnEmptyTrash -bool false\n\n# Change minimize/maximize window effect\ndefaults write com.apple.dock mineffect -string \"scale\"\n\n# Minimize windows into their application’s icon\ndefaults write com.apple.dock minimize-to-application -bool true\n\n# Autohide dock\ndefaults write com.apple.dock autohide -bool true\n\n# Don't show recent applications\ndefaults write com.apple.dock show-recents -bool false\n\n# Disable the Launchpad gesture (pinch with thumb and three fingers)\ndefaults write com.apple.dock showLaunchpadGestureEnabled -int 0\n\n# Clean up dock apps\ndefaults write com.apple.dock persistent-apps -array\ndefaults delete com.apple.dock persistent-others\n\n# Then set them up\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/iTerm.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Outlook.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\n\ndefaults write com.apple.dock persistent-others -array-add \"<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-others -array-add \"<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\n\n# Restart the Dock\nkillall Dock\n\n# Setup login items\nosascript -e 'tell application \"System Events\" to delete every login item'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Firefox.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/System/Applications/Messages.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/iTerm.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Slack.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Microsoft Teams.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Microsoft Outlook.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}'\n\n# Enable the WebKit Developer Tools in the Mac App Store\ndefaults write com.apple.appstore WebKitDeveloperExtras -bool true\n\n# Enable Debug Menu in the Mac App Store\ndefaults write com.apple.appstore ShowDebugMenu -bool true\n\n# Enable the automatic update check\ndefaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true\n\n# Check for software updates daily, not just once per week\ndefaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1\n\n# Download newly available updates in background\ndefaults write com.apple.SoftwareUpdate AutomaticDownload -int 1\n\n# Install System data files & security updates\ndefaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1\n\n# Turn on app auto-update\ndefaults write com.apple.commerce AutoUpdate -bool true\n\n# Allow the App Store to reboot machine on macOS updates\ndefaults write com.apple.commerce AutoUpdateRestartRequired -bool true\n\n# Enable trackpad draglock\ndefaults write com.apple.AppleMultitouchTrackpad Dragging -bool true\ndefaults write com.apple.AppleMultitouchTrackpad DragLock -bool true\n\n# Speed up trackpad\ndefaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.5\n\n# Don't show notification center when swiping right with 2 fingers\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0\n\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2\n\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 1\n\n# Bluetooth trackpad\n# Don't show notification center when swiping right with 2 fingers\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0\n\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2\n\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1\n\n# Show seconds in menubar\ndefaults write com.apple.menuextra.clock DateFormat -string \"EEE MMM d  h:mm:ss a\"\ndefaults write com.apple.menuextra.clock ShowSeconds -bool true\n\nwallpaper set wallpaper.jpg\n\n# Configure iTerm2\n/usr/libexec/PlistBuddy -c 'Set :\"New Bookmarks\":0:\"Transparency\" 0.15' ~/Library/Preferences/com.googlecode.iterm2.plist\n\n# Apply Tokyo Night Storm color theme to the iTerm2 default profile.\n# Downloads the .itermcolors plist and reads each value with PlistBuddy.\n\ncurl -sLo /tmp/tokyonight_storm.itermcolors \\\n  \"https://raw.githubusercontent.com/folke/tokyonight.nvim/main/extras/iterm/tokyonight_storm.itermcolors\"\n\n",
+        "createdAt": "2026-06-13T20:52:38Z",
+        "copyCount": 1
+      },
+      {
+        "text": "if ! brew --version > /dev/null; then\n    /bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"\n    echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> $HOME/.zprofile\n    eval \"$(/opt/homebrew/bin/brew shellenv)\"\nfi\nbrew upgrade\n\nif ! brew ls --versions rbenv > /dev/null; then\n    brew install rbenv\n    brew upgrade ruby-build\n    echo 'eval \"$(rbenv init -)\"' >> $HOME/.zprofile\n    eval \"$(rbenv init -)\"\nfi\n\nif ! brew ls --versions fzf > /dev/null; then\n    brew install fzf\nfi\n\nif ! brew ls --versions the_silver_searcher > /dev/null; then\n  brew install the_silver_searcher\nfi\n\n# ripgrep is used by telescope for live_grep\nif ! brew ls --versions ripgrep > /dev/null; then\n  brew install ripgrep\nfi\n\nif ! brew ls --versions nvim > /dev/null; then\n  brew install nvim\nfi\n\nmkdir $HOME/.config\nmkdir $HOME/.claude\n\n# lazy.nvim bootstraps itself on first nvim launch — no separate install step needed\nrm -rf $HOME/.config/nvim\nln -s $HOME/dots/nvim $HOME/.config/nvim\n\nrm -rf $HOME/.gitconfig\nln -s $HOME/dots/gitconfig $HOME/.gitconfig\n\nrm -rf $HOME/.gitmessage\nln -s $HOME/dots/gitmessage $HOME/.gitmessage\ngit config --global commit.template $HOME/.gitmessage\n\nln -s $HOME/dots/claude $HOME/.claude\n\nif ! brew ls --versions fish > /dev/null; then\n    brew install fish\nfi\necho /opt/homebrew/bin/fish | sudo tee -a /etc/shells\nchsh -s /opt/homebrew/bin/fish\nrm -rf $HOME/.config/fish\nln -s $HOME/dots/fish $HOME/.config/fish\n\nbrew install --cask discord\nbrew install --cask firefox\nbrew install --cask google-chrome\nbrew install --cask iterm2\nbrew install --cask 1password\nbrew install --cask 1password-cli\nbrew install --cask raycast\nbrew install --cask microsoft-teams\nbrew install --cask microsoft-outlook\nbrew install --cask slack\nbrew install --cask orbstack\nbrew install --cask nikitabobko/tap/aerospace\nbrew install --cask jordanbaird-ice\nbrew install --cask claude-code\nbrew install wallpaper\n\nosascript -e 'tell application \"System Preferences\" to quit'\n\n# Disable the “Are you sure you want to open this application?” dialog\ndefaults write com.apple.LaunchServices LSQuarantine -bool false\n\n# Trackpad: enable tap to click for this user and for the login screen\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true\ndefaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1\ndefaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1\n\n# Disable “natural” scroll\ndefaults write NSGlobalDomain com.apple.swipescrolldirection -bool false\n\n# Increase sound quality for Bluetooth headphones/headsets\ndefaults write com.apple.BluetoothAudioAgent \"Apple Bitpool Min (editable)\" -int 40\n\n# Set a blazingly fast keyboard repeat rate\ndefaults write NSGlobalDomain KeyRepeat -int 2\ndefaults write NSGlobalDomain InitialKeyRepeat -int 13\n\n# Remove CMD space keyboard shortcuts\ndefaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'\ndefaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'\n\n# Save screenshots to downloads\ndefaults write com.apple.screencapture location -string \"${HOME}/Downloads\"\n\n# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)\ndefaults write com.apple.screencapture type -string \"png\"\n\n# Set Downloads as the default location for new Finder windows\n# For other paths, use `PfLo` and `file:///full/path/here/`\ndefaults write com.apple.finder NewWindowTarget -string \"PfLo\"\ndefaults write com.apple.finder NewWindowTargetPath -string \"file://${HOME}/Downloads/\"\n\n# Finder: show all filename extensions\ndefaults write NSGlobalDomain AppleShowAllExtensions -bool false\n\n# Use icon view in all Finder windows by default\n# Four-letter codes for all view modes: `Nlsv`, `icnv`, `clmv`, `glyv`\ndefaults write com.apple.finder FXPreferredViewStyle -string \"icnv\"\n\n# Disable the warning before emptying the Trash\ndefaults write com.apple.finder WarnOnEmptyTrash -bool false\n\n# Change minimize/maximize window effect\ndefaults write com.apple.dock mineffect -string \"scale\"\n\n# Minimize windows into their application’s icon\ndefaults write com.apple.dock minimize-to-application -bool true\n\n# Autohide dock\ndefaults write com.apple.dock autohide -bool true\n\n# Don't show recent applications\ndefaults write com.apple.dock show-recents -bool false\n\n# Disable the Launchpad gesture (pinch with thumb and three fingers)\ndefaults write com.apple.dock showLaunchpadGestureEnabled -int 0\n\n# Clean up dock apps\ndefaults write com.apple.dock persistent-apps -array\ndefaults delete com.apple.dock persistent-others\n\n# Then set them up\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/iTerm.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Outlook.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-apps -array-add \"<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\n\ndefaults write com.apple.dock persistent-others -array-add \"<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\ndefaults write com.apple.dock persistent-others -array-add \"<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>\"\n\n# Restart the Dock\nkillall Dock\n\n# Setup login items\nosascript -e 'tell application \"System Events\" to delete every login item'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Firefox.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/System/Applications/Messages.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/iTerm.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Slack.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Microsoft Teams.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Microsoft Outlook.app\", hidden:false}'\nosascript -e 'tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}'\n\n# Enable the WebKit Developer Tools in the Mac App Store\ndefaults write com.apple.appstore WebKitDeveloperExtras -bool true\n\n# Enable Debug Menu in the Mac App Store\ndefaults write com.apple.appstore ShowDebugMenu -bool true\n\n# Enable the automatic update check\ndefaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true\n\n# Check for software updates daily, not just once per week\ndefaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1\n\n# Download newly available updates in background\ndefaults write com.apple.SoftwareUpdate AutomaticDownload -int 1\n\n# Install System data files & security updates\ndefaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1\n\n# Turn on app auto-update\ndefaults write com.apple.commerce AutoUpdate -bool true\n\n# Allow the App Store to reboot machine on macOS updates\ndefaults write com.apple.commerce AutoUpdateRestartRequired -bool true\n\n# Enable trackpad draglock\ndefaults write com.apple.AppleMultitouchTrackpad Dragging -bool true\ndefaults write com.apple.AppleMultitouchTrackpad DragLock -bool true\n\n# Speed up trackpad\ndefaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.5\n\n# Don't show notification center when swiping right with 2 fingers\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0\n\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2\n\ndefaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 1\n\n# Bluetooth trackpad\n# Don't show notification center when swiping right with 2 fingers\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0\n\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2\n\ndefaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1\n\n# Show seconds in menubar\ndefaults write com.apple.menuextra.clock DateFormat -string \"EEE MMM d  h:mm:ss a\"\ndefaults write com.apple.menuextra.clock ShowSeconds -bool true\n\nwallpaper set wallpaper.jpg\n",
+        "category": "text",
+        "copyCount": 1,
+        "createdAt": "2026-06-13T20:53:23Z",
+        "applicationPath": "/Applications/iTerm.app",
+        "modifiedAt": "2026-06-13T20:53:23Z"
+      },
+      {
+        "modifiedAt": "2026-06-13T20:55:22Z",
+        "copyCount": 1,
+        "category": "text",
+        "text": "/usr/libexec/PlistBuddy -c 'Set :\"New Bookmarks\":0:\"Transparency\" 0.15' ~/Library/Preferences/com.googlecode.iterm2.plist\n",
+        "createdAt": "2026-06-13T20:55:22Z",
+        "applicationPath": "/Applications/iTerm.app"
+      },
+      {
+        "modifiedAt": "2026-06-13T20:56:56Z",
+        "text": "brew install --cask ghostty\n",
+        "applicationPath": "/Applications/Firefox.app",
+        "copyCount": 1,
+        "createdAt": "2026-06-13T20:56:56Z",
+        "category": "text"
+      },
+      {
+        "createdAt": "2026-06-13T20:57:45Z",
+        "copyCount": 1,
+        "category": "text",
+        "modifiedAt": "2026-06-13T20:57:45Z",
+        "text": "brew install --cask iterm2\n",
+        "applicationPath": "/System/Applications/Utilities/Terminal.app"
+      },
+      {
+        "applicationPath": "/Applications/Ghostty.app",
+        "createdAt": "2026-06-13T21:17:50Z",
+        "copyCount": 1,
+        "category": "text",
+        "text": "# For other paths, use `PfLo` and `file:///full/path/here/`\n",
+        "modifiedAt": "2026-06-13T21:17:50Z"
+      },
+      {
+        "applicationPath": "/Applications/Ghostty.app",
+        "text": "if ! brew ls --versions fzf > /dev/null; then\n",
+        "createdAt": "2026-06-13T21:27:26Z",
+        "category": "text",
+        "modifiedAt": "2026-06-13T21:27:26Z",
+        "copyCount": 1
+      },
+      {
+        "text": "fi\n",
+        "modifiedAt": "2026-06-13T21:27:38Z",
+        "createdAt": "2026-06-13T21:27:27Z",
+        "category": "text",
+        "applicationPath": "/Applications/Ghostty.app",
+        "copyCount": 4
+      },
+      {
+        "text": "if ! brew ls --versions the_silver_searcher > /dev/null; then\n",
+        "applicationPath": "/Applications/Ghostty.app",
+        "modifiedAt": "2026-06-13T21:27:29Z",
+        "createdAt": "2026-06-13T21:27:29Z",
+        "copyCount": 1,
+        "category": "text"
+      },
+      {
+        "text": "if ! brew ls --versions nvim > /dev/null; then\n",
+        "category": "text",
+        "copyCount": 1,
+        "applicationPath": "/Applications/Ghostty.app",
+        "createdAt": "2026-06-13T21:27:37Z",
+        "modifiedAt": "2026-06-13T21:27:37Z"
+      },
+      {
+        "createdAt": "2026-06-13T21:27:45Z",
+        "category": "text",
+        "modifiedAt": "2026-06-13T21:27:45Z",
+        "text": "brew install fzf\n\nbrew install the_silver_searcher\n\n# ripgrep is used by telescope for live_grep\nbrew install ripgrep\n\nbrew install nvim\n",
+        "copyCount": 1,
+        "applicationPath": "/Applications/Ghostty.app"
+      },
+      {
+        "copyCount": 1,
+        "text": "    brew install fish\n",
+        "modifiedAt": "2026-06-13T21:28:08Z",
+        "createdAt": "2026-06-13T21:28:08Z",
+        "applicationPath": "/Applications/Ghostty.app",
+        "category": "text"
+      },
+      {
+        "copyCount": 1,
+        "applicationPath": "/Applications/Ghostty.app",
+        "category": "text",
+        "text": "if ! brew ls --versions fish > /dev/null; then\n\nfi\n",
+        "createdAt": "2026-06-13T21:28:14Z",
+        "modifiedAt": "2026-06-13T21:28:14Z"
+      },
+      {
+        "text": "echo /opt/homebrew/bin/fish | sudo tee -a /etc/shells\nchsh -s /opt/homebrew/bin/fish\nrm -rf $HOME/.config/fish\nln -s $HOME/dots/fish $HOME/.config/fish\n",
+        "category": "text",
+        "modifiedAt": "2026-06-13T21:28:16Z",
+        "copyCount": 1,
+        "createdAt": "2026-06-13T21:28:16Z",
+        "applicationPath": "/Applications/Ghostty.app"
+      },
+      {
+        "category": "text",
+        "createdAt": "2026-06-13T21:28:53Z",
+        "modifiedAt": "2026-06-13T21:28:53Z",
+        "text": "# lazy.nvim bootstraps itself on first nvim launch — no separate install step needed\n",
+        "copyCount": 1,
+        "applicationPath": "/Applications/Ghostty.app"
+      },
+      {
+        "richText": "e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODcwClxjb2NvYXRleHRzY2FsaW5nMFxjb2NvYXBsYXRmb3JtMHtcZm9udHRibFxmMFxmbmlsXGZjaGFyc2V0MCBNZW5sby1SZWd1bGFyO30Ke1xjb2xvcnRibDtccmVkMjU1XGdyZWVuMjU1XGJsdWUyNTU7XHJlZDIyNFxncmVlbjIyNFxibHVlMjI0O1xyZWQyNVxncmVlbjI5XGJsdWUzOTt9CntcKlxleHBhbmRlZGNvbG9ydGJsOztcY3NnZW5lcmljcmdiXGM4Nzc2MVxjODc3NjFcYzg3NzYxO1xjc2dlbmVyaWNyZ2JcYzk4MzlcYzExMzg4XGMxNTI2MFxjOTUwMDA7fQpccGFyZFx0eDU2MFx0eDExMjBcdHgxNjgwXHR4MjI0MFx0eDI4MDBcdHgzMzYwXHR4MzkyMFx0eDQ0ODBcdHg1MDQwXHR4NTYwMFx0eDYxNjBcdHg2NzIwXHBhcmRpcm5hdHVyYWxccGFydGlnaHRlbmZhY3RvcjAKClxmMFxmczI0IFxjZjIgXGNiMyBcQ29jb2FMaWdhdHVyZTAgZGVmYXVsdHMgcmVhZCBjb20ucmF5Y2FzdC5tYWNvc30=",
+        "text": "defaults read com.raycast.macos",
+        "category": "text",
+        "applicationPath": "/System/Applications/Utilities/Terminal.app",
+        "copyCount": 1,
+        "createdAt": "2026-06-13T21:42:53Z",
+        "modifiedAt": "2026-06-13T21:42:53Z"
+      },
+      {
+        "applicationPath": "/Applications/Firefox.app",
+        "richText": "e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODcwClxjb2NvYXRleHRzY2FsaW5nMFxjb2NvYXBsYXRmb3JtMHtcZm9udHRibFxmMFxmbW9kZXJuXGZjaGFyc2V0MCBDb3VyaWVyO30Ke1xjb2xvcnRibDtccmVkMjU1XGdyZWVuMjU1XGJsdWUyNTU7XHJlZDBcZ3JlZW4wXGJsdWUwO30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O1xjc3NyZ2JcYzBcYzBcYzA7fQpcZGVmdGFiNzIwClxwYXJkXHBhcmRlZnRhYjcyMFxwYXJ0aWdodGVuZmFjdG9yMAoKXGYwXGZzMjYgXGNmMCBcZXhwbmQwXGV4cG5kdHcwXGtlcm5pbmcwClxvdXRsMFxzdHJva2V3aWR0aDAgXHN0cm9rZWMyIElOUFVUX0ZJTEU9InJheWNhc3QucmF5Y29uZmlnIlwKUEFTU1dPUkQ9InNlY3JldCJcCk9VVFBVVF9GSUxFPSIkKGJhc2VuYW1lICIkSU5QVVRfRklMRSIgLnJheWNvbmZpZykuanNvbiJcClwKb3BlbnNzbCBlbmMgLWQgLWFlcy0yNTYtY2JjIC1ub3NhbHQgLWluICIkSU5QVVRfRklMRSIgLWsgIiRQQVNTV09SRCIgMj4vZGV2L251bGwgfCB0YWlsIC1jICsxNyB8IGd1bnppcCA+ICIkT1VUUFVUX0ZJTEUiXAp9",
+        "copyCount": 1,
+        "createdAt": "2026-06-13T23:56:31Z",
+        "text": "INPUT_FILE=\"raycast.rayconfig\"\nPASSWORD=\"secret\"\nOUTPUT_FILE=\"$(basename \"$INPUT_FILE\" .rayconfig).json\"\n\nopenssl enc -d -aes-256-cbc -nosalt -in \"$INPUT_FILE\" -k \"$PASSWORD\" 2>/dev/null | tail -c +17 | gunzip > \"$OUTPUT_FILE\"",
+        "category": "text",
+        "modifiedAt": "2026-06-13T23:56:31Z"
+      },
+      {
+        "createdAt": "2026-06-14T00:02:37Z",
+        "category": "text",
+        "applicationPath": "/Applications/Firefox.app",
+        "modifiedAt": "2026-06-14T00:02:37Z",
+        "copyCount": 1,
+        "text": "gzip --keep --suffix .rayconfig NAME_OF_FILE",
+        "richText": "e1xydGYxXGFuc2lcYW5zaWNwZzEyNTJcY29jb2FydGYyODcwClxjb2NvYXRleHRzY2FsaW5nMFxjb2NvYXBsYXRmb3JtMHtcZm9udHRibFxmMFxmcm9tYW5cZmNoYXJzZXQwIFRpbWVzLVJvbWFuO30Ke1xjb2xvcnRibDtccmVkMjU1XGdyZWVuMjU1XGJsdWUyNTU7XHJlZDBcZ3JlZW4wXGJsdWUwO30Ke1wqXGV4cGFuZGVkY29sb3J0Ymw7O1xjc3NyZ2JcYzBcYzBcYzA7fQpcZGVmdGFiNzIwClxwYXJkXHBhcmRlZnRhYjcyMFxwYXJ0aWdodGVuZmFjdG9yMAoKXGYwXGZzMjQgXGNmMCBcZXhwbmQwXGV4cG5kdHcwXGtlcm5pbmcwClxvdXRsMFxzdHJva2V3aWR0aDAgXHN0cm9rZWMyIGd6aXAgLS1rZWVwIC0tc3VmZml4IC5yYXljb25maWcgTkFNRV9PRl9GSUxFfQ=="
+      },
+      {
+        "applicationPath": "/Applications/Firefox.app",
+        "copyCount": 1,
+        "text": "June 14, 2026 at 2:14 AM",
+        "createdAt": "2026-06-14T00:15:00Z",
+        "category": "text",
+        "modifiedAt": "2026-06-14T00:15:00Z"
+      },
+      {
+        "createdAt": "2026-06-14T00:44:09Z",
+        "text": "{\n    ---Add a space b/w comment and the line\n    padding = true,\n    ---Whether the cursor should stay at its position\n    sticky = true,\n    ---Lines to be ignored while (un)comment\n    ignore = nil,\n    ---LHS of toggle mappings in NORMAL mode\n    toggler = {\n        ---Line-comment toggle keymap\n        line = 'gcc',\n        ---Block-comment toggle keymap\n        block = 'gbc',\n    },\n    ---LHS of operator-pending mappings in NORMAL and VISUAL mode\n    opleader = {\n        ---Line-comment keymap\n        line = 'gc',\n        ---Block-comment keymap\n        block = 'gb',\n    },\n    ---LHS of extra mappings\n    extra = {\n        ---Add comment on the line above\n        above = 'gcO',\n        ---Add comment on the line below\n        below = 'gco',\n        ---Add comment at the end of line\n        eol = 'gcA',\n    },\n    ---Enable keybindings\n    ---NOTE: If given `false` then the plugin won't create any mappings\n    mappings = {\n        ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`\n        basic = true,\n        ---Extra mapping; `gco`, `gcO`, `gcA`\n        extra = true,\n    },\n    ---Function to call before (un)comment\n    pre_hook = nil,\n    ---Function to call after (un)comment\n    post_hook = nil,\n}",
+        "modifiedAt": "2026-06-14T00:44:09Z",
+        "category": "text",
+        "copyCount": 1,
+        "applicationPath": "/Applications/Firefox.app"
+      }
+    ],
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_snippets": {
+    "packSnippets": [],
+    "provider_schemaVersion": 1,
+    "snippets": [
+      {
+        "modifiedAt": "2026-06-14T00:25:53Z",
+        "accessedAt": "2026-06-14T00:25:53Z",
+        "copyCount": 0,
+        "category": "text",
+        "name": "email",
+        "createdAt": "2026-06-14T00:25:53Z",
+        "text": "thogg4@gmail.com",
+        "alias": "@@"
+      }
+    ]
+  },
+  "remote_package_gemini_image": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_calendar": {
+    "provider_schemaVersion": 1
+  },
+  "remote_package_flux": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_weather": {
+    "provider_schemaVersion": 1
+  },
+  "raycast_app_defaults": {
+    "anonymousId": "EA7842EB-2C18-48D6-9369-561078456551",
+    "firstKnownVersion": "1.104.19",
+    "provider_schemaVersion": 1,
+    "installationDate": "2026-06-13T20:43:44Z"
+  },
+  "builtin_package_typingPractice": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_organizations": {
+    "provider_schemaVersion": 1
+  },
+  "remote_package_nano_banana": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_floatingNotes": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_url": {
+    "provider_schemaVersion": 1
+  },
+  "remote_package_web": {
+    "provider_schemaVersion": 1
+  },
+  "remote_package_dalle": {
+    "provider_schemaVersion": 1
+  },
+  "raycast_raycastFocus": {
+    "provider_schemaVersion": 1,
+    "focusCategories": []
+  },
+  "builtin_package_quick-ai": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_contacts": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_finder": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_thinking": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_systemCommands": {
+    "provider_schemaVersion": 1
+  },
+  "raycast_version": "1.104.19",
+  "builtin_package_mcp": {
+    "mcpServers": [],
+    "provider_schemaVersion": 1
+  },
+  "remote_package_stable_diffusion": {
+    "provider_schemaVersion": 1
+  },
+  "remote_package_chart": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_quicklinks": {
+    "provider_schemaVersion": 1,
+    "quicklinks": [
+      {
+        "updatedAt": "2026-06-13T21:37:04Z",
+        "uuid": "C8247648-F3C4-4898-A17E-26779459697F",
+        "isEnabled": true,
+        "name": "Search Google",
+        "url": "https://google.com/search?q={argument}",
+        "openCount": 0
+      },
+      {
+        "updatedAt": "2026-06-13T21:37:04Z",
+        "uuid": "BF294BD7-E57B-4D85-B44E-92458981A1A0",
+        "url": "https://duckduckgo.com/?q={argument}",
+        "isEnabled": true,
+        "name": "Search DuckDuckGo",
+        "openCount": 0
+      }
+    ],
+    "enableAutoFillLink": false,
+    "enableQuickSearch": false,
+    "packQuicklinks": []
+  },
+  "builtin_package_asana": {
+    "provider_schemaVersion": 1
+  },
+  "remote_package_flux-kontext": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_browser": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_raycastPreferences": {
+    "preferencesAppearance": {
+      "raycastShouldFollowSystemAppearance": true,
+      "raycastPreferredWindowMode": "default",
+      "statusBarIsVisible": false,
+      "raycastUI_preferredTextSize": "medium",
+      "showFavoritesInCompactMode": true
+    },
+    "provider_schemaVersion": 1,
+    "preferencesGeneral": {
+      "raycastAlternativeEscape": false,
+      "raycastGlobalHotkey": "Command-49"
+    },
+    "preferencesAdvanced": {
+      "navigationCommandStyleIdentifierKey": "macos",
+      "raycastAPIOptions": 0,
+      "popToRootTimeout": 90,
+      "emojiSkinTone": "light",
+      "mainWindowCaptureShowInFinder": false,
+      "useHyperKeyIcon": false,
+      "keepWindowVisibleOnResignKey": false,
+      "raycastWindowPresentationMode": 0,
+      "pageNavigationCommandKeysIdentifierKey": "squareBrackets",
+      "mainWindowCaptureOpenQuickAccessOverlay": false,
+      "mainWindowCaptureCopyToClipboard": true,
+      "raycastWindowEscapeKeyBehavior": 0
+    }
+  },
+  "builtin_package_github": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_default": {
+    "disabledCommands": [],
+    "enabledFallbackSearchIdentifiers": [
+      "raycastQuicklink_C8247648-F3C4-4898-A17E-26779459697F",
+      "builtin_command_fileSearch_fallbackSearch",
+      "builtin_command_extensionStore_fallbackSearch",
+      "builtin_command_dictionary_defineWord_fallbackSearch",
+      "builtin_command_searchSnippets_fallbackSearch",
+      "builtin_command_searchEmoji_fallbackSearch",
+      "builtin_command_searchMenuItems_fallbackSearch",
+      "builtin_command_ask_calculator_fallbackSearch",
+      "builtin_command_ask-selected-text_fallbackSearch",
+      "builtin_command_ask_calendar_fallbackSearch",
+      "builtin_command_raycastNotes_ask_fallbackSearch",
+      "remote_command_web_fallbackSearch",
+      "remote_command_nano_banana_fallbackSearch",
+      "builtin_command_ask-location_fallbackSearch",
+      "builtin_command_ask-thinking_fallbackSearch",
+      "remote_command_flux-kontext_fallbackSearch",
+      "builtin_command_translate_fallbackSearch",
+      "remote_command_dalle_fallbackSearch",
+      "builtin_command_ask-browser_fallbackSearch",
+      "remote_command_chart_fallbackSearch",
+      "remote_command_flux_fallbackSearch",
+      "remote_command_gemini_image_fallbackSearch",
+      "remote_command_stable_diffusion_fallbackSearch",
+      "builtin_command_askFocus_fallbackSearch",
+      "remote_command_gpt_image_fallbackSearch",
+      "raycastQuicklink_BF294BD7-E57B-4D85-B44E-92458981A1A0",
+      "builtin_command_ask-weather_fallbackSearch",
+      "builtin_command_open-ai-chat-gpt_fallbackSearch"
+    ],
+    "didMigrateWebSearches": true,
+    "provider_schemaVersion": 1,
+    "installedNativeExtensionIdentifiers": [
+      "builtin_package_media"
+    ],
+    "didMigrateQuicklinkFallbackSearch": true
+  },
+  "builtin_package_gSuite": {
+    "provider_schemaVersion": 1
+  },
+  "raycast_onboarding": {
+    "completedTaskIdentifiers": [
+      "calculator",
+      "startWalkthrough",
+      "setHotkeyAndAlias",
+      "calendar",
+      "openActionPanel",
+      "windowManagement",
+      "raycastShortcuts",
+      "quicklinks",
+      "installFirstExtension",
+      "floatingNotes",
+      "snippets"
+    ],
+    "provider_schemaVersion": 1,
+    "showOnboardingItem": false
+  },
+  "builtin_package_calculator": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_selected-text": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_raycastExtensions": {
+    "extensions": [
+      {
+        "title": "Linear",
+        "prefs": [
+          {
+            "type": "textfield",
+            "name": "issueCustomCopyAction",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "type": "textfield",
+            "required": false
+          },
+          {
+            "name": "labelsLimit",
+            "required": false,
+            "type": "textfield"
+          },
+          {
+            "type": "checkbox",
+            "required": false,
+            "name": "shouldHideRedundantIssues"
+          }
+        ],
+        "tools": [
+          {
+            "name": "get-current-user",
+            "enabled": true
+          },
+          {
+            "name": "create-comment",
+            "enabled": true
+          },
+          {
+            "name": "update-comment",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "get-documents"
+          },
+          {
+            "enabled": true,
+            "name": "get-document-content"
+          },
+          {
+            "name": "create-document",
+            "enabled": true
+          },
+          {
+            "name": "update-document",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "full-text-search-issues"
+          },
+          {
+            "enabled": true,
+            "name": "filter-issues"
+          },
+          {
+            "enabled": true,
+            "name": "update-issue"
+          },
+          {
+            "name": "create-issue",
+            "enabled": true
+          },
+          {
+            "name": "get-teams",
+            "enabled": true
+          },
+          {
+            "name": "get-issue-states",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "get-members"
+          },
+          {
+            "name": "get-notifications",
+            "enabled": true
+          },
+          {
+            "name": "get-labels",
+            "enabled": true
+          },
+          {
+            "name": "add-label",
+            "enabled": true
+          },
+          {
+            "name": "remove-label",
+            "enabled": true
+          },
+          {
+            "name": "get-projects",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "get-project-updates"
+          },
+          {
+            "enabled": true,
+            "name": "get-project-statuses"
+          },
+          {
+            "name": "update-project-milestone",
+            "enabled": true
+          }
+        ],
+        "tokenSets": [],
+        "isAskExtensionEnabled": true,
+        "owner": "linear",
+        "name": "linear",
+        "commands": [
+          {
+            "name": "create-issue",
+            "enabled": true,
+            "prefs": [
+              {
+                "type": "dropdown",
+                "required": false,
+                "name": "autofocusField"
+              },
+              {
+                "name": "copyToastAction",
+                "required": false,
+                "type": "dropdown"
+              }
+            ]
+          },
+          {
+            "name": "search-issues",
+            "enabled": true
+          },
+          {
+            "name": "assigned-issues",
+            "enabled": true
+          },
+          {
+            "name": "created-issues",
+            "enabled": true
+          },
+          {
+            "name": "active-cycle",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "search-projects"
+          },
+          {
+            "name": "search-custom-views",
+            "enabled": true
+          },
+          {
+            "name": "search-documents",
+            "enabled": true
+          },
+          {
+            "name": "create-project",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "notifications"
+          },
+          {
+            "enabled": true,
+            "prefs": [
+              {
+                "required": false,
+                "type": "checkbox",
+                "name": "alwaysShow"
+              }
+            ],
+            "name": "unread-notifications"
+          },
+          {
+            "name": "create-issue-for-myself",
+            "enabled": true,
+            "prefs": [
+              {
+                "name": "preferredTeamKey",
+                "type": "textfield",
+                "required": false
+              },
+              {
+                "required": false,
+                "name": "preferredStatusName",
+                "type": "textfield"
+              },
+              {
+                "name": "shouldCloseMainWindow",
+                "type": "checkbox",
+                "required": false
+              }
+            ]
+          },
+          {
+            "enabled": true,
+            "prefs": [
+              {
+                "required": false,
+                "name": "shouldCloseMainWindow",
+                "type": "checkbox"
+              }
+            ],
+            "name": "quick-add-comment-to-issue"
+          },
+          {
+            "name": "favorites",
+            "enabled": true
+          }
+        ],
+        "access": "public"
+      },
+      {
+        "name": "1password",
+        "tokenSets": [],
+        "prefs": [
+          {
+            "name": "version",
+            "type": "dropdown",
+            "required": true
+          },
+          {
+            "type": "dropdown",
+            "name": "primaryAction",
+            "required": false
+          },
+          {
+            "required": false,
+            "name": "secondaryAction",
+            "type": "dropdown"
+          },
+          {
+            "required": false,
+            "type": "checkbox",
+            "name": "closeWindowAfterCopying"
+          },
+          {
+            "type": "textfield",
+            "name": "cliPath",
+            "required": false
+          },
+          {
+            "name": "zshPath",
+            "type": "textfield",
+            "required": false
+          }
+        ],
+        "commands": [
+          {
+            "name": "item-list",
+            "enabled": true
+          },
+          {
+            "name": "renew-auth",
+            "enabled": false
+          },
+          {
+            "enabled": true,
+            "name": "vault-list"
+          },
+          {
+            "name": "generate-password",
+            "enabled": true
+          }
+        ],
+        "title": "1Password",
+        "access": "public",
+        "owner": "khasbilegt"
+      },
+      {
+        "name": "github",
+        "title": "GitHub",
+        "isAskExtensionEnabled": true,
+        "access": "public",
+        "owner": "raycast",
+        "prefs": [
+          {
+            "name": "personalAccessToken",
+            "type": "password",
+            "required": false
+          },
+          {
+            "type": "textfield",
+            "required": false,
+            "name": "defaultSearchTerms"
+          },
+          {
+            "required": false,
+            "name": "numberOfResults",
+            "type": "textfield"
+          },
+          {
+            "type": "directory",
+            "name": "baseClonePath",
+            "required": false
+          },
+          {
+            "name": "repositoryCloneProtocol",
+            "type": "dropdown",
+            "required": false
+          },
+          {
+            "name": "isOpenInBrowser",
+            "type": "checkbox",
+            "required": false
+          },
+          {
+            "name": "includeTeamReviewRequests",
+            "type": "checkbox",
+            "required": false
+          },
+          {
+            "required": false,
+            "name": "repositoryFilterMode",
+            "type": "dropdown"
+          },
+          {
+            "name": "repositoryList",
+            "required": false,
+            "type": "textfield"
+          }
+        ],
+        "commands": [
+          {
+            "prefs": [
+              {
+                "required": false,
+                "type": "checkbox",
+                "name": "includeAssigned"
+              },
+              {
+                "type": "checkbox",
+                "required": false,
+                "name": "includeMentioned"
+              },
+              {
+                "type": "checkbox",
+                "name": "includeReviewRequests",
+                "required": false
+              },
+              {
+                "required": false,
+                "type": "checkbox",
+                "name": "includeReviewed"
+              },
+              {
+                "type": "checkbox",
+                "required": false,
+                "name": "includeRecentlyClosed"
+              },
+              {
+                "name": "includeDrafts",
+                "type": "checkbox",
+                "required": false
+              }
+            ],
+            "name": "my-pull-requests",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "search-pull-requests"
+          },
+          {
+            "name": "create-pull-request",
+            "enabled": true
+          },
+          {
+            "prefs": [
+              {
+                "name": "showCreated",
+                "type": "checkbox",
+                "required": false
+              },
+              {
+                "type": "checkbox",
+                "name": "showAssigned",
+                "required": false
+              },
+              {
+                "required": false,
+                "type": "checkbox",
+                "name": "showMentioned"
+              },
+              {
+                "type": "checkbox",
+                "required": false,
+                "name": "showRecentlyClosed"
+              }
+            ],
+            "name": "my-issues",
+            "enabled": true
+          },
+          {
+            "name": "search-issues",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "create-issue"
+          },
+          {
+            "name": "create-branch",
+            "enabled": false
+          },
+          {
+            "name": "search-repositories",
+            "enabled": true,
+            "prefs": [
+              {
+                "type": "appPicker",
+                "name": "application",
+                "required": false
+              },
+              {
+                "required": false,
+                "type": "checkbox",
+                "name": "includeForks"
+              },
+              {
+                "required": false,
+                "name": "includeArchived",
+                "type": "checkbox"
+              },
+              {
+                "type": "checkbox",
+                "name": "displayOwnerName",
+                "required": false
+              }
+            ]
+          },
+          {
+            "name": "my-latest-repositories",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "my-starred-repositories"
+          },
+          {
+            "name": "workflow-runs",
+            "enabled": true
+          },
+          {
+            "name": "notifications",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "prefs": [
+              {
+                "required": false,
+                "name": "alwaysShow",
+                "type": "checkbox"
+              },
+              {
+                "name": "showUnreadCount",
+                "type": "checkbox",
+                "required": false
+              }
+            ],
+            "name": "unread-notifications"
+          },
+          {
+            "name": "search-discussions",
+            "enabled": false
+          },
+          {
+            "enabled": false,
+            "name": "my-discussions"
+          },
+          {
+            "name": "my-projects",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "prefs": [
+              {
+                "required": false,
+                "type": "checkbox",
+                "name": "showtext"
+              },
+              {
+                "type": "checkbox",
+                "required": false,
+                "name": "useUnreadIndicator"
+              },
+              {
+                "required": false,
+                "name": "maxitems",
+                "type": "textfield"
+              },
+              {
+                "name": "showCreated",
+                "required": false,
+                "type": "checkbox"
+              },
+              {
+                "type": "checkbox",
+                "required": false,
+                "name": "showAssigned"
+              },
+              {
+                "required": false,
+                "name": "showMentioned",
+                "type": "checkbox"
+              },
+              {
+                "name": "showRecentlyClosed",
+                "type": "checkbox",
+                "required": false
+              }
+            ],
+            "name": "my-issues-menu"
+          },
+          {
+            "name": "my-stats-menu",
+            "prefs": [
+              {
+                "name": "useAvatarAsIcon",
+                "type": "checkbox",
+                "required": false
+              },
+              {
+                "name": "notifyOnNewStars",
+                "required": false,
+                "type": "checkbox"
+              },
+              {
+                "type": "dropdown",
+                "required": false,
+                "name": "refreshFrequency"
+              },
+              {
+                "required": false,
+                "type": "dropdown",
+                "name": "titleMetric"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "my-pull-requests-menu",
+            "prefs": [
+              {
+                "required": false,
+                "name": "showtext",
+                "type": "checkbox"
+              },
+              {
+                "type": "checkbox",
+                "required": false,
+                "name": "useUnreadIndicator"
+              },
+              {
+                "name": "includeAssigned",
+                "type": "checkbox",
+                "required": false
+              },
+              {
+                "name": "includeMentioned",
+                "required": false,
+                "type": "checkbox"
+              },
+              {
+                "name": "includeReviewRequests",
+                "required": false,
+                "type": "checkbox"
+              },
+              {
+                "name": "includeReviewed",
+                "type": "checkbox",
+                "required": false
+              },
+              {
+                "required": false,
+                "name": "includeRecentlyClosed",
+                "type": "checkbox"
+              },
+              {
+                "type": "checkbox",
+                "name": "includeDrafts",
+                "required": false
+              },
+              {
+                "type": "textfield",
+                "name": "maxitems",
+                "required": false
+              }
+            ]
+          },
+          {
+            "enabled": true,
+            "name": "download-repository"
+          }
+        ],
+        "tools": [
+          {
+            "name": "get-notifications",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "search-issues"
+          },
+          {
+            "name": "search-pull-requests",
+            "enabled": true
+          },
+          {
+            "name": "search-repositories",
+            "enabled": true
+          },
+          {
+            "name": "enable-auto-merge",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "disable-auto-merge"
+          },
+          {
+            "enabled": true,
+            "name": "merge-pull-request"
+          },
+          {
+            "name": "close-pull-request",
+            "enabled": true
+          },
+          {
+            "name": "reopen-pull-request",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "close-issue"
+          },
+          {
+            "name": "reopen-issue",
+            "enabled": true
+          },
+          {
+            "name": "list-workflow-runs",
+            "enabled": true
+          },
+          {
+            "name": "rerun-workflow-run",
+            "enabled": true
+          },
+          {
+            "name": "cancel-workflow-run",
+            "enabled": true
+          },
+          {
+            "name": "run-workflow",
+            "enabled": true
+          }
+        ],
+        "tokenSets": []
+      },
+      {
+        "access": "public",
+        "commands": [
+          {
+            "enabled": true,
+            "name": "formatClipboard"
+          },
+          {
+            "name": "formatSelection",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "formatSelectionAndShow"
+          },
+          {
+            "enabled": true,
+            "name": "index"
+          },
+          {
+            "name": "formatJsonLines",
+            "enabled": true
+          },
+          {
+            "name": "formatToJsonValue",
+            "enabled": true
+          }
+        ],
+        "owner": "destiner",
+        "title": "Format JSON",
+        "prefs": [
+          {
+            "type": "checkbox",
+            "name": "autopaste",
+            "required": false
+          },
+          {
+            "name": "indent",
+            "type": "dropdown",
+            "required": false
+          },
+          {
+            "required": false,
+            "name": "maxInitialLines",
+            "type": "textfield"
+          }
+        ],
+        "name": "json-format",
+        "tokenSets": []
+      },
+      {
+        "tools": [
+          {
+            "name": "search-chats",
+            "enabled": true
+          },
+          {
+            "name": "send-message",
+            "enabled": true
+          },
+          {
+            "enabled": true,
+            "name": "search-latest-messages"
+          }
+        ],
+        "prefs": [
+          {
+            "type": "checkbox",
+            "name": "filterSpam",
+            "required": false
+          },
+          {
+            "name": "filterUnknownSenders",
+            "required": false,
+            "type": "checkbox"
+          },
+          {
+            "required": false,
+            "name": "loadContactPhotos",
+            "type": "checkbox"
+          }
+        ],
+        "title": "Messages",
+        "name": "messages",
+        "isAskExtensionEnabled": true,
+        "owner": "thomaslombart",
+        "access": "public",
+        "commands": [
+          {
+            "enabled": true,
+            "name": "open-chat"
+          },
+          {
+            "enabled": true,
+            "name": "my-messages"
+          },
+          {
+            "enabled": true,
+            "name": "send-message",
+            "prefs": [
+              {
+                "name": "shouldCloseMainWindow",
+                "type": "checkbox",
+                "required": false
+              }
+            ]
+          },
+          {
+            "enabled": true,
+            "name": "unread-messages"
+          },
+          {
+            "enabled": true,
+            "name": "paste-latest-otp-code"
+          }
+        ],
+        "tokenSets": []
+      }
+    ],
+    "provider_schemaVersion": 1,
+    "localExtensions": []
+  },
+  "builtin_package_webSearches": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_dictionary": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_raycastNotes": {
+    "provider_schemaVersion": 1,
+    "notes": [
+      {
+        "id": "D64D5247-6BEA-4CFA-9538-42DF3D4FA538",
+        "title": "",
+        "documentSchemaVersion": 2,
+        "document": "eyJjb250ZW50IjpbeyJ0eXBlIjoicGFyYWdyYXBoIn1dLCJ0eXBlIjoiZG9jIn0=",
+        "modifiedAt": "2026-06-14T00:24:38Z",
+        "createdAt": "2026-06-13T20:43:45Z",
+        "openedAt": "2026-06-14T00:24:12Z",
+        "text": ""
+      }
+    ]
+  },
+  "builtin_package_browserBookmarks": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_jira": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_rootSearch": {
+    "provider_schemaVersion": 1,
+    "rootSearch": [
+      {
+        "frecencyDate": 808842232.42799997,
+        "searchTerms": "snipp",
+        "openedAt": 803089537.70700002,
+        "type": "command",
+        "key": "builtin_command_createSnippet"
+      },
+      {
+        "openedAt": 803089566.39899993,
+        "type": "nodeCommand",
+        "frecencyDate": 808842261.11999989,
+        "key": "extension_github.download-repository__89648e03-cceb-4205-9f40-75fcb039a4c6"
+      },
+      {
+        "openedAt": 803088467.28800011,
+        "key": "builtin_command_windowManagementMaximize",
+        "searchTerms": "max",
+        "frecencyDate": 808841162.00699997,
+        "type": "command"
+      },
+      {
+        "key": "builtin_command_calendar_schedule",
+        "openedAt": 803088944.96600008,
+        "searchTerms": "schedule",
+        "type": "command",
+        "frecencyDate": 808841639.68700004
+      },
+      {
+        "frecencyDate": 809699971.77900004,
+        "searchTerms": "rayno,notes",
+        "key": "builtin_command_raycastNotes_toggle",
+        "openedAt": 803089474.30299997,
+        "type": "command"
+      },
+      {
+        "key": "builtin_command_searchEmoji",
+        "type": "command",
+        "hotkey": "Control-Command-49"
+      },
+      {
+        "searchTerms": "raycast alternatives,decrypt raycast expo,comment nvim",
+        "frecencyDate": 810199429.26200008,
+        "path": "https://google.com/search?q={argument}",
+        "type": "quicklink",
+        "key": "raycastQuicklink_C8247648-F3C4-4898-A17E-26779459697F",
+        "openedAt": 803090252.329
+      }
+    ]
+  },
+  "builtin_package_mcpServer": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_emoji": {
+    "provider_schemaVersion": 1,
+    "emojis": [
+      {
+        "symbol": "😄",
+        "customKeywords": [],
+        "frecencyDate": "2026-08-19T10:42:00Z"
+      },
+      {
+        "customKeywords": [],
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "😁"
+      },
+      {
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "customKeywords": [],
+        "symbol": "😂"
+      },
+      {
+        "customKeywords": [],
+        "symbol": "😊",
+        "frecencyDate": "2026-08-19T10:42:00Z"
+      },
+      {
+        "customKeywords": [],
+        "symbol": "😍",
+        "frecencyDate": "2026-08-19T10:42:00Z"
+      },
+      {
+        "customKeywords": [],
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "😘"
+      },
+      {
+        "customKeywords": [],
+        "symbol": "☺️",
+        "frecencyDate": "2026-08-19T10:42:00Z"
+      },
+      {
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "😜",
+        "customKeywords": []
+      },
+      {
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "🤔",
+        "customKeywords": []
+      },
+      {
+        "customKeywords": [],
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "😒"
+      },
+      {
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "😔",
+        "customKeywords": []
+      },
+      {
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "customKeywords": [],
+        "symbol": "😳"
+      },
+      {
+        "customKeywords": [],
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "symbol": "😭"
+      },
+      {
+        "customKeywords": [],
+        "symbol": "❤️",
+        "frecencyDate": "2026-08-19T10:42:00Z"
+      },
+      {
+        "customKeywords": [],
+        "symbol": "💋",
+        "frecencyDate": "2026-08-19T10:42:00Z"
+      },
+      {
+        "symbol": "👍",
+        "frecencyDate": "2026-08-19T10:42:00Z",
+        "customKeywords": []
+      }
+    ]
+  },
+  "builtin_package_screenshots": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_scriptCommands": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_zoom": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_raycastAccount": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_location": {
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_navigation": {
+    "pinnedMenuItems": [],
+    "provider_schemaVersion": 1
+  },
+  "builtin_package_linear": {
+    "provider_schemaVersion": 1
+  }
+}
