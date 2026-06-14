@@ -28,6 +28,9 @@ if ! brew ls --versions rbenv > /dev/null; then
     eval "$(rbenv init -)"
 fi
 
+rbenv install 4.0.5
+rbenv global 4.0.5
+
 gem install kamal
 
 # -----------------------------------------------------------------------------
@@ -96,8 +99,15 @@ brew install --cask nikitabobko/tap/aerospace
 brew install --cask jordanbaird-ice
 brew install --cask claude-code
 brew install --cask ghostty
+brew install --cask postgres-unofficial
 brew install wallpaper
 brew install defaultbrowser
+
+
+# — Ghostty terminal ——————————————————————————————————————————————————————————
+# Symlink the whole ghostty/ directory so all config is tracked here.
+rm -rf $HOME/.config/ghostty
+ln -s $HOME/dots/ghostty $HOME/.config/ghostty
 
 # -----------------------------------------------------------------------------
 # Fish shell
@@ -286,9 +296,8 @@ wallpaper set wallpaper.jpg
 # Let the wallpaper get set
 sleep 5
 
-# — Ghostty terminal ——————————————————————————————————————————————————————————
-# Symlink the whole ghostty/ directory so all config is tracked here.
-rm -rf $HOME/.config/ghostty
-ln -s $HOME/dots/ghostty $HOME/.config/ghostty
-
-sudo reboot
+printf "Reboot now? [y/N] "
+read REPLY
+case "$REPLY" in
+    y|Y) sudo reboot ;;
+esac
