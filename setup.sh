@@ -184,7 +184,7 @@ defaults delete com.apple.dock persistent-others
 
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Ghostty.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Outlook.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Mail.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
@@ -202,10 +202,10 @@ killall Dock
 osascript -e 'tell application "System Events" to delete every login item'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Firefox.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Messages.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Mail.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Ghostty.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Outlook.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Raycast.app", hidden:false}'
 
 # — App Store —————————————————————————————————————————————————————————————————
@@ -269,7 +269,7 @@ killall Raycast 2>/dev/null || true
 # tracked raycast.json. The import format is gzipped JSON with a .rayconfig
 # extension. We generate it on the fly so only the canonical .json is committed.
 gzip --keep --suffix .rayconfig "$HOME/dots/raycast.json"
-open -a Raycast --args import "$HOME/dots/raycast.json.rayconfig"
+open -a Raycast --args import "$HOME/dots/raycast.json"
 
 # — Menu bar clock ————————————————————————————————————————————————————————————
 # Show day, date, time with seconds in the menu bar clock.
