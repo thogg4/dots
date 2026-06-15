@@ -1,0 +1,8 @@
+server:
+  port: 7070
+  bind: "0.0.0.0"
+
+# Named sync directories. Both peers must use the same names;
+# paths can differ per machine since ~ expands locally.
+sync_dirs:
+  downloads: ~/work/test

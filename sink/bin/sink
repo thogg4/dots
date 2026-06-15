@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+require 'sink'
+
+case ARGV[0]
+when 'server'   then Sink::Server.new.start
+when 'sync'     then Sink::Client.new.sync
+when 'status'   then Sink::Client.new.status
+when 'discover' then Sink::Discovery.peers(Sink::Config.new.port).each { puts _1 }
+when 'init'     then Sink::Config.init
+else
+  puts <<~USAGE
+    sink — directory sync daemon
+
+    Usage:
+      sink server    Start the sync server (managed by launchd)
+      sink sync      Run an immediate sync with all discovered peers
+      sink status    Show discovered peers on the local network
+      sink discover  List sink servers found on the local network
+      sink init      Create a default config at #{Sink::Config::CONFIG_PATH}
+  USAGE
+  exit ARGV[0] ? 1 : 0
+end

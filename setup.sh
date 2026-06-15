@@ -199,6 +199,21 @@ echo "Linking ~/.config/fish -> ~/dots/fish..."
 rm -rf $HOME/.config/fish
 ln -s $HOME/dots/fish $HOME/.config/fish
 
+# — Sink (directory sync daemon) ——————————————————————————————————————————————
+echo "Linking ~/.config/sink -> ~/dots/sink/config..."
+rm -rf $HOME/.config/sink
+ln -s $HOME/dots/sink/config $HOME/.config/sink
+
+echo "Installing sink launchd agents..."
+chmod +x $HOME/dots/sink/bin/sink
+sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.server.plist.template \
+  > $HOME/Library/LaunchAgents/com.sink.server.plist
+sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.client.plist.template \
+  > $HOME/Library/LaunchAgents/com.sink.client.plist
+launchctl load -w $HOME/Library/LaunchAgents/com.sink.server.plist 2>/dev/null || true
+launchctl load -w $HOME/Library/LaunchAgents/com.sink.client.plist 2>/dev/null || true
+echo "Sink loaded. Edit ~/.config/sink/config.yml to add sync_dirs."
+
 # -----------------------------------------------------------------------------
 # macOS System Preferences — close the GUI so defaults writes take effect
 # cleanly without the app overwriting them on quit.
