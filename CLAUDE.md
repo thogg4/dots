@@ -46,7 +46,7 @@ LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-lan
 
 ## Ghostty terminal
 
-Config at `ghostty/config`. Theme: `TokyoNight Storm`. Background opacity 0.85, non-blinking block cursor.
+Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor.
 
 ## Raycast
 

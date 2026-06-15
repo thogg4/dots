@@ -52,11 +52,11 @@ require("lazy").setup({
     priority = 1000,
     config = function()
       require("tokyonight").setup({
-        style = "storm",    -- variants: "storm" | "moon" | "night" | "day"
+        style = "night",    -- variants: "storm" | "moon" | "night" | "day"
         transparent = true, -- make the Normal background transparent so the
         -- terminal's own background shows through
       })
-      vim.cmd("colorscheme tokyonight-storm")
+      vim.cmd("colorscheme tokyonight-night")
       -- Explicitly clear the background highlight groups so transparent = true
       -- works correctly (some terminals need this nudge)
       vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })

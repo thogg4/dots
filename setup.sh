@@ -139,6 +139,14 @@ cask() {
         brew install --cask "$@"
     fi
 }
+mas_install() {
+    if mas list | grep -q "^$1 "; then
+        echo "  [skip] $2 — already installed"
+    else
+        echo "  [install] $2"
+        echo "$SUDO_PASSWORD" | sudo -S mas install "$1"
+    fi
+}
 
 echo "Installing packages..."
 formula fish
@@ -146,6 +154,7 @@ formula fzf
 formula the_silver_searcher
 formula ripgrep
 formula nvim
+formula mas
 cask discord
 cask firefox
 cask google-chrome
@@ -161,9 +170,15 @@ cask jordanbaird-ice
 cask claude-code
 cask ghostty
 cask postgres-unofficial
+formula libpq
+formula openssl@3
+formula libiconv
+formula freetds
 formula wallpaper
 formula defaultbrowser
 
+echo "Installing App Store apps..."
+mas_install 1091189122 "Bear"
 
 # — Ghostty terminal ——————————————————————————————————————————————————————————
 # Symlink the whole ghostty/ directory so all config is tracked here.
@@ -271,6 +286,7 @@ defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
 defaults write com.apple.dock persistent-apps -array
 defaults delete com.apple.dock persistent-others
 
+defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Bear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Ghostty.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Mail.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
@@ -298,6 +314,8 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Raycast.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Postgres.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bear.app", hidden:false}'
 
 # — App Store —————————————————————————————————————————————————————————————————
 echo "Applying macOS defaults: App Store..."

@@ -2,6 +2,7 @@
 set fish_greeting
 
 # system
+set -x EDITOR nvim
 alias m='nvim'
 alias be='bundle exec'
 alias fs='foreman start'
