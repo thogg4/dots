@@ -169,6 +169,7 @@ cask nikitabobko/tap/aerospace
 cask jordanbaird-ice
 cask claude-code
 cask ghostty
+cask krisp
 cask postgres-unofficial
 formula libpq
 formula openssl@3
@@ -331,6 +332,7 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Raycast.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Postgres.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bear.app", hidden:false}'
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Krisp.app", hidden:false}'
 
 # — App Store —————————————————————————————————————————————————————————————————
 echo "Applying macOS defaults: App Store..."
@@ -402,6 +404,12 @@ echo "Importing Raycast config..."
 rm -f "$HOME/dots/raycast.json.rayconfig"
 gzip --keep --suffix .rayconfig "$HOME/dots/raycast.json"
 open -a Raycast --args import "$HOME/dots/raycast.json"
+
+# — Dictation ————————————————————————————————————————————————————————————————
+# Enable dictation triggered by pressing the Fn key.
+echo "Applying macOS defaults: dictation..."
+defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 1
+defaults write com.apple.HIToolbox AppleFnUsageType -int 1
 
 # — Menu bar clock ————————————————————————————————————————————————————————————
 echo "Applying macOS defaults: menu bar clock..."
