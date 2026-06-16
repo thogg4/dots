@@ -61,6 +61,7 @@ require("lazy").setup({
       -- works correctly (some terminals need this nudge)
       vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
       vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+      vim.api.nvim_set_hl(0, "LineNr", { link = "CursorLineNr" })
     end,
   },
 
@@ -364,6 +365,12 @@ require("lazy").setup({
       })
       -- Load the fzf extension for faster fuzzy matching
       telescope.load_extension("fzf")
+
+      -- Make Telescope panes transparent so the terminal background shows through
+      vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "NONE" })
+      vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "NONE" })
+      vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "NONE" })
+      vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "NONE" })
     end,
   },
 

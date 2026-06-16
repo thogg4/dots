@@ -178,6 +178,7 @@ formula libpq
 formula openssl@3
 formula libiconv
 formula freetds
+formula npm
 formula wallpaper
 formula defaultbrowser
 

@@ -5,4 +5,4 @@ server:
 # Named sync directories. Both peers must use the same names;
 # paths can differ per machine since ~ expands locally.
 sync_dirs:
-  downloads: ~/work/test
+  downloads: ~/Downloads
