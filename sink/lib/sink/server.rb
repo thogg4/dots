@@ -106,7 +106,7 @@ module Sink
 
     def handle_manifest(_req, res)
       res.content_type = 'application/json'
-      res.body = Manifest.new(@config.sync_dirs).scan.to_json
+      res.body = Manifest.new(@config.sync_dirs, @config.state_dir).scan.to_json
     end
 
     def handle_file(req, res)
@@ -143,6 +143,13 @@ module Sink
           t = Time.at(s.to_f)
           File.utime(t, t, abs)
         end
+        res.status = 204
+        res.body   = ''
+
+      when 'DELETE'
+        deleted_at = req.query['deleted_at']&.then { |s| s.match?(/\A[\d.]+\z/) ? s.to_f : nil } || Time.now.to_f
+        FileUtils.rm_f(abs) if File.file?(abs)
+        Manifest.record_tombstone(@config.state_dir, dir_name, rel_path, deleted_at)
         res.status = 204
         res.body   = ''
 

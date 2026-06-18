@@ -6,6 +6,7 @@ require 'fileutils'
 module Sink
   class Config
     CONFIG_PATH = File.expand_path('~/.config/sink/config.yml')
+    STATE_DIR   = File.expand_path('~/.local/share/sink')
 
     def initialize
       @data = load_config
@@ -30,8 +31,9 @@ module Sink
       puts "Created config at #{CONFIG_PATH}"
     end
 
-    def port  = @data.dig('server', 'port') || 7070
-    def bind  = @data.dig('server', 'bind') || '0.0.0.0'
+    def port      = @data.dig('server', 'port') || 7070
+    def bind      = @data.dig('server', 'bind') || '0.0.0.0'
+    def state_dir = STATE_DIR
 
     def sync_dirs
       (@data['sync_dirs'] || {}).transform_values { |p| File.expand_path(p) }
