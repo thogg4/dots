@@ -23,6 +23,10 @@ module Sink
           port: 7070
           bind: "0.0.0.0"
 
+        # Directory where sink stores state (tombstones, previous-state snapshots).
+        # Defaults to ~/.local/share/sink if omitted.
+        state_dir: ~/.local/share/sink
+
         # Named sync directories. Both peers must use the same names;
         # paths can differ per machine since ~ expands locally.
         sync_dirs:
@@ -33,7 +37,7 @@ module Sink
 
     def port      = @data.dig('server', 'port') || 7070
     def bind      = @data.dig('server', 'bind') || '0.0.0.0'
-    def state_dir = STATE_DIR
+    def state_dir = File.expand_path(@data['state_dir'] || STATE_DIR)
 
     def sync_dirs
       (@data['sync_dirs'] || {}).transform_values { |p| File.expand_path(p) }
