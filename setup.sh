@@ -184,6 +184,8 @@ formula defaultbrowser
 
 echo "Installing App Store apps..."
 mas_install 1091189122 "Bear"
+mas_install 497799835 "Xcode"
+claude mcp add --transport stdio xcode -- xcrun mcpbridge
 
 # — Ghostty terminal ——————————————————————————————————————————————————————————
 # Symlink the whole ghostty/ directory so all config is tracked here.
