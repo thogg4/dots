@@ -574,7 +574,7 @@ require("lazy").setup({
         size = 15,            -- height of the terminal split in rows
         direction = "horizontal",
         shell = vim.o.shell,  -- use whatever shell is set in $SHELL
-        auto_scroll = true,   -- scroll to the bottom as output appears
+        auto_scroll = false,  -- don't auto-scroll to the bottom as output appears
         close_on_exit = true, -- close the terminal buffer when the shell exits
       })
       vim.keymap.set("n", "<Leader>c", ":ToggleTermToggleAll<CR>",

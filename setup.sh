@@ -181,6 +181,7 @@ formula freetds
 formula npm
 formula wallpaper
 formula defaultbrowser
+formula xcodegen
 
 echo "Installing App Store apps..."
 mas_install 1091189122 "Bear"
