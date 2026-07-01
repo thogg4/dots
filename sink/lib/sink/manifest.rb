@@ -92,7 +92,7 @@ module Sink
 
       load_previous_state(dir_name).each do |prev|
         next if current_paths.include?(prev.rel_path)
-        tombs[prev.rel_path] ||= now
+        tombs[prev.rel_path] = now
       end
 
       save_previous_state(dir_name, current_entries)
