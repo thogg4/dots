@@ -621,7 +621,7 @@ require("lazy").setup({
   --
   -- To install the formatters:
   --   npm install -g prettier
-  --   gem install rubocop
+  --   gem install standardrb
   --   brew install stylua
   --   (or use :Mason to install them through mason)
   {
@@ -632,7 +632,7 @@ require("lazy").setup({
         formatters_by_ft = {
           javascript = { "prettier" },
           typescript = { "prettier" },
-          ruby       = { "rubocop" },
+          ruby       = { "standardrb" },
           lua        = { "stylua" },
         },
         format_on_save = {
@@ -652,7 +652,7 @@ require("lazy").setup({
   -- diagnostics (same as LSP errors) so they show up in the sign column,
   -- as virtual text, and in the Trouble panel.
   --
-  -- Note: ruby_lsp already provides diagnostics for Ruby, but rubocop here
+  -- Note: ruby_lsp already provides diagnostics for Ruby, but standardrb here
   -- catches style issues that the LSP doesn't report.
   {
     "mfussenegger/nvim-lint",
@@ -661,7 +661,7 @@ require("lazy").setup({
       local lint = require("lint")
       lint.linters_by_ft = {
         javascript = { "eslint" },
-        ruby       = { "rubocop" },
+        ruby       = { "standardrb" },
       }
       -- Run linting every time a buffer is saved
       vim.api.nvim_create_autocmd("BufWritePost", {
