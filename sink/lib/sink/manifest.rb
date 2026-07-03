@@ -107,7 +107,9 @@ module Sink
 
     def save_tombstones_hash(dir_name, hash)
       FileUtils.mkdir_p(@state_dir)
-      File.write(tombstone_path(dir_name), JSON.generate(hash))
+      existing = self.class.load_tombstones_file(tombstone_path(dir_name))
+      merged   = existing.merge(hash) { |_k, old_ts, new_ts| [old_ts, new_ts].max }
+      File.write(tombstone_path(dir_name), JSON.generate(merged))
     end
 
     def load_previous_state(dir_name)
