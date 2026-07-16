@@ -558,20 +558,32 @@ require("lazy").setup({
   -- ---------------------------------------------------------------------------
   -- Replaces: kassio/neoterm + vimlab/split-term
   --
-  -- Opens a terminal in a horizontal split at the bottom. You can have multiple
-  -- terminals (numbered 1, 2, 3...) and toggle them independently.
+  -- Opens a terminal in a horizontal split at the bottom, or a Claude Code
+  -- pane in a vertical split on the right at 35% width (replaces the tmux
+  -- Ctrl-y toggle-split workflow). The Claude pane runs `claude` directly and
+  -- auto-opens on startup; toggling hides it without killing the session.
+  -- Terminals are numbered: 1 is the bottom split, 2 is the Claude pane.
   --
   -- Keymaps:
-  --   <C-T>        — toggle the terminal open/closed
+  --   <C-T>        — toggle the bottom terminal open/closed
+  --   <C-Y>        — toggle the Claude Code side pane open/closed
   --   <Esc>        — exit terminal mode back to normal mode (defined in keymaps.lua)
   --   <Leader>c    — close all terminals
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    keys = { { "<C-T>", "<cmd>ToggleTerm direction=horizontal<CR>", desc = "Toggle terminal" } },
+    lazy = false, -- load at startup so the Claude pane can auto-open
+    keys = {
+      { "<C-T>", "<cmd>1ToggleTerm direction=horizontal<CR>", desc = "Toggle bottom terminal" },
+    },
     config = function()
       require("toggleterm").setup({
-        size = 15,            -- height of the terminal split in rows
+        size = function(term)
+          if term.direction == "vertical" then
+            return math.floor(vim.o.columns * 0.35) -- Claude pane: 35% of editor width
+          end
+          return 15 -- bottom terminal: height in rows
+        end,
         direction = "horizontal",
         shell = vim.o.shell,  -- use whatever shell is set in $SHELL
         auto_scroll = false,  -- don't auto-scroll to the bottom as output appears
@@ -579,6 +591,30 @@ require("lazy").setup({
       })
       vim.keymap.set("n", "<Leader>c", ":ToggleTermToggleAll<CR>",
         { silent = true, desc = "Close all terminals" })
+
+      -- Claude Code side pane — runs `claude` instead of a shell, so <C-Y>
+      -- toggles straight into the agent. Hiding the pane keeps the session
+      -- alive; it only ends when claude exits (close_on_exit) or nvim quits.
+      local claude = require("toggleterm.terminal").Terminal:new({
+        cmd = "claude",
+        count = 2,
+        direction = "vertical",
+      })
+      vim.keymap.set({ "n", "t" }, "<C-Y>", function() claude:toggle() end,
+        { silent = true, desc = "Toggle Claude Code pane" })
+
+      -- Auto-open the Claude pane on startup, keeping focus in the editor.
+      -- Skipped when there's no UI (headless) and for one-shot editor uses
+      -- like git commit messages, where a Claude session is unwanted noise.
+      vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+          if #vim.api.nvim_list_uis() == 0 then return end
+          local first_arg = vim.fn.argv(0) or ""
+          if first_arg:match("COMMIT_EDITMSG") or first_arg:match("git%-rebase%-todo") then return end
+          claude:open()
+          vim.cmd.wincmd("p")
+        end,
+      })
     end,
   },
 

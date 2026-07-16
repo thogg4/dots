@@ -58,9 +58,38 @@ map("n", "<C-A>:", ":vsp<CR>", { silent = true })      -- vertical split
 -- Terminal — escape terminal mode with Esc
 -- In a :terminal buffer, <C-\><C-N> exits to normal mode.
 -- This maps Esc to do the same so muscle memory works.
--- (Terminal-specific keymaps use mode "t")
+-- Exception: when the terminal is running Claude Code, Esc is passed through —
+-- the Claude TUI uses it (interrupt, dismiss menus). Use <C-\><C-N> to leave
+-- terminal mode in that pane. Detection uses the terminal title, which the
+-- shell/TUI updates to the running command.
 -- -----------------------------------------------------------------------------
-map("t", "<Esc>", "<C-\\><C-N>", { silent = true })
+map("t", "<Esc>", function()
+  if (vim.b.term_title or ""):lower():find("claude", 1, true) then
+    return "<Esc>"
+  end
+  return "<C-\\><C-N>"
+end, { expr = true, silent = true })
+
+-- -----------------------------------------------------------------------------
+-- Seamless split navigation — Ctrl+h/j/k/l from anywhere, including terminals
+-- Covers what tmux + smart-splits.nvim provide: one keystroke to move between
+-- the editor and a terminal split (e.g. the <C-Y> Claude pane). Terminal-mode
+-- versions exit terminal mode first, so you land in the target window in
+-- normal mode. Ctrl+Arrow works from terminals too, matching the normal-mode
+-- bindings above.
+-- -----------------------------------------------------------------------------
+map("n", "<C-h>", "<C-w>h", { silent = true })
+map("n", "<C-j>", "<C-w>j", { silent = true })
+map("n", "<C-k>", "<C-w>k", { silent = true })
+map("n", "<C-l>", "<C-w>l", { silent = true })
+map("t", "<C-h>", "<C-\\><C-N><C-w>h", { silent = true })
+map("t", "<C-j>", "<C-\\><C-N><C-w>j", { silent = true })
+map("t", "<C-k>", "<C-\\><C-N><C-w>k", { silent = true })
+map("t", "<C-l>", "<C-\\><C-N><C-w>l", { silent = true })
+map("t", "<C-Left>", "<C-\\><C-N><C-w>h", { silent = true })
+map("t", "<C-Down>", "<C-\\><C-N><C-w>j", { silent = true })
+map("t", "<C-Up>", "<C-\\><C-N><C-w>k", { silent = true })
+map("t", "<C-Right>", "<C-\\><C-N><C-w>l", { silent = true })
 
 -- -----------------------------------------------------------------------------
 -- Ruby debugger helpers

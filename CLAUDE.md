@@ -36,7 +36,7 @@ Key plugins and their bindings:
 - **Gitsigns**: `]g`/`[g` hunks, `<Leader>gp` preview, `<Leader>gb` blame
 - **Trouble**: `<Leader>xx` diagnostics panel, `<Leader>xb` buffer diagnostics
 - **Aerial**: `<Leader>a` code outline
-- **Toggleterm**: `<C-T>` terminal, `<Leader>c` close all
+- **Toggleterm**: `<C-T>` bottom terminal, `<C-Y>` Claude Code side pane (35% width, runs `claude`, auto-opens at startup except for git commit/rebase edits), `<Leader>c` close all; `<C-h/j/k/l>` navigates between editor and terminal splits
 
 LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-language-server`, `lua-language-server`, `elixir-ls`.
 
