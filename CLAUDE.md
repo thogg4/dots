@@ -16,7 +16,9 @@ Current symlinks:
 - `nvim/` → `~/.config/nvim`
 - `fish/` → `~/.config/fish`
 - `ghostty/` → `~/.config/ghostty`
-- `claude/` → `~/.claude`
+- `claude/skills/` → `~/.claude/skills` (personal Claude Code skills, one `<name>/SKILL.md` per skill)
+- `claude/rules/` → `~/.claude/rules` (guideline docs referenced by skills, e.g. dev-workflow)
+- `claude/settings.json` → `~/.claude/settings.json` (the rest of `~/.claude` is untracked runtime state)
 - `gitconfig` → `~/.gitconfig`
 - `gitmessage` → `~/.gitmessage`
 

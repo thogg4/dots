@@ -107,8 +107,42 @@ rm -rf $HOME/.gitmessage
 ln -s $HOME/dots/gitmessage $HOME/.gitmessage
 git config --global commit.template $HOME/.gitmessage
 
-echo "Linking ~/.claude -> ~/dots/claude..."
-ln -s $HOME/dots/claude $HOME/.claude
+# -----------------------------------------------------------------------------
+# Claude Code config
+# ~/.claude itself is NOT symlinked — Claude Code fills it with runtime state
+# (history, sessions, caches) that doesn't belong in git. Only skills/ and
+# settings.json are tracked and linked individually.
+# -----------------------------------------------------------------------------
+echo "Linking ~/.claude/skills -> ~/dots/claude/skills..."
+rm -rf $HOME/.claude/skills
+ln -s $HOME/dots/claude/skills $HOME/.claude/skills
+
+echo "Linking ~/.claude/rules -> ~/dots/claude/rules..."
+rm -rf $HOME/.claude/rules
+ln -s $HOME/dots/claude/rules $HOME/.claude/rules
+
+echo "Linking ~/.claude/settings.json -> ~/dots/claude/settings.json..."
+rm -f $HOME/.claude/settings.json
+ln -s $HOME/dots/claude/settings.json $HOME/.claude/settings.json
+
+# -----------------------------------------------------------------------------
+# Plannotator (https://github.com/backnotprop/plannotator)
+# Browser-based plan/code review UI used by the plannotator-* skills.
+# Config is tracked in plannotator/ here and symlinked to ~/.plannotator.
+# Plannotator's review-skill discovery ignores symlinked skill directories,
+# so ~/.agents/skills/review is a real directory with a symlinked SKILL.md.
+# -----------------------------------------------------------------------------
+if command -v plannotator > /dev/null 2>&1; then
+    echo "  [skip] plannotator — already installed"
+else
+    echo "  [install] plannotator"
+    curl -fsSL https://plannotator.ai/install.sh | bash
+fi
+mkdir -p $HOME/.plannotator
+ln -sf $HOME/dots/plannotator/config.json $HOME/.plannotator/config.json
+ln -sf $HOME/dots/plannotator/review-skills.json $HOME/.plannotator/review-skills.json
+mkdir -p $HOME/.agents/skills/review
+ln -sf $HOME/dots/claude/skills/review/SKILL.md $HOME/.agents/skills/review/SKILL.md
 
 # -----------------------------------------------------------------------------
 # Package installs
@@ -116,6 +150,8 @@ ln -s $HOME/dots/claude $HOME/.claude
 # fzf        — fuzzy finder (used standalone and by some nvim plugins)
 # ag         — silver searcher, fast code search
 # ripgrep    — used by Telescope live_grep inside neovim
+# gh         — GitHub CLI (used by create-pr/dependabot-prs/review skills)
+# worktrunk  — `wt` worktree CLI (required by the ruby-app-refactor skill)
 # wallpaper  — CLI to set the desktop wallpaper (used later in this script)
 # defaultbrowser — CLI to set the default browser without a UI prompt
 # aerospace  — tiling window manager (tap required, not in core Homebrew)
@@ -155,6 +191,8 @@ formula the_silver_searcher
 formula ripgrep
 formula nvim
 formula mas
+formula gh
+formula worktrunk
 cask discord
 cask firefox
 cask google-chrome

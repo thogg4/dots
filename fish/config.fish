@@ -20,6 +20,9 @@ alias ga='git add -A'
 alias gc='git commit'
 alias gp='git pull'
 
+# user-installed binaries (plannotator installs here)
+fish_add_path $HOME/.local/bin
+
 # ruby
 #set RUBYOPT -rbumbler/go
 

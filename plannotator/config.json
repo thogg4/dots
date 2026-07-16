@@ -1,0 +1,11 @@
+{
+  "displayName": "Tim Hogg",
+  "diffOptions": {
+    "overflow": "wrap",
+    "diffStyle": "unified",
+    "defaultDiffType": "since-base"
+  },
+  "conventionalComments": true,
+  "conventionalLabels": null,
+  "pfmReminder": true
+}

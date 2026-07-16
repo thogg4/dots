@@ -2,4 +2,4 @@
 # VERSION: 3.0
 SETUVAR __fish_initialized:4300
 SETUVAR fish_greeting:\x1d
-SETUVAR fish_user_paths:/opt/homebrew/opt/libpq/bin\x1e/usr/local/opt/fzf/bin
+SETUVAR fish_user_paths:/Users/tim/\x2elocal/bin\x1e/opt/homebrew/opt/libpq/bin\x1e/usr/local/opt/fzf/bin
