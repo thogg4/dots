@@ -66,6 +66,77 @@ require("lazy").setup({
   },
 
   -- ---------------------------------------------------------------------------
+  -- DASHBOARD — alpha-nvim
+  -- ---------------------------------------------------------------------------
+  -- Shows a start screen with quick-action buttons when nvim is opened with
+  -- no file argument (e.g. plain `nvim`). Disappears as soon as you open a
+  -- file or run a command.
+  --
+  -- Keymaps (only active on the dashboard buffer):
+  --   f   — find file, fuzzy, from the git root (same behaviour as <C-P>)
+  --   r   — recent files (Telescope oldfiles)
+  --   g   — live grep (Telescope)
+  --   n   — new file
+  --   q   — quit
+  {
+    "goolord/alpha-nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    event = "VimEnter",
+    config = function()
+      local alpha = require("alpha")
+      local dashboard = require("alpha.themes.dashboard")
+
+      dashboard.section.header.val = {
+        "      __________...----..____..-'``-..___                       ",
+        "    ,'.                                  ```--.._               ",
+        "   :                                             ``._           ",
+        "   |                           --                    ``.        ",
+        "   |                   -.-      -.     -   -.        `.         ",
+        "   :                     __           --            .     \\    ",
+        "    `._____________     (  `.   -.-      --  -   .   `     \\   ",
+        "       `-----------------\\   \\_.--------..__..--.._ `. `. :   ",
+        "                          `--'                     `-._ .   |   ",
+        "                                                       `.`  |   ",
+        "                                                         \\` |   ",
+        "                                                          \\ |   ",
+        "                                                          / \\`. ",
+        "                                                         /  _\\-'",
+        "                                                        /_,'    ",
+      }
+      vim.api.nvim_set_hl(0, "AlphaHeader", { fg = "#bb9af7", bold = true })
+      dashboard.section.header.opts.hl = "AlphaHeader"
+
+      dashboard.section.buttons.val = {
+        dashboard.button("f", "  Find file",
+          [[<Cmd>lua local r = vim.fn.systemlist("git rev-parse --show-toplevel 2>/dev/null")[1]; require("telescope.builtin").find_files({ cwd = (r and r ~= "") and r or vim.fn.getcwd() })<CR>]]),
+        dashboard.button("r", "  Recent files", ":Telescope oldfiles<CR>"),
+        dashboard.button("g", "  Live grep", ":Telescope live_grep<CR>"),
+        dashboard.button("n", "  New file", ":ene <BAR> startinsert<CR>"),
+        dashboard.button("q", "  Quit", ":qa<CR>"),
+      }
+
+      -- Footer: plugin count + load time, filled in once lazy.nvim finishes
+      local function footer()
+        local stats = require("lazy").stats()
+        local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
+        return "⚡ " .. stats.loaded .. "/" .. stats.count .. " plugins loaded in " .. ms .. "ms"
+      end
+      dashboard.section.footer.val = footer()
+
+      alpha.setup(dashboard.opts)
+
+      -- Refresh the footer after lazy.nvim finishes loading everything
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LazyDone",
+        callback = function()
+          dashboard.section.footer.val = footer()
+          pcall(vim.cmd.AlphaRedraw)
+        end,
+      })
+    end,
+  },
+
+  -- ---------------------------------------------------------------------------
   -- TREESITTER — syntax highlighting, indentation, folding
   -- ---------------------------------------------------------------------------
   -- Replaces: vim-ruby, vim-javascript, vim-elixir, vim-markdown, vim-coffee-
