@@ -36,7 +36,8 @@ Key plugins and their bindings:
 - **Gitsigns**: `]g`/`[g` hunks, `<Leader>gp` preview, `<Leader>gb` blame
 - **Trouble**: `<Leader>xx` diagnostics panel, `<Leader>xb` buffer diagnostics
 - **Aerial**: `<Leader>a` code outline
-- **Toggleterm**: `<C-T>` bottom terminal, `<C-Y>` Claude Code side pane (35% width, runs `claude`, auto-opens at startup except for git commit/rebase edits), `<Leader>c` close all; `<C-h/j/k/l>` navigates between editor and terminal splits
+- **Toggleterm**: `<C-T>` bottom terminal, `<Leader>c` close all; `<C-h/j/k/l>` navigates between editor and terminal splits
+- **Claudecode**: `<C-Y>` Claude Code side pane via claudecode.nvim IDE integration — Claude sees open files, selections, and diagnostics (35% width, right side, runs `claude --permission-mode acceptEdits`, auto-opens at startup except for git commit/rebase edits); `<Leader>as` sends the visual selection to Claude
 
 LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-language-server`, `lua-language-server`, `elixir-ls`.
 

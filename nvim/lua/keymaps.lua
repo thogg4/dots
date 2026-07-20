@@ -50,25 +50,17 @@ map("n", "<C-Up>", "<C-w>k", { silent = true })    -- move to window above
 map("n", "<C-Down>", "<C-w>j", { silent = true })  -- move to window below
 
 -- Split creation — <C-A> as a prefix (mirrors the old <C-A> + <C-W> combo)
-map("n", "<C-A>", "<C-w>", { silent = true })         -- pass through to <C-w> commands
-map("n", '<C-A>"', ":sp<CR>", { silent = true })       -- horizontal split
-map("n", "<C-A>:", ":vsp<CR>", { silent = true })      -- vertical split
+map("n", "<C-A>", "<C-w>", { silent = true })     -- pass through to <C-w> commands
+map("n", '<C-A>"', ":sp<CR>", { silent = true })  -- horizontal split
+map("n", "<C-A>:", ":vsp<CR>", { silent = true }) -- vertical split
 
 -- -----------------------------------------------------------------------------
 -- Terminal — escape terminal mode with Esc
 -- In a :terminal buffer, <C-\><C-N> exits to normal mode.
--- This maps Esc to do the same so muscle memory works.
--- Exception: when the terminal is running Claude Code, Esc is passed through —
--- the Claude TUI uses it (interrupt, dismiss menus). Use <C-\><C-N> to leave
--- terminal mode in that pane. Detection uses the terminal title, which the
--- shell/TUI updates to the running command.
+-- This maps Esc to do the same so muscle memory works, in every terminal
+-- including the Claude pane. The program in the terminal never sees Esc.
 -- -----------------------------------------------------------------------------
-map("t", "<Esc>", function()
-  if (vim.b.term_title or ""):lower():find("claude", 1, true) then
-    return "<Esc>"
-  end
-  return "<C-\\><C-N>"
-end, { expr = true, silent = true })
+map("t", "<Esc>", "<C-\\><C-N>", { silent = true })
 
 -- -----------------------------------------------------------------------------
 -- Seamless split navigation — Ctrl+h/j/k/l from anywhere, including terminals
@@ -96,10 +88,14 @@ map("t", "<C-Right>", "<C-\\><C-N><C-w>l", { silent = true })
 -- <Leader>b  — insert a binding.pry on the line below and save
 -- <Leader>B  — remove ALL binding.pry lines from the file (cleanup before commit)
 -- -----------------------------------------------------------------------------
-map("i", "<Leader>b", "<Esc>obinding.pry<Esc>:w<CR>", { silent = true,
-  desc = "Insert binding.pry below (insert mode)" })
-map("n", "<Leader>b", "obinding.pry<Esc>:w<CR>", { silent = true,
-  desc = "Insert binding.pry below" })
+map("i", "<Leader>b", "<Esc>obinding.pry<Esc>:w<CR>", {
+  silent = true,
+  desc = "Insert binding.pry below (insert mode)"
+})
+map("n", "<Leader>b", "obinding.pry<Esc>:w<CR>", {
+  silent = true,
+  desc = "Insert binding.pry below"
+})
 map("n", "<Leader>B", function()
   vim.cmd(":%s/binding.pry//gi") -- case-insensitive global substitution
 end, { silent = true, desc = "Remove all binding.pry" })

@@ -52,3 +52,32 @@ autocmd({ "FocusGained", "BufEnter" }, {
   group = augroup("auto_read", { clear = true }),
   command = "checktime", -- re-read the file from disk if it changed
 })
+
+-- -----------------------------------------------------------------------------
+-- :q in the last editor window quits nvim, terminal panes included
+-- Without this, quitting the last file window leaves a terminal (e.g. the
+-- Claude pane) as the sole window, and toggleterm then swaps the file buffer
+-- back into it — which looks like :q closed the terminal split instead of the
+-- one the cursor was in. Closing the terminal windows first makes the :q apply
+-- to the whole session. With other file windows open, :q behaves as normal.
+-- -----------------------------------------------------------------------------
+autocmd("QuitPre", {
+  group = augroup("quit_with_terminals", { clear = true }),
+  callback = function()
+    if vim.bo.buftype == "terminal" then return end
+    local term_wins = {}
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      local is_float = vim.api.nvim_win_get_config(win).relative ~= ""
+      if win ~= vim.api.nvim_get_current_win() and not is_float then
+        if vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "terminal" then
+          table.insert(term_wins, win)
+        else
+          return -- another file window remains; let :q close just this split
+        end
+      end
+    end
+    for _, win in ipairs(term_wins) do
+      vim.api.nvim_win_close(win, true)
+    end
+  end,
+})
