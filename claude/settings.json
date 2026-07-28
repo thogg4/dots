@@ -4,6 +4,5 @@
     "swift-lsp@claude-plugins-official": true
   },
   "tui": "default",
-  "theme": "auto",
-  "model": "claude-fable-5[1m]"
+  "theme": "auto"
 }
