@@ -87,6 +87,31 @@ done
 # Wipe any existing config first so the symlink is clean on re-runs.
 # lazy.nvim bootstraps itself on first launch; no separate install needed.
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# SSH key
+# Generate a new ed25519 key if one doesn't already exist. ssh-keygen prompts
+# for a passphrase interactively. The key is then added to the agent and to
+# macOS Keychain (via ~/.ssh/config) so it's unlocked automatically on login.
+# -----------------------------------------------------------------------------
+SSH_KEY="$HOME/.ssh/id_ed25519"
+if [ -f "$SSH_KEY" ]; then
+    echo "SSH key already exists at $SSH_KEY, skipping."
+else
+    echo "Generating SSH key..."
+    ssh-keygen -t ed25519 -C "thogg4@gmail.com" -f "$SSH_KEY"
+
+    if [ ! -f "$HOME/.ssh/config" ] || ! grep -q "UseKeychain" "$HOME/.ssh/config" 2>/dev/null; then
+        echo "Adding UseKeychain config to ~/.ssh/config..."
+        printf "Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile %s\n" "$SSH_KEY" >> "$HOME/.ssh/config"
+    fi
+
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add --apple-use-keychain "$SSH_KEY"
+
+    echo "Public key (add this to GitHub, etc.):"
+    cat "$SSH_KEY.pub"
+fi
+
 echo "Linking ~/.config/nvim -> ~/dots/nvim..."
 rm -rf $HOME/.config/nvim
 ln -s $HOME/dots/nvim $HOME/.config/nvim
