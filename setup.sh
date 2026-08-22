@@ -185,7 +185,8 @@ ln -sf $HOME/dots/claude/skills/review/SKILL.md $HOME/.agents/skills/review/SKIL
 # -----------------------------------------------------------------------------
 formula() {
     if brew list "$1" > /dev/null 2>&1; then
-        echo "  [skip] $1 — already installed"
+        echo "  [upgrade] $1"
+        brew upgrade "$@"
     else
         echo "  [install] $1"
         brew install "$@"
@@ -194,7 +195,8 @@ formula() {
 cask() {
     _name="${1##*/}"
     if brew list --cask "$_name" > /dev/null 2>&1; then
-        echo "  [skip] $_name — already installed"
+        echo "  [upgrade] $_name"
+        brew upgrade --cask "$@"
     else
         echo "  [install] $_name"
         brew install --cask "$@"
