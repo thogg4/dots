@@ -170,6 +170,26 @@ mkdir -p $HOME/.agents/skills/review
 ln -sf $HOME/dots/claude/skills/review/SKILL.md $HOME/.agents/skills/review/SKILL.md
 
 # -----------------------------------------------------------------------------
+# Run (https://github.com/thogg4/run)
+# Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
+# Config and saved urls are tracked here so they match across machines; history
+# is per-machine runtime state and stays local (same reasoning as ~/.claude above).
+# -----------------------------------------------------------------------------
+if [ -d "/Applications/Run.app" ]; then
+    echo "  [skip] Run.app — already installed"
+else
+    echo "  [install] Run.app"
+    RUN_MOUNT="$(mktemp -d)"
+    rmdir "$RUN_MOUNT"
+    hdiutil attach "$HOME/dots/run/Run.dmg" -nobrowse -readonly -noverify -quiet -mountpoint "$RUN_MOUNT"
+    cp -R "$RUN_MOUNT/Run.app" /Applications/
+    hdiutil detach "$RUN_MOUNT" -quiet
+fi
+mkdir -p $HOME/.config/run
+ln -sf $HOME/dots/run/config $HOME/.config/run/config
+ln -sf $HOME/dots/run/urls $HOME/.config/run/urls
+
+# -----------------------------------------------------------------------------
 # Package installs
 # CLI tools first, then GUI apps via --cask.
 # fzf        — fuzzy finder (used standalone and by some nvim plugins)

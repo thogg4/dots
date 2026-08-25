@@ -62,13 +62,14 @@ module Sink
     end
 
     def self.record_tombstone(state_dir, dir_name, rel_path, deleted_at)
-      path  = tombstone_path_for(state_dir, dir_name)
-      tombs = load_tombstones_file(path)
-      return if (existing = tombs[rel_path]) && existing >= deleted_at
+      with_lock(state_dir, dir_name) do
+        path  = tombstone_path_for(state_dir, dir_name)
+        tombs = load_tombstones_file(path)
+        next if (existing = tombs[rel_path]) && existing >= deleted_at
 
-      tombs[rel_path] = deleted_at
-      FileUtils.mkdir_p(state_dir)
-      File.write(path, JSON.generate(tombs))
+        tombs[rel_path] = deleted_at
+        File.write(path, JSON.generate(tombs))
+      end
     rescue => e
       warn "sink: failed to record tombstone: #{e.message}"
     end
@@ -81,22 +82,38 @@ module Sink
       {}
     end
 
+    # Serializes access to a dir_name's state/tombstone files across threads
+    # (the server handles peer requests concurrently) and across processes
+    # (the periodic client runs as a separate process from the server), so a
+    # read-modify-write here can never be clobbered by a concurrent one.
+    def self.with_lock(state_dir, dir_name)
+      FileUtils.mkdir_p(state_dir)
+      File.open(File.join(state_dir, "#{dir_name}.lock"), File::CREAT | File::RDWR) do |f|
+        f.flock(File::LOCK_EX)
+        yield
+      end
+    end
+
     private
 
     def detect_and_load_tombstones(dir_name, current_entries)
       return [] unless @state_dir
 
       current_paths = current_entries.map(&:rel_path).to_set
-      tombs         = load_tombstones(dir_name)
       now           = Time.now.to_f
+      tombs         = nil
 
-      load_previous_state(dir_name).each do |prev|
-        next if current_paths.include?(prev.rel_path)
-        tombs[prev.rel_path] = now
+      self.class.with_lock(@state_dir, dir_name) do
+        tombs = load_tombstones(dir_name)
+
+        load_previous_state(dir_name).each do |prev|
+          next if current_paths.include?(prev.rel_path)
+          tombs[prev.rel_path] = now
+        end
+
+        save_previous_state(dir_name, current_entries)
+        save_tombstones_hash(dir_name, tombs)
       end
-
-      save_previous_state(dir_name, current_entries)
-      save_tombstones_hash(dir_name, tombs)
 
       tombs.map { |path, ts| Tombstone.new(rel_path: path, deleted_at: ts) }
     end
@@ -106,10 +123,7 @@ module Sink
     end
 
     def save_tombstones_hash(dir_name, hash)
-      FileUtils.mkdir_p(@state_dir)
-      existing = self.class.load_tombstones_file(tombstone_path(dir_name))
-      merged   = existing.merge(hash) { |_k, old_ts, new_ts| [old_ts, new_ts].max }
-      File.write(tombstone_path(dir_name), JSON.generate(merged))
+      File.write(tombstone_path(dir_name), JSON.generate(hash))
     end
 
     def load_previous_state(dir_name)

@@ -1,0 +1,9 @@
+# Run config file — https://github.com/thogg4/run
+# See CLAUDE.md "Config File" section for the full key reference.
+
+text-transform-script = Lowercase :: #!/bin/bash\ntr '[:upper:]' '[:lower:]'
+open-on-login = true
+hotkey = option+control
+show-dock-icon = false
+sound-effects-volume = 0
+launcher-hotkey = command+space

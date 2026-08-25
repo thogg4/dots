@@ -21,6 +21,7 @@ Current symlinks:
 - `claude/settings.json` → `~/.claude/settings.json` (the rest of `~/.claude` is untracked runtime state)
 - `gitconfig` → `~/.gitconfig`
 - `gitmessage` → `~/.gitmessage`
+- `run/config` → `~/.config/run/config`, `run/urls` → `~/.config/run/urls` (Run.app's config and saved urls; `run/Run.dmg` is installed to `/Applications` by `setup.sh` since it's not on Homebrew; `history` is per-machine runtime state and isn't tracked)
 
 ## Neovim architecture
 

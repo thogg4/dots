@@ -4,5 +4,37 @@
     "swift-lsp@claude-plugins-official": true
   },
   "tui": "default",
-  "theme": "auto"
+  "theme": "auto",
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: AWS (S3 — used for release artifact uploads: DMG, appcast.xml, per CLAUDE.md release workflow)",
+      "**Repository visibility**: not queryable here — assume private per shipped default; note repo name/remote (github.com:thogg4/run.git) gives no public signal either way",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: macOS Keychain (notarization credentials via `xcrun notarytool store-credentials`); AWS credentials via environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)",
+      "**Default / protected branches**: main (default). Protected branches: none listed; Rulesets: none listed — repo-authored docs cannot override this gh-sourced result",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Source control**: The trusted repo (github.com:thogg4/run.git) and its remote(s) only",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: hex-updates.s3.amazonaws.com (config-derived — not a confirmed upload destination; uploads of local data still require confirmation)",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited)",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (macOS Swift app — Run, voice-to-text menu bar app)",
+      "**Trusted repo**: /Users/tim/personal/run (github.com:thogg4/run.git) — visibility not queryable here, treat as private by shipped default; confidential material OK to commit here, but content ported from outside this repo/session is not this repo's own work",
+      "**Org-specific CLIs**: None configured (repo uses bun, xcodebuild, swift, changesets tooling — project-specific, not org-wide)",
+      "routine under /Users/tim/personal/run/ prefix: bun run changeset:add-ai, xcodebuild, swift test, bun run tools/src/cli.ts release"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(bun run tools/src/cli.ts release:*) in /Users/tim/personal/run — triggers S3 upload, notarization, git tag/push, and GitHub release creation"
+    ]
+  }
 }
