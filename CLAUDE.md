@@ -52,18 +52,6 @@ LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-lan
 
 Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor.
 
-## Raycast
+## Run
 
-Raycast has no config files — settings, extensions, quicklinks, and snippets are configured via `raycast.json` (decrypted export) and `defaults write`.
-
-**To update the config:**
-1. In Raycast: Settings → Advanced → Export, save with password `12345678`
-2. Decrypt and overwrite `raycast.json`:
-   ```sh
-   openssl enc -d -aes-256-cbc -nosalt -in raycast.rayconfig -k 12345678 2>/dev/null | tail -c +17 | gunzip > ~/dots/raycast.json
-   ```
-3. Commit `raycast.json`
-
-**How setup.sh applies it:** gzips `raycast.json` to `raycast.json.rayconfig` then imports it via `open -a Raycast --args import`. Preferences in `raycastPreferences` are also applied via `defaults write com.raycast.macos`.
-
-**What's configured in `raycast.json`:** extensions (Linear, GitHub, 1Password, Messages, Format JSON), quicklinks (Google, DuckDuckGo), snippets (`@@` → email), and appearance/general/advanced preferences.
+Run.app (https://github.com/thogg4/run) is the launcher/app-switcher, replacing Raycast. It's not on Homebrew, so `setup.sh` installs it from the bundled `run/Run.dmg`. `run/config` and `run/urls` are tracked and symlinked into `~/.config/run/`; `history` is per-machine runtime state and isn't tracked. It owns the Cmd+Space hotkey (`launcher-hotkey` in `run/config`), which is why `setup.sh` disables macOS's Spotlight Cmd+Space/Cmd+Shift+Space shortcuts.

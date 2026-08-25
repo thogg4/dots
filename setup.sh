@@ -245,7 +245,6 @@ cask firefox
 cask google-chrome
 cask 1password
 cask 1password-cli
-cask raycast
 cask microsoft-teams
 cask microsoft-outlook
 cask slack
@@ -346,7 +345,7 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 13
 
 # Disable Spotlight's Cmd-Space and Cmd-Shift-Space shortcuts (keys 64/65)
-# so Raycast can own that hotkey without conflict.
+# so Run can own that hotkey without conflict (see run/config's launcher-hotkey).
 echo "Applying macOS defaults: Spotlight shortcuts..."
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
@@ -422,7 +421,6 @@ osascript -e 'tell application "System Events" to make login item at end with pr
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Ghostty.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Raycast.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Postgres.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bear.app", hidden:false}'
 osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Krisp.app", hidden:false}'
@@ -472,33 +470,6 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeF
 # Set Firefox as the default browser (requires `brew install defaultbrowser`).
 echo "Setting Firefox as default browser..."
 echo "$SUDO_PASSWORD" | sudo -S defaultbrowser firefox 2>/dev/null
-
-# — Raycast ———————————————————————————————————————————————————————————————————
-# Apply preferences that aren't stored in the raycast.json export.
-# set_plist tries Add first (for a fresh plist) then falls back to Set.
-echo "Configuring Raycast preferences..."
-RAYCAST_PLIST="$HOME/Library/Preferences/com.raycast.macos.plist"
-set_plist() {
-    /usr/libexec/PlistBuddy -c "Add :$1 $2 $3" "$RAYCAST_PLIST" 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Set :$1 $3" "$RAYCAST_PLIST"
-}
-# Command-49 = Cmd+Space (key code 49 is spacebar).
-set_plist "raycastGlobalHotkey"                 string  "Command-49"
-set_plist "raycastPreferredWindowMode"          string  "default"
-set_plist "raycastShouldFollowSystemAppearance" integer 1
-set_plist "useHyperKeyIcon"                     integer 0
-
-# Kill Raycast so it picks up the new plist values on next launch.
-echo "Restarting Raycast..."
-killall Raycast 2>/dev/null || true
-
-# Import extensions, quicklinks, snippets, and remaining preferences from the
-# tracked raycast.json. The import format is gzipped JSON with a .rayconfig
-# extension. We generate it on the fly so only the canonical .json is committed.
-echo "Importing Raycast config..."
-rm -f "$HOME/dots/raycast.json.rayconfig"
-gzip --keep --suffix .rayconfig "$HOME/dots/raycast.json"
-open -a Raycast --args import "$HOME/dots/raycast.json"
 
 # — Dictation ————————————————————————————————————————————————————————————————
 # Enable dictation triggered by pressing the Fn key.

@@ -8,11 +8,11 @@ Running `setup.sh` once on a clean machine will:
 
 - Install **Homebrew** and upgrade any existing packages
 - Install **rbenv**, the latest stable Ruby, and the `kamal` gem
-- Install CLI tools (fish, fzf, ripgrep, ag, nvim, mas, libpq, …) and GUI apps via Homebrew casks (Firefox, Ghostty, Slack, 1Password, Raycast, OrbStack, Linear, Notion, Bruno, Postgres, Krisp, and more)
+- Install CLI tools (fish, fzf, ripgrep, ag, nvim, mas, libpq, …) and GUI apps via Homebrew casks (Firefox, Ghostty, Slack, 1Password, OrbStack, Linear, Notion, Bruno, Postgres, Krisp, and more)
+- Install Run.app (launcher) from the bundled `run/Run.dmg` — it's not on Homebrew
 - Install Mac App Store apps via `mas`
 - Symlink all configs into place (see below)
 - Apply a comprehensive set of `defaults write` settings for macOS (Dock, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
-- Configure Raycast (import extensions/quicklinks/snippets from `raycast.json`)
 - Set Firefox as the default browser
 - Set the desktop wallpaper
 - Configure login items
@@ -27,6 +27,7 @@ Running `setup.sh` once on a clean machine will:
 | `claude/` | `~/.claude` |
 | `gitconfig` | `~/.gitconfig` |
 | `gitmessage` | `~/.gitmessage` |
+| `run/config`, `run/urls` | `~/.config/run/config`, `~/.config/run/urls` |
 | `irbrc` | (manually placed) |
 | `pryrc` | (manually placed) |
 
@@ -48,7 +49,7 @@ The script asks for your sudo password once at the start and validates it before
 
 **Ghostty** (`ghostty/config`) — TokyoNight Night theme, 0.85 background opacity, non-blinking block cursor.
 
-**Raycast** (`raycast.json`) — extensions (Linear, GitHub, 1Password, Messages, Format JSON), quicklinks, `@@` email snippet, and preferences. To update: export from Raycast → decrypt → overwrite `raycast.json` → commit (see CLAUDE.md for the exact commands).
+**Run** (`run/config`, `run/urls`) — launcher app, installed from `run/Run.dmg` since it's not on Homebrew. Owns the Cmd+Space hotkey, so `setup.sh` disables Spotlight's Cmd+Space/Cmd+Shift+Space shortcuts.
 
 ## Adding a new config
 
