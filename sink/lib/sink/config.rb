@@ -23,8 +23,10 @@ module Sink
           port: 7070
           bind: "0.0.0.0"
 
-        # Directory where sink stores state (tombstones, previous-state snapshots).
-        # Defaults to ~/.local/share/sink if omitted.
+        # Directory where sink stores its previous-scan snapshot, used to detect
+        # local deletions between runs. (Tombstones themselves live in a hidden
+        # file inside each synced directory.) Defaults to ~/.local/share/sink
+        # if omitted.
         state_dir: ~/.local/share/sink
 
         # Named sync directories. Both peers must use the same names;

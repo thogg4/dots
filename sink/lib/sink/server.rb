@@ -38,8 +38,8 @@ module Sink
       end
     end
 
-    def initialize
-      @config = Config.new
+    def initialize(config = Config.new)
+      @config = config
     end
 
     def start
@@ -147,9 +147,7 @@ module Sink
         res.body   = ''
 
       when 'DELETE'
-        deleted_at = req.query['deleted_at']&.then { |s| s.match?(/\A[\d.]+\z/) ? s.to_f : nil } || Time.now.to_f
-        FileUtils.rm_f(abs) if File.file?(abs)
-        Manifest.record_tombstone(@config.state_dir, dir_name, rel_path, deleted_at)
+        FileUtils.rm_f(abs)
         res.status = 204
         res.body   = ''
 

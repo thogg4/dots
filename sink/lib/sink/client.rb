@@ -10,8 +10,8 @@ module Sink
     CONNECT_TIMEOUT = 5
     READ_TIMEOUT    = 60
 
-    def initialize
-      @config = Config.new
+    def initialize(config = Config.new)
+      @config = config
     end
 
     def sync
@@ -59,32 +59,31 @@ module Sink
       @config.sync_dirs.each do |dir_name, root|
         local_files  = index(local_manifest.dirs[dir_name] || [])
         remote_files = index(remote.dirs[dir_name] || [])
-        local_tombs  = tomb_index(local_manifest.tombstones[dir_name] || [])
-        remote_tombs = tomb_index(remote.tombstones[dir_name] || [])
+        local_tombs  = local_manifest.tombstones[dir_name] || {}
+        remote_tombs = fetch_tombstones(ip, dir_name)
 
         merged_tombs = merge_tombs(local_tombs, remote_tombs)
+        # A file re-created after deletion wins over its own tombstone — drop
+        # it up front so it falls through to the normal pull/push branch
+        # below instead of being stuck matching a tombstone that can never
+        # age out.
+        merged_tombs = merged_tombs.reject { |rel_path, deleted_at|
+          newest_mtime = [local_files[rel_path]&.mtime, remote_files[rel_path]&.mtime].compact.max
+          newest_mtime && newest_mtime > deleted_at
+        }
+        persist_tombstones(ip, dir_name, root, local_tombs, remote_tombs, merged_tombs)
 
         (local_files.keys + remote_files.keys + merged_tombs.keys).uniq.each do |rel_path|
-          l     = local_files[rel_path]
-          r     = remote_files[rel_path]
-          tomb  = merged_tombs[rel_path]
+          l          = local_files[rel_path]
+          r          = remote_files[rel_path]
+          deleted_at = merged_tombs[rel_path]
 
-          if tomb
-            newest_mtime = [l&.mtime, r&.mtime].compact.max
-            # File re-created after deletion → file wins
-            next if newest_mtime && newest_mtime > tomb.deleted_at
-
+          if deleted_at
             if l
               FileUtils.rm_f(File.join(root, rel_path))
-              Manifest.record_tombstone(@config.state_dir, dir_name, rel_path, tomb.deleted_at)
               deleted += 1
             end
-
-            # Propagate tombstone to remote if it lacks it or has an older one
-            remote_ts = remote_tombs[rel_path]&.deleted_at.to_f
-            if r || remote_ts < tomb.deleted_at
-              delete_remote(ip, dir_name, rel_path, tomb.deleted_at)
-            end
+            delete_remote(ip, dir_name, rel_path) if r
           else
             if l.nil?
               pull(ip, dir_name, rel_path, root) && pulled += 1
@@ -108,16 +107,39 @@ module Sink
       entries.each_with_object({}) { |e, h| h[e.rel_path] = e }
     end
 
-    def tomb_index(tombstones)
-      tombstones.each_with_object({}) { |t, h| h[t.rel_path] = t }
+    def fetch_tombstones(ip, dir_name)
+      body = get(ip, file_url(dir_name, Manifest::TOMBSTONE_FILENAME))
+      body ? JSON.parse(body) : {}
+    rescue JSON::ParserError
+      {}
+    end
+
+    # Persists the merged tombstones locally if the remote had newer entries,
+    # and pushes them back to the remote if the local side did — converging
+    # both peers on the synced tombstone file itself rather than a bespoke
+    # delete RPC.
+    def persist_tombstones(ip, dir_name, root, local_tombs, remote_tombs, merged)
+      if merged != local_tombs
+        Manifest.with_lock(@config.state_dir, dir_name) { Manifest.save_tombstones(root, merged) }
+      end
+      push_tombstones(ip, dir_name, merged) if merged != remote_tombs
     end
 
     def merge_tombs(local_tombs, remote_tombs)
       (local_tombs.keys + remote_tombs.keys).uniq.each_with_object({}) do |path, h|
-        l = local_tombs[path]
-        r = remote_tombs[path]
-        h[path] = (l && r) ? (l.deleted_at >= r.deleted_at ? l : r) : (l || r)
+        h[path] = [local_tombs[path], remote_tombs[path]].compact.max
       end
+    end
+
+    def push_tombstones(ip, dir_name, tombs)
+      http(ip, Net::HTTP::Put, file_url(dir_name, Manifest::TOMBSTONE_FILENAME), body: JSON.generate(tombs))
+    end
+
+    def delete_remote(ip, dir_name, rel_path)
+      res = http(ip, Net::HTTP::Delete, file_url(dir_name, rel_path))
+      (res&.code&.to_i || 0).between?(200, 204)
+    rescue => e
+      warn "  delete #{rel_path}: #{e.message}"; false
     end
 
     def pull(ip, dir_name, rel_path, root)
@@ -145,14 +167,6 @@ module Sink
       (res&.code&.to_i || 0).between?(200, 204)
     rescue => e
       warn "  push #{rel_path}: #{e.message}"; false
-    end
-
-    def delete_remote(ip, dir_name, rel_path, deleted_at)
-      url = "/file?dir=#{CGI.escape(dir_name)}&path=#{CGI.escape(rel_path)}&deleted_at=#{deleted_at}"
-      res = http(ip, Net::HTTP::Delete, url)
-      (res&.code&.to_i || 0).between?(200, 204)
-    rescue => e
-      warn "  delete #{rel_path}: #{e.message}"; false
     end
 
     def file_url(dir_name, rel_path)
