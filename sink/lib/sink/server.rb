@@ -4,6 +4,7 @@ require 'socket'
 require 'json'
 require 'fileutils'
 require 'cgi'
+require 'digest'
 
 module Sink
   class Server
@@ -38,22 +39,32 @@ module Sink
       end
     end
 
-    def initialize(config = Config.new)
-      @config = config
+    attr_reader :port
+
+    def initialize(config = Config.new, peer_cache: PeerCache.new(config))
+      @config     = config
+      @peer_cache = peer_cache
     end
 
     def start
-      tcp = TCPServer.new(@config.bind, @config.port)
-      $stdout.puts "sink server on #{@config.bind}:#{@config.port}"
+      @tcp  = TCPServer.new(@config.bind, @config.port)
+      @port = @tcp.addr[1]
+      $stdout.puts "sink server on #{@config.bind}:#{@port}"
       $stdout.flush
 
-      trap('INT')  { tcp.close; exit }
-      trap('TERM') { tcp.close; exit }
+      @peer_cache.start_background_refresh!
+
+      trap('INT')  { stop; exit }
+      trap('TERM') { stop; exit }
 
       loop do
-        conn = tcp.accept
+        conn = @tcp.accept
         Thread.new(conn) { |c| handle(c) }
       end
+    end
+
+    def stop
+      @tcp&.close
     end
 
     private
@@ -137,17 +148,25 @@ module Sink
         res.body             = File.binread(abs)
 
       when 'PUT'
+        body = req.body || ''
         FileUtils.mkdir_p(File.dirname(abs))
-        File.binwrite(abs, req.body || '')
+        File.binwrite(abs, body)
+        mtime = Time.now.to_f
         if (s = req.headers['x-sink-mtime'])&.match?(/\A[\d.]+\z/)
-          t = Time.at(s.to_f)
+          mtime = s.to_f
+          t = Time.at(mtime)
           File.utime(t, t, abs)
         end
+        entry = Manifest::Entry.new(rel_path: rel_path, sha256: Digest::SHA256.hexdigest(body), mtime: mtime, size: body.bytesize)
+        Manifest.update_state_entry(@config.state_dir, dir_name, entry)
         res.status = 204
         res.body   = ''
 
       when 'DELETE'
-        FileUtils.rm_f(abs)
+        deleted_at = req.query['deleted_at']&.then { |s| s.match?(/\A[\d.]+\z/) ? s.to_f : nil } || Time.now.to_f
+        FileUtils.rm_f(abs) if File.file?(abs)
+        Manifest.record_tombstone(@config.state_dir, dir_name, rel_path, deleted_at)
+        Manifest.remove_state_entry(@config.state_dir, dir_name, rel_path)
         res.status = 204
         res.body   = ''
 

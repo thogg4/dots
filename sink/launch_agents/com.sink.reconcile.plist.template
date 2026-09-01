@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.sink.client</string>
+  <string>com.sink.reconcile</string>
 
   <key>ProgramArguments</key>
   <array>
     <string>__HOME__/dots/sink/bin/sink</string>
-    <string>sync</string>
+    <string>reconcile</string>
   </array>
 
   <key>StartInterval</key>
-  <integer>120</integer>
+  <integer>1800</integer>
 
   <key>StandardOutPath</key>
-  <string>__HOME__/.config/sink/sync.log</string>
+  <string>__HOME__/.config/sink/reconcile.log</string>
   <key>StandardErrorPath</key>
-  <string>__HOME__/.config/sink/sync.log</string>
+  <string>__HOME__/.config/sink/reconcile.log</string>
 
   <key>EnvironmentVariables</key>
   <dict>

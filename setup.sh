@@ -302,8 +302,11 @@ sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.server.plist.tem
   > $HOME/Library/LaunchAgents/com.sink.server.plist
 sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.client.plist.template \
   > $HOME/Library/LaunchAgents/com.sink.client.plist
+sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.reconcile.plist.template \
+  > $HOME/Library/LaunchAgents/com.sink.reconcile.plist
 launchctl load -w $HOME/Library/LaunchAgents/com.sink.server.plist 2>/dev/null || true
 launchctl load -w $HOME/Library/LaunchAgents/com.sink.client.plist 2>/dev/null || true
+launchctl load -w $HOME/Library/LaunchAgents/com.sink.reconcile.plist 2>/dev/null || true
 echo "Sink loaded. Edit ~/.config/sink/config.yml to add sync_dirs."
 
 # -----------------------------------------------------------------------------
