@@ -1,11 +1,24 @@
 {
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
-    "swift-lsp@claude-plugins-official": true
+    "swift-lsp@claude-plugins-official": true,
+    "work-intake@deseretbook": true
+  },
+  "extraKnownMarketplaces": {
+    "deseretbook": {
+      "source": {
+        "source": "git",
+        "url": "git@github.com:deseretbook/claude-plugins.git"
+      }
+    }
   },
   "tui": "default",
   "theme": "auto",
   "autoMode": {
+    "soft_deny": [
+      "$defaults",
+      "Bash(bun run tools/src/cli.ts release:*) in /Users/tim/personal/run — triggers S3 upload, notarization, git tag/push, and GitHub release creation"
+    ],
     "environment": [
       "### Org-wide",
       "**Organization**: None configured",
@@ -31,10 +44,6 @@
       "**Trusted repo**: /Users/tim/personal/run (github.com:thogg4/run.git) — visibility not queryable here, treat as private by shipped default; confidential material OK to commit here, but content ported from outside this repo/session is not this repo's own work",
       "**Org-specific CLIs**: None configured (repo uses bun, xcodebuild, swift, changesets tooling — project-specific, not org-wide)",
       "routine under /Users/tim/personal/run/ prefix: bun run changeset:add-ai, xcodebuild, swift test, bun run tools/src/cli.ts release"
-    ],
-    "soft_deny": [
-      "$defaults",
-      "Bash(bun run tools/src/cli.ts release:*) in /Users/tim/personal/run — triggers S3 upload, notarization, git tag/push, and GitHub release creation"
     ]
   }
 }

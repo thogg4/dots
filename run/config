@@ -3,7 +3,7 @@
 
 text-transform-script = Lowercase :: #!/bin/bash\ntr '[:upper:]' '[:lower:]'
 open-on-login = true
-hotkey = option+control
+hotkey = function
 show-dock-icon = false
 sound-effects-volume = 0
 launcher-hotkey = command+space
