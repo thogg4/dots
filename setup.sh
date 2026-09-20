@@ -151,25 +151,6 @@ rm -f $HOME/.claude/settings.json
 ln -s $HOME/dots/claude/settings.json $HOME/.claude/settings.json
 
 # -----------------------------------------------------------------------------
-# Plannotator (https://github.com/backnotprop/plannotator)
-# Browser-based plan/code review UI used by the plannotator-* skills.
-# Config is tracked in plannotator/ here and symlinked to ~/.plannotator.
-# Plannotator's review-skill discovery ignores symlinked skill directories,
-# so ~/.agents/skills/review is a real directory with a symlinked SKILL.md.
-# -----------------------------------------------------------------------------
-if command -v plannotator > /dev/null 2>&1; then
-    echo "  [skip] plannotator — already installed"
-else
-    echo "  [install] plannotator"
-    curl -fsSL https://plannotator.ai/install.sh | bash
-fi
-mkdir -p $HOME/.plannotator
-ln -sf $HOME/dots/plannotator/config.json $HOME/.plannotator/config.json
-ln -sf $HOME/dots/plannotator/review-skills.json $HOME/.plannotator/review-skills.json
-mkdir -p $HOME/.agents/skills/review
-ln -sf $HOME/dots/claude/skills/review/SKILL.md $HOME/.agents/skills/review/SKILL.md
-
-# -----------------------------------------------------------------------------
 # Run (https://github.com/thogg4/run)
 # Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
 # Config and saved urls are tracked here so they match across machines; history
