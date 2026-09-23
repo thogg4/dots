@@ -248,6 +248,7 @@ formula wallpaper
 formula defaultbrowser
 formula xcodegen
 
+# — GitHub CLI auth ——————————————————————————————————————————————————————————
 echo "Checking gh CLI authentication..."
 if gh auth status > /dev/null 2>&1; then
     echo "gh already authenticated, skipping."
