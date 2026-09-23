@@ -42,8 +42,8 @@ If a repo PR template exists, use its structure for the middle section (between 
 
 ### 3. Determine PR Title and Ticket Info
 
-- Ask the user for the ticket number and title if not already known from context (branch name, commit messages, Linear, etc.).
-- Format the PR title as: `#{ticket_number} - #{ticket_title}`
+- Ask the user for the ticket ID and title if not already known from context (branch name, commit messages, Linear, etc.).
+- Format the PR title as: `TICKET-ID / title` (e.g. `DEV-1234 / fix login redirect`). If there's no ticket ID, just use `title`.
 - Determine the ticket URL for linking in the description.
 
 ### 4. Create the Draft PR
@@ -53,32 +53,13 @@ Push the branch if needed, then create the PR.
 **PR description structure:**
 
 ```
-## Goal
+## Why?
 Contributes to [TASK_ID](task_url)
 
-- What is the goal and purpose of these changes?
+- Why is this change being made?
 
-## Primary Changes
-- Most important changes for the reviewer
-
-## Tradeoffs & Alternatives
-- Other approaches considered and tradeoffs made
-
-## Things to Look Out for While Reviewing
-- Areas needing special attention
-
-## Needed Supporting Changes
-- Required changes in other systems or deployment steps
-
-## Testing
-- How the reviewer should test (don't suggest running automated tests; CI does that)
-
-## Demo
-
-<details>
-  <summary>Some Image</summary>
-  <img src="" />
-</details>
+## What?
+- What actually changed?
 
 ## PR Checklist
 - [ ] Tested on stage
@@ -114,8 +95,8 @@ Contributes to [TASK_ID](task_url)
 ```
 
 **Guidelines for the description:**
-- Keep it simple and concise — don't go overboard on details.
-- Omit sections that aren't relevant (e.g., skip "Tradeoffs & Alternatives" if there's nothing notable, skip "Demo" if not applicable).
+- Voice: casual, succinct. No em dashes.
+- Keep the Why?/What? sections short — don't go overboard on details.
 - The "After Creating Pull Request" checklist is always included verbatim.
 - Use a HEREDOC to pass the body to `gh pr create` for correct formatting.
 - Add a short note at the top of the description making clear the PR was created by Claude on Tim's behalf (e.g. "_Created by Claude on Tim's behalf._").
