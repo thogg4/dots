@@ -248,6 +248,14 @@ formula wallpaper
 formula defaultbrowser
 formula xcodegen
 
+echo "Checking gh CLI authentication..."
+if gh auth status > /dev/null 2>&1; then
+    echo "gh already authenticated, skipping."
+else
+    echo "Authenticating gh CLI..."
+    gh auth login
+fi
+
 echo "Installing App Store apps..."
 mas_install 1091189122 "Bear"
 mas_install 497799835 "Xcode"
