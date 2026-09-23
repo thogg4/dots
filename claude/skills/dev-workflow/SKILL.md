@@ -33,7 +33,7 @@ Run the `/validate-work` skill. Confirm the task is ready for development before
 Invoke the `planning-team` skill and follow it. Do not advance until the plan has been presented to and accepted by the user.
 
 ### 5. Build
-Follow the **Planning and Building** guidelines (`~/.claude/rules/planning-and-building.md`) and invoke the `test-driven-development` skill. Commit regularly per the git rules.
+Follow the **Planning and Building** guidelines (`~/.claude/rules/planning-and-building.md`) and invoke the `test-driven-development` skill. Don't run `git commit` — the user commits all changes manually.
 
 ### 6. Manual testing
 Follow the **Manual Testing** guidelines (`~/.claude/rules/manual-testing.md`). Verify the happy path and relevant edge cases.

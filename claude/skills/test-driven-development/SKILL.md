@@ -18,7 +18,7 @@ At a finer grain:
 1. Write a list of the specifications within scope of the current TDD session
 2. Encode one item in the list as an automated test
 3. Change the code *just barely enough* to *make the current test failure go away*. Avoid "speculative coding" - if we write more code than necessary to make the current test failure go away, we risk having code never exercised by any test
-4. Optionally refactor, but not before committing the behavior change. Never mix behavior changes with refactoring
+4. Optionally refactor, but not before the behavior change is committed. Don't commit it yourself — pause and have the user commit, since they commit all changes manually. Never mix behavior changes with refactoring
 5. Until the list is empty, go back to #2
 
 This follows Kent Beck's [Canon TDD](https://tidyfirst.substack.com/p/canon-tdd).

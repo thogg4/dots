@@ -17,6 +17,10 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "autoMode": {
     "soft_deny": [
       "$defaults",
