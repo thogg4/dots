@@ -262,6 +262,25 @@ mas_install 1091189122 "Bear"
 mas_install 497799835 "Xcode"
 claude mcp add --transport stdio xcode -- xcrun mcpbridge
 
+# — Plannotator (plan/code review UI) ————————————————————————————————————————
+echo "Installing Plannotator..."
+if ! /bin/bash -c "$(curl -fsSL https://plannotator.ai/install.sh)"; then
+    echo "Plannotator install script failed, skipping marketplace/plugin setup." >&2
+else
+    if claude plugin marketplace list | grep -q "backnotprop/plannotator"; then
+        echo "Plannotator marketplace already added, skipping."
+    else
+        echo "Adding Plannotator marketplace..."
+        claude plugin marketplace add backnotprop/plannotator
+    fi
+    if claude plugin list | grep -q "plannotator@plannotator"; then
+        echo "Plannotator plugin already installed, skipping."
+    else
+        echo "Installing Plannotator plugin..."
+        claude plugin install -y plannotator@plannotator
+    fi
+fi
+
 # — Ghostty terminal ——————————————————————————————————————————————————————————
 # Symlink the whole ghostty/ directory so all config is tracked here.
 echo "Linking ~/.config/ghostty -> ~/dots/ghostty..."

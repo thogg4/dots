@@ -1,8 +1,16 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "work-intake@deseretbook": true
+    "work-intake@deseretbook": true,
+    "plannotator@plannotator": true
   },
   "extraKnownMarketplaces": {
     "deseretbook": {
@@ -14,13 +22,6 @@
   },
   "tui": "default",
   "theme": "auto",
-  "permissions": {
-    "defaultMode": "auto"
-  },
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
   "autoMode": {
     "soft_deny": [
       "$defaults",
