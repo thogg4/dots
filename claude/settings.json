@@ -53,5 +53,6 @@
       "**Org-specific CLIs**: None configured (repo uses bun, xcodebuild, swift, changesets tooling — project-specific, not org-wide)",
       "routine under /Users/tim/personal/run/ prefix: bun run changeset:add-ai, xcodebuild, swift test, bun run tools/src/cli.ts release"
     ]
-  }
+  },
+  "model": "opus[1m]"
 }

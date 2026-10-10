@@ -4,6 +4,7 @@
 	email = thogg4@gmail.com
 [push]
   default = current
+	autoSetupRemote = true
 [pull]
   rebase = true
 [commit]

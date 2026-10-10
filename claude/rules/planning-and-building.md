@@ -40,6 +40,14 @@ Write simple, readable, maintainable code. When in doubt, choose the more obviou
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
+## Third-Party Libraries
+
+Wrap third-party libraries in our own classes rather than calling them directly throughout the codebase. This decouples the app from the library's API, so a future swap or upgrade touches one place instead of every call site.
+
+## Credentials and Secrets
+
+The user manages credentials and secrets files manually — don't create, edit, or populate them (e.g. `.env`, credentials/master key files, secret managers). Leave placeholders or note what's needed and let the user fill them in, typically after the rest of the change is done.
+
 ## TDD
 
 TDD should lead to more rigor and better results. Always build using red-green-refactor TDD. Invoke the `test-driven-development` skill before writing application code and follow it.
