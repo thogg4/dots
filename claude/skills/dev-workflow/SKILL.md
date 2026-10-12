@@ -56,7 +56,7 @@ Once your own work and reviews are complete and you're confident the code is rea
 ### 12. PR description
 Generate a description for the pull request:
 - First line is the title: `TICKET-ID / title` if a ticket ID was given (Step 1), otherwise just `title`.
-- Then a `## Why?` section and a `## What?` section, answering those two questions about the change.
+- Then a `Why?` section and a `What?` section, answering those two questions about the change.
 - Voice: casual, succinct. No em dashes.
 
 ## Final report
