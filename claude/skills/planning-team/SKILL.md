@@ -9,7 +9,7 @@ For the planning step, create the below team. Then synthesize their findings int
 
 ## Team Members
 
-Each subagent runs on a specific model: Fable for the roles that reason about the design (Architecture Strategist, Plan Author, Plan Critic), Opus for the roles that gather information (Codebase Explorer, Best Practices Researcher). Pass the listed `model` when spawning each one — don't let it inherit the session's model.
+Each subagent runs on a specific model: Opus for the roles that reason about the design (Architecture Strategist, Plan Author, Plan Critic), Opus for the roles that gather information (Codebase Explorer, Best Practices Researcher). Pass the listed `model` when spawning each one — don't let it inherit the session's model.
 
 **Product Owner / Lead Planner** (Tim)
 - Set the direction with a high-level plan before any research begins.
