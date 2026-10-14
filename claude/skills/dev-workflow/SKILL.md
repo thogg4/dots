@@ -9,7 +9,7 @@ Orchestrate the full 12-step workflow for every code change, regardless of size.
 
 The substance for each step lives in slash commands, other skills, or rule files (already loaded in global context). This skill is the orchestrator — keep work moving through the checklist, do not duplicate guidance from those sources.
 
-This workflow runs entirely on a single model, whichever the user is currently running. There are no model-switch steps.
+The session itself stays on a single model throughout, whichever the user is currently running. There are no model-switch steps. Subagents are the exception: they run on whatever model the skill that spawns them specifies (e.g. `planning-team` puts its roles on Fable or Opus).
 
 ## On invocation
 
@@ -24,7 +24,7 @@ Do not collapse, reorder, or skip steps. If a step is genuinely not applicable (
 The Claude Code session should be named after the task or ticket. If the session has no custom name yet, ask the user to set one or suggest one (e.g., from the ticket ID or feature name).
 
 ### 2. Branch
-Check the current git branch. If it's the repository's default branch (e.g. `main`/`master`), create and check out a new feature branch before making any changes, named after the task or ticket (reuse the session name from Step 1, kebab-cased). If a non-default (feature) branch is already checked out, keep working on it — don't create a new one.
+Check the current git branch. If it's the repository's default branch (e.g. `main`/`master`), create and check out a new feature branch before making any changes, named after the task or ticket (reuse the session name from Step 1, kebab-cased). If a non-default (feature) branch is already checked out, keep working on it — don't create a new one. Also create a new git worktree if there is a .claude/worktrees/ directory.
 
 ### 3. Validate work
 Run the `/validate-work` skill. Confirm the task is ready for development before advancing.
@@ -56,7 +56,7 @@ Once your own work and reviews are complete and you're confident the code is rea
 ### 12. PR description
 Generate a description for the pull request:
 - First line is the title: `TICKET-ID / title` if a ticket ID was given (Step 1), otherwise just `title`.
-- Then a `Why?` section and a `What?` section, answering those two questions about the change.
+- Then a `Why?` section and a `What?` section (with equals signs under the section headers), answering those two questions about the change.
 - Voice: casual, succinct. No em dashes.
 
 ## Final report

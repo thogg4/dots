@@ -10,7 +10,6 @@
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "work-intake@deseretbook": true,
     "plannotator@plannotator": true
   },
   "extraKnownMarketplaces": {
