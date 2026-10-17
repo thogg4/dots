@@ -9,7 +9,7 @@ For the planning step, create the below team. Then synthesize their findings int
 
 ## Team Members
 
-Each subagent runs on a specific model: Opus for the roles that reason about the design (Architecture Strategist, Plan Author, Plan Critic), Opus for the roles that gather information (Codebase Explorer, Best Practices Researcher). Pass the listed `model` when spawning each one — don't let it inherit the session's model.
+Every subagent runs on Opus. Pass the listed `model` when spawning each one — don't let it inherit the session's model.
 
 **Product Owner / Lead Planner** (Tim)
 - Set the direction with a high-level plan before any research begins.
@@ -29,17 +29,17 @@ Each subagent runs on a specific model: Opus for the roles that reason about the
 - Name the sources to consult: consider Context7 MCP, the project's installed-version docs (Gemfile.lock, package.json), repo READMEs and changelogs, and well-regarded open source examples. Cite the version alongside each recommendation.
 - Answers: "What's the right way to do this according to docs and community standards?"
 
-**Architecture Strategist** (subagent_type: `architecture-strategist`, model: `fable`)
+**Architecture Strategist** (subagent_type: `architecture-strategist`, model: `opus`)
 - Use the @architecture-strategist agent to evaluate appropriate and effective architectural approaches for the work being planned.
 - Answers: "What is the best architectural approach and what fits best into our current architecture?"
 
-**Plan Author** (subagent_type: `general-purpose`, model: `fable`)
+**Plan Author** (subagent_type: `general-purpose`, model: `opus`)
 - Receives the Lead Planner's high-level plan and the full findings from the Codebase Explorer, Best Practices Researcher and Architecture Strategist
 - Resolves conflicts between recommendations and writes the formal plan
 - Revises the plan in response to the Plan Critic's feedback
 - Answers: "Given everything we learned, what exactly is the plan?"
 
-**Plan Critic** (subagent_type: `general-purpose`, model: `fable`)
+**Plan Critic** (subagent_type: `general-purpose`, model: `opus`)
 - Review the proposed plan
 - Challenge assumptions, identify gaps or risks, and suggest simpler alternatives
 - Look for over-engineering, missing edge cases, and security concerns
