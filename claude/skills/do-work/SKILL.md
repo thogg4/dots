@@ -1,11 +1,11 @@
 ---
-name: dev-workflow
-description: Run the full Development Workflow for any code change — from session naming through review. Use for every task that touches code, no matter how small, not just when the user invokes /dev-workflow. Also use when the user kicks off a feature, bug fix, or refactor, or asks to "start a task" or "follow the full workflow." Creates a tracked 12-step checklist and gates progression so no step is skipped or reordered.
+name: do-work
+description: Run the full Development Workflow for any code change — from session naming through review. Use for every task that touches code, no matter how small, not just when the user invokes /do-work. Also use when the user kicks off a feature, bug fix, or refactor, or asks to "start a task" or "follow the full workflow." Creates a tracked 12-step checklist and gates progression so no step is skipped or reordered.
 ---
 
 # Development Workflow
 
-Orchestrate the full 12-step workflow for every code change, regardless of size. Per `~/.claude/rules/dev-workflow-always.md`, invoke this skill proactively as soon as a task will touch code — don't wait for the user to run `/dev-workflow`. Each step must be completed and verified before moving to the next.
+Orchestrate the full 12-step workflow for every code change, regardless of size. Per `~/.claude/rules/do-work-always.md`, invoke this skill proactively as soon as a task will touch code — don't wait for the user to run `/do-work`. Each step must be completed and verified before moving to the next.
 
 The substance for each step lives in slash commands, other skills, or rule files (already loaded in global context). This skill is the orchestrator — keep work moving through the checklist, do not duplicate guidance from those sources.
 
@@ -17,6 +17,16 @@ The session itself stays on a single model throughout, whichever the user is cur
 2. As you finish each step, mark it completed and move the next step to in progress. Do not batch updates.
 
 Do not collapse, reorder, or skip steps. If a step is genuinely not applicable (e.g., no UI to manually test), state why in one sentence and mark it completed.
+
+## Keep going until done
+
+Run the workflow through to the Final report in one continuous pass. Do not end your turn between steps to summarize progress, ask "should I continue?", or wait for acknowledgement. Finishing a step means starting the next one.
+
+Stop only when you need an answer only the user can give:
+- A gate the steps below define: a session name (Step 1), task readiness (Step 3), plan acceptance (Step 4), or the user's review (Step 11).
+- A question whose answer changes what you build, or a destructive, irreversible, or outward-facing action that needs permission.
+
+For anything else, such as naming, defaults, or choosing between equivalent approaches, pick a reasonable option, note it, and keep going. When a check fails, fix it and continue rather than reporting the failure and stopping. When you do stop, ask the question plainly. Once it's answered, pick up where you left off.
 
 ## Steps
 

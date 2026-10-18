@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
@@ -10,7 +13,8 @@
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "plannotator@plannotator": true
+    "plannotator@plannotator": true,
+    "dev-workflow@deseretbook": true
   },
   "extraKnownMarketplaces": {
     "deseretbook": {

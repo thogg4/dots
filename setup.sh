@@ -142,6 +142,10 @@ echo "Linking ~/.claude/skills -> ~/dots/claude/skills..."
 rm -rf $HOME/.claude/skills
 ln -s $HOME/dots/claude/skills $HOME/.claude/skills
 
+echo "Linking ~/.claude/agents -> ~/dots/claude/agents..."
+rm -rf $HOME/.claude/agents
+ln -s $HOME/dots/claude/agents $HOME/.claude/agents
+
 echo "Linking ~/.claude/rules -> ~/dots/claude/rules..."
 rm -rf $HOME/.claude/rules
 ln -s $HOME/dots/claude/rules $HOME/.claude/rules
