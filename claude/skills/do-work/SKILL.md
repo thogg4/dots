@@ -9,7 +9,7 @@ Orchestrate the full 13-step workflow for every code change, regardless of size.
 
 The substance for each step lives in slash commands, other skills, or rule files (already loaded in global context). This skill is the orchestrator — keep work moving through the checklist, do not duplicate guidance from those sources.
 
-The session itself stays on a single model throughout, whichever the user is currently running. There are no model-switch steps. Subagents are the exception: they run on whatever model the skill that spawns them specifies (e.g. `planning-team` puts its roles on Opus).
+The session itself stays on a single model throughout, whichever the user is currently running. There are no model-switch steps. Subagents are the exception: they run on whatever model the skill that spawns them specifies (e.g. `planning-team` sets a model per role).
 
 ## On invocation
 
