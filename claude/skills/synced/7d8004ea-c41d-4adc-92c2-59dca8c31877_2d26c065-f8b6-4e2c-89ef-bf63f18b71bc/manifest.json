@@ -1,5 +1,5 @@
 {
-  "lastUpdated": 1792023664541,
+  "lastUpdated": 1792778270587,
   "skills": [
     {
       "skillId": "import-memory",
@@ -20,7 +20,7 @@
       "name": "skill-creator",
       "description": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.",
       "source": "anthropic-example",
-      "updatedAt": "2026-09-14T19:41:01.499089Z"
+      "updatedAt": "2026-10-21T20:47:56.610025Z"
     },
     {
       "skillId": "pdf",
@@ -63,6 +63,13 @@
       "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx) or Word templates (.dotx). Triggers include: any mention of Microsoft Word Documents, such as 'Word doc', 'word document', '.docx', '.dotx', 'microsoft doc'. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a deliverable as a Word or .docx file (to download, email or print), use this skill. However, if they ask for a document, page, report, memo, or notes WITHOUT naming a file format and the session offers Claude's own dedicated document or page skill or connector, use that instead, even if they will email or print it. Do NOT use for PDFs, spreadsheets, Google Docs, or coding unrelated to document generation.",
       "source": "anthropic",
       "updatedAt": "2026-09-30T02:00:31.677168Z"
+    },
+    {
+      "skillId": "artifact-emulator",
+      "name": "artifact-emulator",
+      "description": "See a page, slide deck or design canvas artifact you made, close to how a person will see it: open its files in the real artifact viewer inside this cloud session, then screenshot it and read its console errors with a short Python Playwright script. Use it when the person asks to see or check how it looks, or when the artifact type's own instructions tell you to check. Where a type's instructions say not to check unless asked, they win. Never a step before saving or publishing, nor a routine after every save. Not for web apps or pages that are not artifacts. Cloud sessions only (built for cloud Cowork): elsewhere its script stops with a one-line reason. Only you see the result.",
+      "source": "anthropic-example",
+      "updatedAt": "2026-10-19T20:08:47.184180Z"
     }
   ]
 }
