@@ -22,6 +22,7 @@ Current symlinks:
 - `claude/settings.json` → `~/.claude/settings.json` (the rest of `~/.claude` is untracked runtime state)
 - `gitconfig` → `~/.gitconfig`
 - `gitmessage` → `~/.gitmessage`
+- `herdr/config.toml` → `~/.config/herdr/config.toml` (only the file; the rest of `~/.config/herdr` is sockets, logs, and session state)
 - `run/config` → `~/.config/run/config`, `run/urls` → `~/.config/run/urls` (Run.app's config and saved urls; `run/Run.dmg` is installed to `/Applications` by `setup.sh` since it's not on Homebrew; `history` is per-machine runtime state and isn't tracked)
 
 ## Neovim architecture
@@ -52,6 +53,10 @@ LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-lan
 ## Ghostty terminal
 
 Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor.
+
+## herdr
+
+Agent multiplexer, installed via Homebrew. Config at `herdr/config.toml`: Dracula theme, onboarding off, prefix `ctrl+\` (nvim's `\` leader plus ctrl, since a plain `\` prefix would swallow every `\` typed in panes, including nvim leader mappings).
 
 ## Run
 

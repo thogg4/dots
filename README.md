@@ -27,6 +27,7 @@ Running `setup.sh` once on a clean machine will:
 | `claude/` | `~/.claude` |
 | `gitconfig` | `~/.gitconfig` |
 | `gitmessage` | `~/.gitmessage` |
+| `herdr/config.toml` | `~/.config/herdr/config.toml` |
 | `run/config`, `run/urls` | `~/.config/run/config`, `~/.config/run/urls` |
 | `irbrc` | (manually placed) |
 | `pryrc` | (manually placed) |
@@ -48,6 +49,8 @@ The script asks for your sudo password once at the start and validates it before
 **Fish** (`fish/config.fish`) — key aliases: `m` = nvim, `c` = claude, `be` = bundle exec, `gs/ga/gc/gp` = git shortcuts.
 
 **Ghostty** (`ghostty/config`) — TokyoNight Night theme, 0.85 background opacity, non-blinking block cursor.
+
+**herdr** (`herdr/config.toml`) — agent multiplexer, installed via Homebrew. Dracula theme, prefix `ctrl+\` (nvim's `\` leader plus ctrl, so it doesn't swallow `\` in panes).
 
 **Run** (`run/config`, `run/urls`) — launcher app, installed from `run/Run.dmg` since it's not on Homebrew. Owns the Cmd+Space hotkey, so `setup.sh` disables Spotlight's Cmd+Space/Cmd+Shift+Space shortcuts.
 

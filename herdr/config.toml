@@ -1,0 +1,8 @@
+onboarding = false
+
+[keys]
+# ctrl+\ — nvim's leader (\) plus ctrl; a plain \ prefix would swallow every \ typed in panes.
+prefix = "ctrl+backslash"
+
+[theme]
+name = "dracula"

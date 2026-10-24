@@ -182,6 +182,7 @@ ln -sf $HOME/dots/run/urls $HOME/.config/run/urls
 # ripgrep    — used by Telescope live_grep inside neovim
 # gh         — GitHub CLI (used by create-pr/dependabot-prs/review skills)
 # worktrunk  — `wt` worktree CLI (required by the ruby-app-refactor skill)
+# herdr      — AI coding agent multiplexer (config linked later in this script)
 # wallpaper  — CLI to set the desktop wallpaper (used later in this script)
 # defaultbrowser — CLI to set the default browser without a UI prompt
 # aerospace  — tiling window manager (tap required, not in core Homebrew)
@@ -225,6 +226,7 @@ formula nvim
 formula mas
 formula gh
 formula worktrunk
+formula herdr
 cask discord
 cask firefox
 cask google-chrome
@@ -290,6 +292,13 @@ fi
 echo "Linking ~/.config/ghostty -> ~/dots/ghostty..."
 rm -rf $HOME/.config/ghostty
 ln -s $HOME/dots/ghostty $HOME/.config/ghostty
+
+# — herdr (terminal agent multiplexer) ————————————————————————————————————————
+# Only config.toml is linked — ~/.config/herdr also holds sockets, logs, and
+# session state that stay per-machine.
+echo "Linking ~/.config/herdr/config.toml -> ~/dots/herdr/config.toml..."
+mkdir -p $HOME/.config/herdr
+ln -sf $HOME/dots/herdr/config.toml $HOME/.config/herdr/config.toml
 
 # -----------------------------------------------------------------------------
 # Fish shell
