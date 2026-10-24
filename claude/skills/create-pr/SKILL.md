@@ -11,9 +11,9 @@ Create a draft GitHub pull request with a structured description following the t
 
 ### 1. Pre-flight Checks
 
-Complete each item before creating the PR:
+Complete each item before creating the PR. Skip items 1-3 when the caller asks you to:
 
-1. **Confirm target branch** — Ask the user which branch to merge into if not obvious from context.
+1. **Confirm target branch** — Ask the user which branch to merge into if not obvious from context. When skipped, use the repo's default branch.
 2. **Confirm tasks complete** — Ask the user to confirm all planned tasks are done.
 3. **Confirm feature flags** — Ask if any feature flags are needed.
 4. **Run project checks** — Run the project's check command (typically `chp` or equivalent). Do not proceed if checks fail.
@@ -42,23 +42,25 @@ If a repo PR template exists, use its structure for the middle section (between 
 
 ### 3. Determine PR Title and Ticket Info
 
-- Ask the user for the ticket ID and title if not already known from context (branch name, commit messages, Linear, etc.).
-- Format the PR title as: `TICKET-ID / title` (e.g. `DEV-1234 / fix login redirect`). If there's no ticket ID, just use `title`.
+- If the caller provided a title and description, use them for the title and the Why?/What? sections (the note and checklists below still apply). Otherwise ask the user for the ticket ID and title if not already known from context (branch name, commit messages, Linear, etc.).
+- Format the PR title as: `TICKET-ID / title` (e.g. `DEV-1234 / fix login redirect`). If there's no ticket ID, just use `title`. Keep it to 256 characters or fewer (GitHub's PR title limit).
 - Determine the ticket URL for linking in the description.
 
 ### 4. Create the Draft PR
 
-Push the branch if needed, then create the PR.
+Push the branch if needed, then create the PR with `gh pr create --draft --assignee @me`.
 
 **PR description structure:**
 
 ```
-## Why?
+Why?
+====
 Contributes to [TASK_ID](task_url)
 
 - Why is this change being made?
 
-## What?
+What?
+=====
 - What actually changed?
 
 ## PR Checklist
