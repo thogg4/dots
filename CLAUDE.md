@@ -48,7 +48,7 @@ LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-lan
 
 ## Shell (fish)
 
-`fish/config.fish` is the main config. Key aliases: `m` = nvim, `c` = claude, `be` = bundle exec, `gs/ga/gc/gp` = git shortcuts.
+`fish/config.fish` is the main config. Key aliases: `m` = nvim, `c` = claude, `be` = bundle exec, `gs/ga/gc/gp` = git shortcuts. `h` (`fish/functions/h.fish`) starts herdr with a space for every directory in `~/work`, skipping ones that already have a space.
 
 ## Ghostty terminal
 

@@ -46,7 +46,7 @@ The script asks for your sudo password once at the start and validates it before
 
 **Neovim** (`nvim/`) — entry point is `nvim/init.lua`. Plugins managed by lazy.nvim, all defined in `nvim/lua/plugins.lua`. LSP servers (ruby-lsp, typescript-language-server, lua-language-server, elixir-ls) auto-installed by Mason on first launch.
 
-**Fish** (`fish/config.fish`) — key aliases: `m` = nvim, `c` = claude, `be` = bundle exec, `gs/ga/gc/gp` = git shortcuts.
+**Fish** (`fish/config.fish`) — key aliases: `m` = nvim, `c` = claude, `be` = bundle exec, `gs/ga/gc/gp` = git shortcuts. `h` (`fish/functions/h.fish`) starts herdr with a space for every directory in `~/work`, skipping ones that already have a space.
 
 **Ghostty** (`ghostty/config`) — TokyoNight Night theme, 0.85 background opacity, non-blinking block cursor.
 
