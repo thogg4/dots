@@ -56,7 +56,7 @@ Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, 
 
 ## herdr
 
-Agent multiplexer, installed via Homebrew. Config at `herdr/config.toml`: Dracula theme, onboarding off, prefix `ctrl+\` (nvim's `\` leader plus ctrl, since a plain `\` prefix would swallow every `\` typed in panes, including nvim leader mappings). `cmd+shift+left/right` switch herdr tabs (taken over from Ghostty, whose own tabs still switch with `cmd+shift+[`/`]`).
+Agent multiplexer, installed via Homebrew. Config at `herdr/config.toml`: Dracula theme, onboarding off, prefix `ctrl+\` (nvim's `\` leader plus ctrl, since a plain `\` prefix would swallow every `\` typed in panes, including nvim leader mappings). `cmd+shift+left/right` switch herdr tabs (taken over from Ghostty, whose own tabs still switch with `cmd+shift+[`/`]`). `cmd+shift+up/down` step through agents (Ghostty unbinds its own prompt-jump on those keys so they reach herdr) and `shift+option+up/down` through spaces. `cmd+k` clears the focused pane (Ghostty's own `cmd+k` clear is unbound).
 
 ## Run
 
