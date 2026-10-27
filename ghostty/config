@@ -4,7 +4,7 @@ scrollback-limit = 100000
 cursor-style = block
 cursor-style-blink = false
 maximize = true
-# cmd+shift+up/down go to herdr (agents).
+# cmd+shift+up/down go to herdr (spaces).
 keybind = cmd+shift+up=unbind
 keybind = cmd+shift+down=unbind
 # cmd+k goes to herdr, which clears just the focused pane.

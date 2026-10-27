@@ -6,11 +6,11 @@ prefix = "ctrl+backslash"
 # cmd+shift+arrows, taken over from Ghostty's tab switching.
 next_tab = ["prefix+n", "cmd+shift+right"]
 previous_tab = ["prefix+p", "cmd+shift+left"]
-# cmd+shift+up/down step through agents; shift+option+up/down through spaces.
-previous_agent = "cmd+shift+up"
-next_agent = "cmd+shift+down"
-previous_workspace = "shift+alt+up"
-next_workspace = "shift+alt+down"
+# cmd+shift+up/down step through spaces; shift+option+up/down through agents.
+previous_workspace = "cmd+shift+up"
+next_workspace = "cmd+shift+down"
+previous_agent = "shift+alt+up"
+next_agent = "shift+alt+down"
 # cmd+k clears the focused pane (Ghostty unbinds its own clear_screen); no-op in full-screen apps like nvim.
 clear_pane = "cmd+k"
 
