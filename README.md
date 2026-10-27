@@ -50,7 +50,7 @@ The script asks for your sudo password once at the start and validates it before
 
 **Ghostty** (`ghostty/config`) — TokyoNight Night theme, 0.85 background opacity, non-blinking block cursor.
 
-**herdr** (`herdr/config.toml`) — agent multiplexer, installed via Homebrew. Dracula theme, prefix `ctrl+\` (nvim's `\` leader plus ctrl, so it doesn't swallow `\` in panes).
+**herdr** (`herdr/config.toml`) — agent multiplexer, installed via Homebrew. Dracula theme, prefix `ctrl+\` (nvim's `\` leader plus ctrl, so it doesn't swallow `\` in panes). `cmd+shift+left/right` switch herdr tabs (taken over from Ghostty, whose own tabs still switch with `cmd+shift+[`/`]`).
 
 **Run** (`run/config`, `run/urls`) — launcher app, installed from `run/Run.dmg` since it's not on Homebrew. Owns the Cmd+Space hotkey, so `setup.sh` disables Spotlight's Cmd+Space/Cmd+Shift+Space shortcuts.
 

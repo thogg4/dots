@@ -3,6 +3,9 @@ onboarding = false
 [keys]
 # ctrl+\ — nvim's leader (\) plus ctrl; a plain \ prefix would swallow every \ typed in panes.
 prefix = "ctrl+backslash"
+# cmd+shift+arrows, taken over from Ghostty's tab switching.
+next_tab = ["prefix+n", "cmd+shift+right"]
+previous_tab = ["prefix+p", "cmd+shift+left"]
 
 [theme]
 name = "dracula"
