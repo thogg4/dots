@@ -42,6 +42,8 @@ cd ~/dots
 
 The script asks for your sudo password once at the start and validates it before proceeding. Most steps are idempotent — re-running is safe.
 
+The first time it runs, it asks before each section (Homebrew, Ruby, SSH key, config symlinks, apps, `gh` login, fish login shell, Sink, macOS preferences) and skips any you decline. Answers are saved to `.setup-approvals` (gitignored, one `section=yes|no` line each), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need apps), so only decline those on a machine that already has them.
+
 ## Key tools and their configs
 
 **Neovim** (`nvim/`) — entry point is `nvim/init.lua`. Plugins managed by lazy.nvim, all defined in `nvim/lua/plugins.lua`. LSP servers (ruby-lsp, typescript-language-server, lua-language-server, elixir-ls) auto-installed by Mason on first launch.
@@ -57,7 +59,7 @@ The script asks for your sudo password once at the start and validates it before
 ## Adding a new config
 
 1. Create the file or directory here (e.g. `dots/foo/config`)
-2. Add a symlink step to `setup.sh`:
+2. Add a symlink step to the `symlinks` section of `setup.sh`:
    ```sh
    rm -rf $HOME/.config/foo && ln -s $HOME/dots/foo $HOME/.config/foo
    ```
