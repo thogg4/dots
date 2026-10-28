@@ -16,5 +16,9 @@ next_agent = "shift+alt+down"
 # cmd+k clears the focused pane (Ghostty unbinds its own clear_screen); no-op in full-screen apps like nvim.
 clear_pane = "cmd+k"
 
+[ui]
+# Open new tabs right away instead of asking for a name first.
+prompt_new_tab_name = false
+
 [theme]
 name = "dracula"
