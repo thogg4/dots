@@ -57,7 +57,7 @@ The first time it runs, it asks before each section (Homebrew, Ruby, SSH key, co
 
 **Ghostty** (`ghostty/config`) — TokyoNight Night theme, 0.85 background opacity, non-blinking block cursor.
 
-**herdr** (`herdr/config.toml`) — agent multiplexer, installed via Homebrew. Dracula theme, prefix `ctrl+\` (nvim's `\` leader plus ctrl, so it doesn't swallow `\` in panes). `cmd+shift+left/right` switch herdr tabs (taken over from Ghostty, whose own tabs still switch with `cmd+shift+[`/`]`). `cmd+shift+up/down` step through spaces (Ghostty unbinds its own prompt-jump on those keys so they reach herdr) and `shift+option+up/down` through agents. `cmd+k` clears the focused pane (Ghostty's own `cmd+k` clear is unbound).
+**herdr** (`herdr/config.toml`) — agent multiplexer, installed via Homebrew. Dracula theme, prefix `ctrl+\` (nvim's `\` leader plus ctrl, so it doesn't swallow `\` in panes). `cmd+shift+left/right` switch herdr tabs (taken over from Ghostty, whose own tabs still switch with `cmd+shift+[`/`]`). `cmd+shift+up/down` step through spaces (Ghostty unbinds its own prompt-jump on those keys so they reach herdr) and `shift+option+up/down` through agents. `cmd+k` clears the focused pane (Ghostty's own `cmd+k` clear is unbound). `cmd+t` opens a new herdr tab right away, without asking for a name (Ghostty's own `cmd+t` new tab is unbound).
 
 **Run** (`run/config`, `run/urls`) — launcher app, installed from `run/Run.dmg` since it's not on Homebrew. Owns the Cmd+Space hotkey, so `setup.sh` disables Spotlight's Cmd+Space/Cmd+Shift+Space shortcuts.
 
