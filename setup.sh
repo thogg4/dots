@@ -35,6 +35,26 @@ approved() {
 }
 
 # -----------------------------------------------------------------------------
+# App location
+# Where Homebrew casks and Run.app go; the apps and macos sections use $APPDIR.
+# app_path finds an app there, falling back to /Applications for .pkg and App
+# Store apps, and for casks installed before ~/Applications was chosen.
+# -----------------------------------------------------------------------------
+if approved home_applications "Install apps into ~/Applications instead of /Applications?"; then
+    APPDIR="$HOME/Applications"
+else
+    APPDIR=/Applications
+fi
+echo "Apps go in $APPDIR."
+app_path() {
+    if [ -d "$APPDIR/$1.app" ]; then
+        echo "$APPDIR/$1.app"
+    else
+        echo "/Applications/$1.app"
+    fi
+}
+
+# -----------------------------------------------------------------------------
 # Homebrew
 # Installs into ~/hb, since the default /opt/homebrew needs sudo to create.
 # The installer caps the prefix at /opt/homebrew's 13 bytes, which /Users/tim/hb
@@ -107,11 +127,11 @@ if approved ruby "Install rbenv, the latest Ruby, and the kamal gem?"; then
 fi
 
 # -----------------------------------------------------------------------------
-# Config directory and Claude directory
+# Base directories (config, Claude, SSH, work, and the apps folder)
 # mkdir is intentionally without -p so it fails loudly if something unexpected
 # is already at that path (e.g. a file instead of a directory).
 # -----------------------------------------------------------------------------
-for dir in "$HOME/.config" "$HOME/.claude" "$HOME/.ssh" "$HOME/work"; do
+for dir in "$HOME/.config" "$HOME/.claude" "$HOME/.ssh" "$HOME/work" "$APPDIR"; do
     if [ -d "$dir" ]; then
         echo "$dir already exists, skipping."
     else
@@ -227,16 +247,27 @@ fi
 # Apps
 # -----------------------------------------------------------------------------
 if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, Run.app, Plannotator)?"; then
+    # — App location ————————————————————————————————————————————————————————————————
+    # brew.env makes every cask install use $APPDIR, including ones run by hand
+    # later. It can't expand variables, so the path is written out. Only that
+    # line is replaced, keeping any other settings. Casks installed before this
+    # keep their old location.
+    echo "Pointing Homebrew casks at $APPDIR..."
+    BREW_ENV="$HOME/.homebrew/brew.env"
+    mkdir -p "$HOME/.homebrew"
+    { grep -v '^HOMEBREW_CASK_OPTS=' "$BREW_ENV" 2>/dev/null; echo "HOMEBREW_CASK_OPTS=--appdir=$APPDIR"; } > "$BREW_ENV.tmp"
+    mv "$BREW_ENV.tmp" "$BREW_ENV"
+
     # — Run (https://github.com/thogg4/run) —————————————————————————————————————————
     # Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
-    if [ -d "/Applications/Run.app" ]; then
+    if [ -d "$(app_path Run)" ]; then
         echo "  [skip] Run.app — already installed"
     else
         echo "  [install] Run.app"
         RUN_MOUNT="$(mktemp -d)"
         rmdir "$RUN_MOUNT"
         hdiutil attach "$HOME/dots/run/Run.dmg" -nobrowse -readonly -noverify -quiet -mountpoint "$RUN_MOUNT"
-        cp -R "$RUN_MOUNT/Run.app" /Applications/
+        cp -R "$RUN_MOUNT/Run.app" "$APPDIR/"
         hdiutil detach "$RUN_MOUNT" -quiet
     fi
 
@@ -302,7 +333,12 @@ if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, 
     cask discord
     cask firefox
     cask google-chrome
-    cask 1password
+    # 1Password won't launch from anywhere but /Applications.
+    if [ -w /Applications ]; then
+        cask 1password --appdir=/Applications
+    else
+        echo "  [skip] 1password — needs sudo"
+    fi
     cask 1password-cli
     pkg_cask microsoft-teams
     pkg_cask microsoft-outlook
@@ -500,16 +536,20 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
     defaults write com.apple.dock persistent-apps -array
     defaults delete com.apple.dock persistent-others
 
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Bear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Linear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Ghostty.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Mail.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    dock_app() {
+        defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://$1/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    }
+    dock_app "$(app_path Bear)"
+    dock_app "$(app_path Linear)"
+    dock_app "$(app_path Firefox)"
+    dock_app "$(app_path Ghostty)"
+    dock_app "/System/Applications/Mail.app"
+    dock_app "$(app_path "Microsoft Teams")"
+    dock_app "/System/Applications/Messages.app"
+    dock_app "$(app_path Slack)"
 
-    # Dock stacks: Downloads folder and /Applications as right-side tiles.
+    # Dock stacks: Downloads folder and /Applications as right-side tiles
+    # (/Applications even when apps go in ~/Applications, by choice).
     defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>arrangement</key><integer>3</integer><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
     defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
 
@@ -522,18 +562,21 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
     # hidden:false = the app window is visible at login (not launched in background).
     echo "Setting login items..."
     osascript -e 'tell application "System Events" to delete every login item'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Firefox.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Messages.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Mail.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Ghostty.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Postgres.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bear.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Krisp.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Linear.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bruno.app", hidden:false}'
-    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Run.app", hidden:false}'
+    login_item() {
+        osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$1\", hidden:false}"
+    }
+    login_item "$(app_path Firefox)"
+    login_item "/System/Applications/Messages.app"
+    login_item "/System/Applications/Mail.app"
+    login_item "$(app_path Ghostty)"
+    login_item "$(app_path Slack)"
+    login_item "$(app_path "Microsoft Teams")"
+    login_item "$(app_path Postgres)"
+    login_item "$(app_path Bear)"
+    login_item "$(app_path Krisp)"
+    login_item "$(app_path Linear)"
+    login_item "$(app_path Bruno)"
+    login_item "$(app_path Run)"
 
     # — App Store —————————————————————————————————————————————————————————————————
     echo "Applying macOS defaults: App Store..."

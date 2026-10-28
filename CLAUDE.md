@@ -10,6 +10,8 @@ Each section of `setup.sh` (homebrew, ruby, ssh, symlinks, apps, gh, shell, sink
 
 `setup.sh` never uses sudo (it exports `HOMEBREW_NO_SUDO=1`); a step that would need it prints `  [skip] <name> — needs sudo` instead. Homebrew is `/opt/homebrew` on older machines and `~/hb` on ones set up without sudo, so don't hardcode either. In `setup.sh` use `$HOMEBREW_PREFIX`; `fish/config.fish` and the sink plist templates check both.
 
+Apps go in `$APPDIR`. setup.sh asks once whether that's `~/Applications` (`home_applications=yes`) or `/Applications` (`no`). The apps section sets the `HOMEBREW_CASK_OPTS=--appdir=$APPDIR` line (expanded) in `~/.homebrew/brew.env`, so every cask install lands there. 1Password is the exception (`--appdir=/Applications`, skipped without write access), since it won't launch anywhere else. `.pkg` casks and App Store apps always land in `/Applications`. For Dock and login-item paths use `$(app_path Name)`. It returns `$APPDIR/Name.app` when the app is there and `/Applications/Name.app` otherwise, so apps installed before the choice still resolve.
+
 ## How configs are applied
 
 Every config is tracked in this repo and symlinked into place by `setup.sh`. Adding a new config means:
@@ -27,7 +29,7 @@ Current symlinks:
 - `gitconfig` → `~/.gitconfig`
 - `gitmessage` → `~/.gitmessage`
 - `herdr/config.toml` → `~/.config/herdr/config.toml` (only the file; the rest of `~/.config/herdr` is sockets, logs, and session state)
-- `run/config` → `~/.config/run/config`, `run/urls` → `~/.config/run/urls` (Run.app's config and saved urls; `run/Run.dmg` is installed to `/Applications` by `setup.sh` since it's not on Homebrew; `history` is per-machine runtime state and isn't tracked)
+- `run/config` → `~/.config/run/config`, `run/urls` → `~/.config/run/urls` (Run.app's config and saved urls; `run/Run.dmg` is installed to `$APPDIR` by `setup.sh` since it's not on Homebrew; `history` is per-machine runtime state and isn't tracked)
 
 ## Neovim architecture
 
