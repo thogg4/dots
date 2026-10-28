@@ -2,6 +2,7 @@
 set fish_greeting
 
 # system
+fish_add_path --path ~/.local/bin
 set -x EDITOR nvim
 alias m='nvim'
 alias be='bundle exec'
@@ -51,10 +52,12 @@ function ctags
 end
 
 if status --is-interactive
-  # /opt/homebrew on older machines, ~/hb on ones set up without sudo
+  # /opt/homebrew or ~/hb, whichever setup.sh installed
   for prefix in /opt/homebrew ~/hb
     if test -x $prefix/bin/brew
       eval ($prefix/bin/brew shellenv)
+      # psql and friends; libpq is keg-only so brew doesn't link it
+      fish_add_path --path $prefix/opt/libpq/bin
       # Ghostty may launch fish while the login shell is still zsh
       set -gx SHELL $prefix/bin/fish
       break

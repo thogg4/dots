@@ -5,7 +5,8 @@
 # =============================================================================
 
 # Runs without sudo. Steps that would need it print a "[skip] … needs sudo"
-# line instead, and Homebrew refuses anything that would prompt for it.
+# line instead, and Homebrew refuses anything that would prompt for it. The one
+# password prompt is Homebrew's own installer, if you put it in /opt/homebrew.
 export HOMEBREW_NO_SUDO=1
 
 # -----------------------------------------------------------------------------
@@ -56,10 +57,11 @@ app_path() {
 
 # -----------------------------------------------------------------------------
 # Homebrew
-# Installs into ~/hb, since the default /opt/homebrew needs sudo to create.
-# The installer caps the prefix at /opt/homebrew's 13 bytes, which /Users/tim/hb
-# just fits. Older machines keep /opt/homebrew, so put whichever exists on PATH
-# first; shellenv wires up PATH/MANPATH/HOMEBREW_PREFIX.
+# Goes in /opt/homebrew or ~/hb, asked once at install. ~/hb is a git clone,
+# since the installer caps the prefix at /opt/homebrew's 13 bytes. Past that
+# length bottles built for /opt/homebrew compile from source and brew doctor
+# calls the setup unsupported (Tier 3). Put whichever exists on PATH first;
+# shellenv wires up PATH/MANPATH/HOMEBREW_PREFIX.
 # -----------------------------------------------------------------------------
 for _prefix in /opt/homebrew "$HOME/hb"; do
     if [ -x "$_prefix/bin/brew" ]; then
@@ -73,18 +75,30 @@ if approved homebrew "Install Homebrew and upgrade installed packages?"; then
         echo "Homebrew already installed, upgrading packages..."
         brew upgrade
     elif ! xcode-select -p > /dev/null 2>&1; then
-        # The installer needs git from the Command Line Tools, and only installs
-        # them itself with sudo. This opens Apple's installer dialog instead.
+        # Both installs need git from the Command Line Tools, and the installer
+        # only installs them itself with sudo. This opens Apple's dialog instead.
         xcode-select --install
         echo "  [skip] Homebrew — install the Command Line Tools in the dialog, then rerun setup.sh"
     else
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" -- --path="$HOME/hb"
-        # Checked by result, since a failed download still exits 0 (bash -c "").
-        if [ -x "$HOME/hb/bin/brew" ]; then
-            echo 'eval "$($HOME/hb/bin/brew shellenv)"' >> $HOME/.zprofile
-            eval "$("$HOME/hb/bin/brew" shellenv)"
+        if approved home_homebrew "Install Homebrew into ~/hb instead of /opt/homebrew?"; then
+            _prefix="$HOME/hb"
+            echo "Cloning Homebrew into $_prefix..."
+            git clone https://github.com/Homebrew/brew "$_prefix" &&
+                "$_prefix/bin/brew" update --force --quiet
         else
-            echo "Homebrew install failed; later sections that need it will fail too." >&2
+            _prefix=/opt/homebrew
+            echo "Installing Homebrew into $_prefix (the installer asks for your password)..."
+            # The installer only asks for the password with HOMEBREW_NO_SUDO
+            # unset and a TTY on stdin.
+            env -u HOMEBREW_NO_SUDO /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/tty
+        fi
+        # Checked by result, since a failed download still exits 0 (bash -c "").
+        if [ -x "$_prefix/bin/brew" ]; then
+            echo "eval \"\$($_prefix/bin/brew shellenv)\"" >> "$HOME/.zprofile"
+            eval "$("$_prefix/bin/brew" shellenv)"
+        else
+            echo "Homebrew install into $_prefix failed; later sections that need it will fail too." >&2
+            echo "Rerun to try again, or delete the home_homebrew line from $APPROVALS to pick the other location (/opt/homebrew needs an admin account)." >&2
         fi
     fi
 fi
