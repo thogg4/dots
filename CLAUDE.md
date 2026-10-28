@@ -6,11 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A macOS dotfiles repo. Running `setup.sh` does a full machine bootstrap: installs Homebrew packages/casks, symlinks configs, and applies `defaults write` settings. It is designed to be run once on a fresh machine.
 
+Each section of `setup.sh` (homebrew, ruby, ssh, symlinks, apps, gh, shell, sink, macos) is wrapped in `if approved <key> "<question>"; then`, which asks once and saves the answer to the gitignored `.setup-approvals` (`key=yes|no` lines), so re-runs don't prompt. Wrap any new section the same way.
+
 ## How configs are applied
 
 Every config is tracked in this repo and symlinked into place by `setup.sh`. Adding a new config means:
 1. Create the file/directory here (e.g. `dots/foo/config`)
-2. Add `rm -rf $HOME/.config/foo && ln -s $HOME/dots/foo $HOME/.config/foo` to `setup.sh`
+2. Add `rm -rf $HOME/.config/foo && ln -s $HOME/dots/foo $HOME/.config/foo` to the `symlinks` section of `setup.sh`
 
 Current symlinks:
 - `nvim/` → `~/.config/nvim`

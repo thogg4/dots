@@ -18,54 +18,84 @@ fi
 echo "Password validated."
 
 # -----------------------------------------------------------------------------
+# Approvals
+# Each section below asks before it runs, the first time only. Answers are
+# saved as key=yes/no lines in .setup-approvals (gitignored, per machine), so
+# later runs don't ask again. Delete a line (or the file) to be asked again.
+# -----------------------------------------------------------------------------
+APPROVALS="$HOME/dots/.setup-approvals"
+approved() {
+    _answer="$(grep "^$1=" "$APPROVALS" 2>/dev/null | cut -d= -f2)"
+    if [ -z "$_answer" ]; then
+        printf "%s [y/N] " "$2"
+        if ! read _reply < /dev/tty; then
+            echo "Couldn't read an answer, stopping." >&2
+            exit 1
+        fi
+        case "$_reply" in
+            [yY]*) _answer=yes ;;
+            *) _answer=no ;;
+        esac
+        echo "$1=$_answer" >> "$APPROVALS"
+    fi
+    [ "$_answer" = yes ] && return
+    echo "Skipping $1."
+    return 1
+}
+
+# -----------------------------------------------------------------------------
 # Homebrew
 # Install if missing, then upgrade everything that's already installed.
 # The arm64 prefix is /opt/homebrew; shellenv wires up PATH/MANPATH/etc.
 # -----------------------------------------------------------------------------
-if ! brew --version > /dev/null 2>&1; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-else
-    echo "Homebrew already installed."
+if approved homebrew "Install Homebrew and upgrade installed packages?"; then
+    if ! brew --version > /dev/null 2>&1; then
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        echo "Homebrew already installed."
+    fi
+    echo "Upgrading Homebrew packages..."
+    brew upgrade
 fi
-echo "Upgrading Homebrew packages..."
-brew upgrade
 
 # -----------------------------------------------------------------------------
 # rbenv — Ruby version manager
 # ruby-build is the plugin that lets rbenv install specific Ruby versions.
 # We upgrade ruby-build separately so new Ruby versions stay available.
 # -----------------------------------------------------------------------------
-if ! brew ls --versions rbenv > /dev/null; then
-    echo "Installing rbenv..."
-    brew install rbenv
-    echo 'eval "$(rbenv init -)"' >> $HOME/.zprofile
-    eval "$(rbenv init -)"
-else
-    echo "rbenv already installed, upgrading..."
-    brew upgrade rbenv ruby-build 2>/dev/null || true
-fi
+if approved ruby "Install rbenv, the latest Ruby, and the kamal gem?"; then
+    if ! brew ls --versions rbenv > /dev/null; then
+        echo "Installing rbenv..."
+        brew install rbenv
+        echo 'eval "$(rbenv init -)"' >> $HOME/.zprofile
+        eval "$(rbenv init -)"
+    else
+        echo "rbenv already installed, upgrading..."
+        brew upgrade rbenv ruby-build 2>/dev/null || true
+    fi
 
-RUBY_VERSION="$(rbenv install --list | grep -E '^\s*[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')"
-if ! rbenv versions --bare | grep -qx "$RUBY_VERSION"; then
-    echo "Installing Ruby $RUBY_VERSION..."
-    rbenv install "$RUBY_VERSION"
-else
-    echo "Ruby $RUBY_VERSION already installed, skipping."
-fi
-echo "Setting Ruby $RUBY_VERSION as global..."
-rbenv global "$RUBY_VERSION"
+    RUBY_VERSION="$(rbenv install --list | grep -E '^\s*[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')"
+    if ! rbenv versions --bare | grep -qx "$RUBY_VERSION"; then
+        echo "Installing Ruby $RUBY_VERSION..."
+        rbenv install "$RUBY_VERSION"
+    else
+        echo "Ruby $RUBY_VERSION already installed, skipping."
+    fi
+    echo "Setting Ruby $RUBY_VERSION as global..."
+    rbenv global "$RUBY_VERSION"
 
-if gem list kamal -i > /dev/null 2>&1 && gem outdated | grep -q "^kamal "; then
-    echo "Updating kamal gem..."
-    gem update kamal
-elif gem list kamal -i > /dev/null 2>&1; then
-    echo "kamal gem already up to date, skipping."
-else
-    echo "Installing kamal gem..."
-    gem install kamal
+    if gem list kamal -i > /dev/null 2>&1 && gem outdated | grep -q "^kamal "; then
+        echo "Updating kamal gem..."
+        gem update kamal
+    elif gem list kamal -i > /dev/null 2>&1; then
+        echo "kamal gem already up to date, skipping."
+    else
+        echo "Installing kamal gem..."
+        gem install kamal
+    fi
 fi
 
 # -----------------------------------------------------------------------------
@@ -83,437 +113,467 @@ for dir in "$HOME/.config" "$HOME/.claude" "$HOME/.ssh" "$HOME/work"; do
 done
 
 # -----------------------------------------------------------------------------
-# Neovim config — symlink the whole nvim/ directory
-# Wipe any existing config first so the symlink is clean on re-runs.
-# lazy.nvim bootstraps itself on first launch; no separate install needed.
-# -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
 # SSH key
 # Generate a new ed25519 key if one doesn't already exist. ssh-keygen prompts
 # for a passphrase interactively. The key is then added to the agent and to
 # macOS Keychain (via ~/.ssh/config) so it's unlocked automatically on login.
 # -----------------------------------------------------------------------------
-SSH_KEY="$HOME/.ssh/id_ed25519"
-if [ -f "$SSH_KEY" ]; then
-    echo "SSH key already exists at $SSH_KEY, skipping."
-else
-    echo "Generating SSH key..."
-    ssh-keygen -t ed25519 -C "thogg4@gmail.com" -f "$SSH_KEY"
-
-    if [ ! -f "$HOME/.ssh/config" ] || ! grep -q "UseKeychain" "$HOME/.ssh/config" 2>/dev/null; then
-        echo "Adding UseKeychain config to ~/.ssh/config..."
-        printf "Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile %s\n" "$SSH_KEY" >> "$HOME/.ssh/config"
-    fi
-
-    eval "$(ssh-agent -s)" > /dev/null
-    ssh-add --apple-use-keychain "$SSH_KEY"
-
-    echo "Public key (add this to GitHub, etc.):"
-    cat "$SSH_KEY.pub"
-fi
-
-echo "Linking ~/.config/nvim -> ~/dots/nvim..."
-rm -rf $HOME/.config/nvim
-ln -s $HOME/dots/nvim $HOME/.config/nvim
-
-# -----------------------------------------------------------------------------
-# Git config
-# .gitconfig holds user identity, push/pull defaults, and the commit template.
-# .gitmessage is the commit template referenced by gitconfig.
-# The `git config` call writes the absolute path into .gitconfig so it works
-# even before the symlink is in place on a fresh clone.
-# -----------------------------------------------------------------------------
-echo "Linking ~/.gitconfig -> ~/dots/gitconfig..."
-rm -rf $HOME/.gitconfig
-ln -s $HOME/dots/gitconfig $HOME/.gitconfig
-
-echo "Linking ~/.gitmessage -> ~/dots/gitmessage..."
-rm -rf $HOME/.gitmessage
-ln -s $HOME/dots/gitmessage $HOME/.gitmessage
-git config --global commit.template $HOME/.gitmessage
-
-# -----------------------------------------------------------------------------
-# Claude Code config
-# ~/.claude itself is NOT symlinked — Claude Code fills it with runtime state
-# (history, sessions, caches) that doesn't belong in git. Only skills/ and
-# settings.json are tracked and linked individually.
-# -----------------------------------------------------------------------------
-echo "Linking ~/.claude/skills -> ~/dots/claude/skills..."
-rm -rf $HOME/.claude/skills
-ln -s $HOME/dots/claude/skills $HOME/.claude/skills
-
-echo "Linking ~/.claude/agents -> ~/dots/claude/agents..."
-rm -rf $HOME/.claude/agents
-ln -s $HOME/dots/claude/agents $HOME/.claude/agents
-
-echo "Linking ~/.claude/rules -> ~/dots/claude/rules..."
-rm -rf $HOME/.claude/rules
-ln -s $HOME/dots/claude/rules $HOME/.claude/rules
-
-echo "Linking ~/.claude/settings.json -> ~/dots/claude/settings.json..."
-rm -f $HOME/.claude/settings.json
-ln -s $HOME/dots/claude/settings.json $HOME/.claude/settings.json
-
-# -----------------------------------------------------------------------------
-# Run (https://github.com/thogg4/run)
-# Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
-# Config and saved urls are tracked here so they match across machines; history
-# is per-machine runtime state and stays local (same reasoning as ~/.claude above).
-# -----------------------------------------------------------------------------
-if [ -d "/Applications/Run.app" ]; then
-    echo "  [skip] Run.app — already installed"
-else
-    echo "  [install] Run.app"
-    RUN_MOUNT="$(mktemp -d)"
-    rmdir "$RUN_MOUNT"
-    hdiutil attach "$HOME/dots/run/Run.dmg" -nobrowse -readonly -noverify -quiet -mountpoint "$RUN_MOUNT"
-    cp -R "$RUN_MOUNT/Run.app" /Applications/
-    hdiutil detach "$RUN_MOUNT" -quiet
-fi
-mkdir -p $HOME/.config/run
-ln -sf $HOME/dots/run/config $HOME/.config/run/config
-ln -sf $HOME/dots/run/urls $HOME/.config/run/urls
-
-# -----------------------------------------------------------------------------
-# Package installs
-# CLI tools first, then GUI apps via --cask.
-# fzf        — fuzzy finder (used standalone and by some nvim plugins)
-# ag         — silver searcher, fast code search
-# ripgrep    — used by Telescope live_grep inside neovim
-# gh         — GitHub CLI (used by create-pr/dependabot-prs/review skills)
-# worktrunk  — `wt` worktree CLI (required by the ruby-app-refactor skill)
-# herdr      — AI coding agent multiplexer (config linked later in this script)
-# wallpaper  — CLI to set the desktop wallpaper (used later in this script)
-# defaultbrowser — CLI to set the default browser without a UI prompt
-# aerospace  — tiling window manager (tap required, not in core Homebrew)
-# jordanbaird-ice — menu bar management
-# orbstack   — lightweight Docker/Linux VM alternative to Docker Desktop
-# -----------------------------------------------------------------------------
-formula() {
-    if brew list "$1" > /dev/null 2>&1; then
-        echo "  [upgrade] $1"
-        brew upgrade "$@"
+if approved ssh "Generate an SSH key and add it to the macOS Keychain?"; then
+    SSH_KEY="$HOME/.ssh/id_ed25519"
+    if [ -f "$SSH_KEY" ]; then
+        echo "SSH key already exists at $SSH_KEY, skipping."
     else
-        echo "  [install] $1"
-        brew install "$@"
-    fi
-}
-cask() {
-    _name="${1##*/}"
-    if brew list --cask "$_name" > /dev/null 2>&1; then
-        echo "  [upgrade] $_name"
-        brew upgrade --cask "$@"
-    else
-        echo "  [install] $_name"
-        brew install --cask "$@"
-    fi
-}
-mas_install() {
-    if mas list | grep -q "^$1 "; then
-        echo "  [skip] $2 — already installed"
-    else
-        echo "  [install] $2"
-        echo "$SUDO_PASSWORD" | sudo -S mas install "$1"
-    fi
-}
+        echo "Generating SSH key..."
+        ssh-keygen -t ed25519 -C "thogg4@gmail.com" -f "$SSH_KEY"
 
-echo "Installing packages..."
-formula fish
-formula fzf
-formula the_silver_searcher
-formula ripgrep
-formula nvim
-formula mas
-formula gh
-formula worktrunk
-formula herdr
-cask discord
-cask firefox
-cask google-chrome
-cask 1password
-cask 1password-cli
-cask microsoft-teams
-cask microsoft-outlook
-cask slack
-cask orbstack
-cask nikitabobko/tap/aerospace
-cask jordanbaird-ice
-cask claude-code
-cask ghostty
-cask krisp
-cask linear-linear
-cask notion
-cask bruno
-cask postgres-unofficial
-formula libpq
-formula openssl@3
-formula libiconv
-formula freetds
-formula npm
-formula wallpaper
-formula defaultbrowser
-formula xcodegen
+        if [ ! -f "$HOME/.ssh/config" ] || ! grep -q "UseKeychain" "$HOME/.ssh/config" 2>/dev/null; then
+            echo "Adding UseKeychain config to ~/.ssh/config..."
+            printf "Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile %s\n" "$SSH_KEY" >> "$HOME/.ssh/config"
+        fi
 
-# — GitHub CLI auth ——————————————————————————————————————————————————————————
-echo "Checking gh CLI authentication..."
-if gh auth status > /dev/null 2>&1; then
-    echo "gh already authenticated, skipping."
-else
-    echo "Authenticating gh CLI..."
-    gh auth login
-fi
+        eval "$(ssh-agent -s)" > /dev/null
+        ssh-add --apple-use-keychain "$SSH_KEY"
 
-echo "Installing App Store apps..."
-mas_install 1091189122 "Bear"
-mas_install 497799835 "Xcode"
-claude mcp add --transport stdio xcode -- xcrun mcpbridge
-
-# — Plannotator (plan/code review UI) ————————————————————————————————————————
-echo "Installing Plannotator..."
-if ! /bin/bash -c "$(curl -fsSL https://plannotator.ai/install.sh)"; then
-    echo "Plannotator install script failed, skipping marketplace/plugin setup." >&2
-else
-    if claude plugin marketplace list | grep -q "backnotprop/plannotator"; then
-        echo "Plannotator marketplace already added, skipping."
-    else
-        echo "Adding Plannotator marketplace..."
-        claude plugin marketplace add backnotprop/plannotator
-    fi
-    if claude plugin list | grep -q "plannotator@plannotator"; then
-        echo "Plannotator plugin already installed, skipping."
-    else
-        echo "Installing Plannotator plugin..."
-        claude plugin install -y plannotator@plannotator
+        echo "Public key (add this to GitHub, etc.):"
+        cat "$SSH_KEY.pub"
     fi
 fi
 
-# — Ghostty terminal ——————————————————————————————————————————————————————————
-# Symlink the whole ghostty/ directory so all config is tracked here.
-echo "Linking ~/.config/ghostty -> ~/dots/ghostty..."
-rm -rf $HOME/.config/ghostty
-ln -s $HOME/dots/ghostty $HOME/.config/ghostty
+# -----------------------------------------------------------------------------
+# Config symlinks
+# Tracked configs are linked into place here (Sink's is in its own section).
+# Add new configs to this section.
+# -----------------------------------------------------------------------------
+if approved symlinks "Symlink configs from ~/dots into place (replaces existing configs)?"; then
+    # — Neovim ——————————————————————————————————————————————————————————————————————
+    # Symlink the whole nvim/ directory. Wipe any existing config first so the
+    # symlink is clean on re-runs.
+    # lazy.nvim bootstraps itself on first launch; no separate install needed.
+    echo "Linking ~/.config/nvim -> ~/dots/nvim..."
+    rm -rf $HOME/.config/nvim
+    ln -s $HOME/dots/nvim $HOME/.config/nvim
 
-# — herdr (terminal agent multiplexer) ————————————————————————————————————————
-# Only config.toml is linked — ~/.config/herdr also holds sockets, logs, and
-# session state that stay per-machine.
-echo "Linking ~/.config/herdr/config.toml -> ~/dots/herdr/config.toml..."
-mkdir -p $HOME/.config/herdr
-ln -sf $HOME/dots/herdr/config.toml $HOME/.config/herdr/config.toml
+    # — Git config ——————————————————————————————————————————————————————————————————
+    # .gitconfig holds user identity, push/pull defaults, and the commit template.
+    # .gitmessage is the commit template referenced by gitconfig.
+    # The `git config` call writes the absolute path into .gitconfig so it works
+    # even before the symlink is in place on a fresh clone.
+    echo "Linking ~/.gitconfig -> ~/dots/gitconfig..."
+    rm -rf $HOME/.gitconfig
+    ln -s $HOME/dots/gitconfig $HOME/.gitconfig
+
+    echo "Linking ~/.gitmessage -> ~/dots/gitmessage..."
+    rm -rf $HOME/.gitmessage
+    ln -s $HOME/dots/gitmessage $HOME/.gitmessage
+    git config --global commit.template $HOME/.gitmessage
+
+    # — Claude Code config ——————————————————————————————————————————————————————————
+    # ~/.claude itself is NOT symlinked — Claude Code fills it with runtime state
+    # (history, sessions, caches) that doesn't belong in git. Only skills/ and
+    # settings.json are tracked and linked individually.
+    echo "Linking ~/.claude/skills -> ~/dots/claude/skills..."
+    rm -rf $HOME/.claude/skills
+    ln -s $HOME/dots/claude/skills $HOME/.claude/skills
+
+    echo "Linking ~/.claude/agents -> ~/dots/claude/agents..."
+    rm -rf $HOME/.claude/agents
+    ln -s $HOME/dots/claude/agents $HOME/.claude/agents
+
+    echo "Linking ~/.claude/rules -> ~/dots/claude/rules..."
+    rm -rf $HOME/.claude/rules
+    ln -s $HOME/dots/claude/rules $HOME/.claude/rules
+
+    echo "Linking ~/.claude/settings.json -> ~/dots/claude/settings.json..."
+    rm -f $HOME/.claude/settings.json
+    ln -s $HOME/dots/claude/settings.json $HOME/.claude/settings.json
+
+    # — Run ————————————————————————————————————————————————————————————————————————
+    # Config and saved urls are tracked here so they match across machines; history
+    # is per-machine runtime state and stays local (same reasoning as ~/.claude above).
+    echo "Linking ~/.config/run/{config,urls} -> ~/dots/run/..."
+    mkdir -p $HOME/.config/run
+    ln -sf $HOME/dots/run/config $HOME/.config/run/config
+    ln -sf $HOME/dots/run/urls $HOME/.config/run/urls
+
+    # — Ghostty terminal ——————————————————————————————————————————————————————————
+    # Symlink the whole ghostty/ directory so all config is tracked here.
+    echo "Linking ~/.config/ghostty -> ~/dots/ghostty..."
+    rm -rf $HOME/.config/ghostty
+    ln -s $HOME/dots/ghostty $HOME/.config/ghostty
+
+    # — herdr (terminal agent multiplexer) ————————————————————————————————————————
+    # Only config.toml is linked — ~/.config/herdr also holds sockets, logs, and
+    # session state that stay per-machine.
+    echo "Linking ~/.config/herdr/config.toml -> ~/dots/herdr/config.toml..."
+    mkdir -p $HOME/.config/herdr
+    ln -sf $HOME/dots/herdr/config.toml $HOME/.config/herdr/config.toml
+
+    # — Fish ———————————————————————————————————————————————————————————————————————
+    # Symlink the whole fish/ directory (config.fish, functions/, conf.d/).
+    echo "Linking ~/.config/fish -> ~/dots/fish..."
+    rm -rf $HOME/.config/fish
+    ln -s $HOME/dots/fish $HOME/.config/fish
+fi
+
+# -----------------------------------------------------------------------------
+# Apps
+# -----------------------------------------------------------------------------
+if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, Run.app, Plannotator)?"; then
+    # — Run (https://github.com/thogg4/run) —————————————————————————————————————————
+    # Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
+    if [ -d "/Applications/Run.app" ]; then
+        echo "  [skip] Run.app — already installed"
+    else
+        echo "  [install] Run.app"
+        RUN_MOUNT="$(mktemp -d)"
+        rmdir "$RUN_MOUNT"
+        hdiutil attach "$HOME/dots/run/Run.dmg" -nobrowse -readonly -noverify -quiet -mountpoint "$RUN_MOUNT"
+        cp -R "$RUN_MOUNT/Run.app" /Applications/
+        hdiutil detach "$RUN_MOUNT" -quiet
+    fi
+
+    # — Package installs ————————————————————————————————————————————————————————————
+    # CLI tools first, then GUI apps via --cask.
+    # fzf        — fuzzy finder (used standalone and by some nvim plugins)
+    # ag         — silver searcher, fast code search
+    # ripgrep    — used by Telescope live_grep inside neovim
+    # gh         — GitHub CLI (used by create-pr/dependabot-prs/review skills)
+    # worktrunk  — `wt` worktree CLI (required by the ruby-app-refactor skill)
+    # herdr      — AI coding agent multiplexer (config linked in the symlinks section)
+    # wallpaper  — CLI to set the desktop wallpaper (used later in this script)
+    # defaultbrowser — CLI to set the default browser without a UI prompt
+    # aerospace  — tiling window manager (tap required, not in core Homebrew)
+    # jordanbaird-ice — menu bar management
+    # orbstack   — lightweight Docker/Linux VM alternative to Docker Desktop
+    formula() {
+        if brew list "$1" > /dev/null 2>&1; then
+            echo "  [upgrade] $1"
+            brew upgrade "$@"
+        else
+            echo "  [install] $1"
+            brew install "$@"
+        fi
+    }
+    cask() {
+        _name="${1##*/}"
+        if brew list --cask "$_name" > /dev/null 2>&1; then
+            echo "  [upgrade] $_name"
+            brew upgrade --cask "$@"
+        else
+            echo "  [install] $_name"
+            brew install --cask "$@"
+        fi
+    }
+    mas_install() {
+        if mas list | grep -q "^$1 "; then
+            echo "  [skip] $2 — already installed"
+        else
+            echo "  [install] $2"
+            echo "$SUDO_PASSWORD" | sudo -S mas install "$1"
+        fi
+    }
+
+    echo "Installing packages..."
+    formula fish
+    formula fzf
+    formula the_silver_searcher
+    formula ripgrep
+    formula nvim
+    formula mas
+    formula gh
+    formula worktrunk
+    formula herdr
+    cask discord
+    cask firefox
+    cask google-chrome
+    cask 1password
+    cask 1password-cli
+    cask microsoft-teams
+    cask microsoft-outlook
+    cask slack
+    cask orbstack
+    cask nikitabobko/tap/aerospace
+    cask jordanbaird-ice
+    cask claude-code
+    cask ghostty
+    cask krisp
+    cask linear-linear
+    cask notion
+    cask bruno
+    cask postgres-unofficial
+    formula libpq
+    formula openssl@3
+    formula libiconv
+    formula freetds
+    formula npm
+    formula wallpaper
+    formula defaultbrowser
+    formula xcodegen
+
+    echo "Installing App Store apps..."
+    mas_install 1091189122 "Bear"
+    mas_install 497799835 "Xcode"
+    claude mcp add --transport stdio xcode -- xcrun mcpbridge
+
+    # — Plannotator (plan/code review UI) ————————————————————————————————————————
+    echo "Installing Plannotator..."
+    if ! /bin/bash -c "$(curl -fsSL https://plannotator.ai/install.sh)"; then
+        echo "Plannotator install script failed, skipping marketplace/plugin setup." >&2
+    else
+        if claude plugin marketplace list | grep -q "backnotprop/plannotator"; then
+            echo "Plannotator marketplace already added, skipping."
+        else
+            echo "Adding Plannotator marketplace..."
+            claude plugin marketplace add backnotprop/plannotator
+        fi
+        if claude plugin list | grep -q "plannotator@plannotator"; then
+            echo "Plannotator plugin already installed, skipping."
+        else
+            echo "Installing Plannotator plugin..."
+            claude plugin install -y plannotator@plannotator
+        fi
+    fi
+fi
+
+# -----------------------------------------------------------------------------
+# GitHub CLI auth
+# -----------------------------------------------------------------------------
+if approved gh "Log in to the GitHub CLI if needed?"; then
+    echo "Checking gh CLI authentication..."
+    if gh auth status > /dev/null 2>&1; then
+        echo "gh already authenticated, skipping."
+    else
+        echo "Authenticating gh CLI..."
+        gh auth login
+    fi
+fi
 
 # -----------------------------------------------------------------------------
 # Fish shell
 # Add fish to /etc/shells so chsh accepts it, then make it the login shell.
-# Symlink the whole fish/ directory (config.fish, functions/, conf.d/).
+# Checks fish exists first, since it's installed by the apps section and
+# chsh-ing to a missing binary would break login.
 # -----------------------------------------------------------------------------
-echo "Adding fish to /etc/shells..."
-echo "$SUDO_PASSWORD" | sudo -S sh -c 'echo /opt/homebrew/bin/fish | tee -a /etc/shells' 2>/dev/null
-echo "Setting fish as login shell..."
-echo "$SUDO_PASSWORD" | sudo -S chsh -s /opt/homebrew/bin/fish "$USER" 2>/dev/null
-echo "Linking ~/.config/fish -> ~/dots/fish..."
-rm -rf $HOME/.config/fish
-ln -s $HOME/dots/fish $HOME/.config/fish
+if approved shell "Make fish your login shell?"; then
+    if [ -x /opt/homebrew/bin/fish ]; then
+        echo "Adding fish to /etc/shells..."
+        echo "$SUDO_PASSWORD" | sudo -S sh -c 'echo /opt/homebrew/bin/fish | tee -a /etc/shells' 2>/dev/null
+        echo "Setting fish as login shell..."
+        echo "$SUDO_PASSWORD" | sudo -S chsh -s /opt/homebrew/bin/fish "$USER" 2>/dev/null
+    else
+        echo "fish isn't installed (it comes from the apps section), leaving the login shell alone." >&2
+    fi
+fi
 
-# — Sink (directory sync daemon) ——————————————————————————————————————————————
-echo "Linking ~/.config/sink -> ~/dots/sink/config..."
-rm -rf $HOME/.config/sink
-ln -s $HOME/dots/sink/config $HOME/.config/sink
+# -----------------------------------------------------------------------------
+# Sink (directory sync daemon)
+# Its config link lives here rather than in the symlinks section because it
+# goes with the launchd agents below.
+# -----------------------------------------------------------------------------
+if approved sink "Link the Sink config and load its launchd agents?"; then
+    echo "Linking ~/.config/sink -> ~/dots/sink/config..."
+    rm -rf $HOME/.config/sink
+    ln -s $HOME/dots/sink/config $HOME/.config/sink
 
-echo "Installing sink launchd agents..."
-chmod +x $HOME/dots/sink/bin/sink
-sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.server.plist.template \
-  > $HOME/Library/LaunchAgents/com.sink.server.plist
-sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.client.plist.template \
-  > $HOME/Library/LaunchAgents/com.sink.client.plist
-sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.reconcile.plist.template \
-  > $HOME/Library/LaunchAgents/com.sink.reconcile.plist
-launchctl load -w $HOME/Library/LaunchAgents/com.sink.server.plist 2>/dev/null || true
-launchctl load -w $HOME/Library/LaunchAgents/com.sink.client.plist 2>/dev/null || true
-launchctl load -w $HOME/Library/LaunchAgents/com.sink.reconcile.plist 2>/dev/null || true
-echo "Sink loaded. Edit ~/.config/sink/config.yml to add sync_dirs."
+    echo "Installing sink launchd agents..."
+    chmod +x $HOME/dots/sink/bin/sink
+    sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.server.plist.template \
+      > $HOME/Library/LaunchAgents/com.sink.server.plist
+    sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.client.plist.template \
+      > $HOME/Library/LaunchAgents/com.sink.client.plist
+    sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.reconcile.plist.template \
+      > $HOME/Library/LaunchAgents/com.sink.reconcile.plist
+    launchctl load -w $HOME/Library/LaunchAgents/com.sink.server.plist 2>/dev/null || true
+    launchctl load -w $HOME/Library/LaunchAgents/com.sink.client.plist 2>/dev/null || true
+    launchctl load -w $HOME/Library/LaunchAgents/com.sink.reconcile.plist 2>/dev/null || true
+    echo "Sink loaded. Edit ~/.config/sink/config.yml to add sync_dirs."
+fi
 
 # -----------------------------------------------------------------------------
 # macOS System Preferences — close the GUI so defaults writes take effect
 # cleanly without the app overwriting them on quit.
 # -----------------------------------------------------------------------------
-echo "Closing System Preferences..."
-osascript -e 'tell application "System Preferences" to quit'
+if approved macos "Apply macOS preferences (defaults, Dock, login items, default browser, wallpaper)?"; then
+    echo "Closing System Preferences..."
+    osascript -e 'tell application "System Preferences" to quit'
 
-# — Security ——————————————————————————————————————————————————————————————————
-# Suppress the "Are you sure you want to open this application?" Gatekeeper
-# dialog for apps downloaded from the internet.
-echo "Applying macOS defaults: security..."
-defaults write com.apple.LaunchServices LSQuarantine -bool false
+    # — Security ——————————————————————————————————————————————————————————————————
+    # Suppress the "Are you sure you want to open this application?" Gatekeeper
+    # dialog for apps downloaded from the internet.
+    echo "Applying macOS defaults: security..."
+    defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-# — Trackpad ——————————————————————————————————————————————————————————————————
-# Tap to click (applies to both the current user and the login screen).
-echo "Applying macOS defaults: trackpad tap-to-click..."
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+    # — Trackpad ——————————————————————————————————————————————————————————————————
+    # Tap to click (applies to both the current user and the login screen).
+    echo "Applying macOS defaults: trackpad tap-to-click..."
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+    defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+    defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
-# Use "natural" scroll direction: false = old-school (scroll up = content moves up).
-echo "Applying macOS defaults: scroll direction..."
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+    # Use "natural" scroll direction: false = old-school (scroll up = content moves up).
+    echo "Applying macOS defaults: scroll direction..."
+    defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
-# — Audio —————————————————————————————————————————————————————————————————————
-# Raise the Bluetooth audio codec bitpool floor so headphones use a higher
-# quality codec instead of dropping to the lowest common denominator.
-echo "Applying macOS defaults: Bluetooth audio quality..."
-defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
+    # — Audio —————————————————————————————————————————————————————————————————————
+    # Raise the Bluetooth audio codec bitpool floor so headphones use a higher
+    # quality codec instead of dropping to the lowest common denominator.
+    echo "Applying macOS defaults: Bluetooth audio quality..."
+    defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
-# — Keyboard ——————————————————————————————————————————————————————————————————
-# KeyRepeat: delay between repeated keys when held (lower = faster).
-# InitialKeyRepeat: pause before repetition starts.
-# These values are lower than the UI allows.
-echo "Applying macOS defaults: keyboard repeat rate..."
-defaults write NSGlobalDomain KeyRepeat -int 2
-defaults write NSGlobalDomain InitialKeyRepeat -int 13
+    # — Keyboard ——————————————————————————————————————————————————————————————————
+    # KeyRepeat: delay between repeated keys when held (lower = faster).
+    # InitialKeyRepeat: pause before repetition starts.
+    # These values are lower than the UI allows.
+    echo "Applying macOS defaults: keyboard repeat rate..."
+    defaults write NSGlobalDomain KeyRepeat -int 2
+    defaults write NSGlobalDomain InitialKeyRepeat -int 13
 
-# Disable Spotlight's Cmd-Space and Cmd-Shift-Space shortcuts (keys 64/65)
-# so Run can own that hotkey without conflict (see run/config's launcher-hotkey).
-echo "Applying macOS defaults: Spotlight shortcuts..."
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
+    # Disable Spotlight's Cmd-Space and Cmd-Shift-Space shortcuts (keys 64/65)
+    # so Run can own that hotkey without conflict (see run/config's launcher-hotkey).
+    echo "Applying macOS defaults: Spotlight shortcuts..."
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 '<dict><key>enabled</key><false/></dict>'
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 '<dict><key>enabled</key><false/></dict>'
 
-# — Screenshots ———————————————————————————————————————————————————————————————
-echo "Applying macOS defaults: screenshots..."
-defaults write com.apple.screencapture location -string "${HOME}/Downloads"
-defaults write com.apple.screencapture type -string "png"
+    # — Screenshots ———————————————————————————————————————————————————————————————
+    echo "Applying macOS defaults: screenshots..."
+    defaults write com.apple.screencapture location -string "${HOME}/Downloads"
+    defaults write com.apple.screencapture type -string "png"
 
-# — Finder ————————————————————————————————————————————————————————————————————
-# Open new windows to Downloads instead of the default "Recents" view.
-# PfLo = "Path from Location" (a custom folder), as opposed to PfHm (home).
-echo "Applying macOS defaults: Finder..."
-defaults write com.apple.finder NewWindowTarget -string "PfLo"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
+    # — Finder ————————————————————————————————————————————————————————————————————
+    # Open new windows to Downloads instead of the default "Recents" view.
+    # PfLo = "Path from Location" (a custom folder), as opposed to PfHm (home).
+    echo "Applying macOS defaults: Finder..."
+    defaults write com.apple.finder NewWindowTarget -string "PfLo"
+    defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Downloads/"
 
-# false = hide extensions (only show them on hover). Set true to always show.
-defaults write NSGlobalDomain AppleShowAllExtensions -bool false
+    # false = hide extensions (only show them on hover). Set true to always show.
+    defaults write NSGlobalDomain AppleShowAllExtensions -bool false
 
-# Default view: icon (icnv). Others: list (Nlsv), column (clmv), gallery (glyv).
-defaults write com.apple.finder FXPreferredViewStyle -string "icnv"
+    # Default view: icon (icnv). Others: list (Nlsv), column (clmv), gallery (glyv).
+    defaults write com.apple.finder FXPreferredViewStyle -string "icnv"
 
-# Skip the "Are you sure?" prompt when emptying Trash.
-defaults write com.apple.finder WarnOnEmptyTrash -bool false
+    # Skip the "Are you sure?" prompt when emptying Trash.
+    defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
-# — Dock ——————————————————————————————————————————————————————————————————————
-# "scale" shrinks the window into the app icon rather than doing a genie effect.
-echo "Applying macOS defaults: Dock..."
-defaults write com.apple.dock mineffect -string "scale"
+    # — Dock ——————————————————————————————————————————————————————————————————————
+    # "scale" shrinks the window into the app icon rather than doing a genie effect.
+    echo "Applying macOS defaults: Dock..."
+    defaults write com.apple.dock mineffect -string "scale"
 
-# Minimise into the app's icon instead of a separate Dock tile.
-defaults write com.apple.dock minimize-to-application -bool true
+    # Minimise into the app's icon instead of a separate Dock tile.
+    defaults write com.apple.dock minimize-to-application -bool true
 
-# Auto-hide the Dock; it slides in on hover.
-defaults write com.apple.dock autohide -bool true
+    # Auto-hide the Dock; it slides in on hover.
+    defaults write com.apple.dock autohide -bool true
 
-# Don't show the "Recent Applications" section at the right end of the Dock.
-defaults write com.apple.dock show-recents -bool false
+    # Don't show the "Recent Applications" section at the right end of the Dock.
+    defaults write com.apple.dock show-recents -bool false
 
-# Disable the pinch-to-Launchpad trackpad gesture.
-defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
+    # Disable the pinch-to-Launchpad trackpad gesture.
+    defaults write com.apple.dock showLaunchpadGestureEnabled -int 0
 
-# Reset the persistent-apps list completely, then rebuild it in order.
-# persistent-apps = pinned app icons; persistent-others = folder/stack tiles.
-defaults write com.apple.dock persistent-apps -array
-defaults delete com.apple.dock persistent-others
+    # Reset the persistent-apps list completely, then rebuild it in order.
+    # persistent-apps = pinned app icons; persistent-others = folder/stack tiles.
+    defaults write com.apple.dock persistent-apps -array
+    defaults delete com.apple.dock persistent-others
 
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Bear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Linear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Ghostty.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Mail.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
-defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Bear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Linear.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Firefox.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Ghostty.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Mail.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Microsoft Teams.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///System/Applications/Messages.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/Slack.app/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
 
-# Dock stacks: Downloads folder and /Applications as right-side tiles.
-defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>arrangement</key><integer>3</integer><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
-defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
+    # Dock stacks: Downloads folder and /Applications as right-side tiles.
+    defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>arrangement</key><integer>3</integer><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
+    defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
 
-# Apply all Dock changes.
-echo "Restarting Dock..."
-killall Dock
+    # Apply all Dock changes.
+    echo "Restarting Dock..."
+    killall Dock
 
-# — Login items ———————————————————————————————————————————————————————————————
-# Clear existing login items, then add the ones we want.
-# hidden:false = the app window is visible at login (not launched in background).
-echo "Setting login items..."
-osascript -e 'tell application "System Events" to delete every login item'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Firefox.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Messages.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Mail.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Ghostty.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Postgres.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bear.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Krisp.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Linear.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bruno.app", hidden:false}'
-osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Run.app", hidden:false}'
+    # — Login items ———————————————————————————————————————————————————————————————
+    # Clear existing login items, then add the ones we want.
+    # hidden:false = the app window is visible at login (not launched in background).
+    echo "Setting login items..."
+    osascript -e 'tell application "System Events" to delete every login item'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Firefox.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Messages.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/System/Applications/Mail.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Ghostty.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Slack.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Microsoft Teams.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Postgres.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bear.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Krisp.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Linear.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Bruno.app", hidden:false}'
+    osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Run.app", hidden:false}'
 
-# — App Store —————————————————————————————————————————————————————————————————
-echo "Applying macOS defaults: App Store..."
-defaults write com.apple.appstore WebKitDeveloperExtras -bool true  # WebKit devtools in App Store
-defaults write com.apple.appstore ShowDebugMenu -bool true           # Debug menu in App Store
+    # — App Store —————————————————————————————————————————————————————————————————
+    echo "Applying macOS defaults: App Store..."
+    defaults write com.apple.appstore WebKitDeveloperExtras -bool true  # WebKit devtools in App Store
+    defaults write com.apple.appstore ShowDebugMenu -bool true           # Debug menu in App Store
 
-# — Software Update ———————————————————————————————————————————————————————————
-echo "Applying macOS defaults: Software Update..."
-defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true  # Check daily
-defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1          # 1 = daily (default is weekly)
-defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1           # Download in background
-defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1       # Auto-install security patches
-defaults write com.apple.commerce AutoUpdate -bool true                    # Auto-update App Store apps
-defaults write com.apple.commerce AutoUpdateRestartRequired -bool true     # Allow reboot for OS updates
+    # — Software Update ———————————————————————————————————————————————————————————
+    echo "Applying macOS defaults: Software Update..."
+    defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true  # Check daily
+    defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1          # 1 = daily (default is weekly)
+    defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1           # Download in background
+    defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1       # Auto-install security patches
+    defaults write com.apple.commerce AutoUpdate -bool true                    # Auto-update App Store apps
+    defaults write com.apple.commerce AutoUpdateRestartRequired -bool true     # Allow reboot for OS updates
 
-# — Trackpad gestures —————————————————————————————————————————————————————————
-# Drag with lock: lets you drag windows by tapping twice and locking the drag.
-echo "Applying macOS defaults: trackpad gestures..."
-defaults write com.apple.AppleMultitouchTrackpad Dragging -bool true
-defaults write com.apple.AppleMultitouchTrackpad DragLock -bool true
+    # — Trackpad gestures —————————————————————————————————————————————————————————
+    # Drag with lock: lets you drag windows by tapping twice and locking the drag.
+    echo "Applying macOS defaults: trackpad gestures..."
+    defaults write com.apple.AppleMultitouchTrackpad Dragging -bool true
+    defaults write com.apple.AppleMultitouchTrackpad DragLock -bool true
 
-# Trackpad speed (0–3 range; 2.5 is faster than the UI maximum of ~2).
-defaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.5
+    # Trackpad speed (0–3 range; 2.5 is faster than the UI maximum of ~2).
+    defaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.5
 
-# Disable notification centre swipe (2-finger from right edge).
-# 0 = disabled, 1 = swipe with 2 fingers, 2 = swipe with 3 fingers.
-defaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0
+    # Disable notification centre swipe (2-finger from right edge).
+    # 0 = disabled, 1 = swipe with 2 fingers, 2 = swipe with 3 fingers.
+    defaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0
 
-# 4-finger vertical: Mission Control (2) / Exposé.
-defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2
-# 4-finger horizontal: switch between full-screen apps.
-defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2
-# 3-finger horizontal: swipe between pages / back-forward in apps.
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 1
+    # 4-finger vertical: Mission Control (2) / Exposé.
+    defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerVertSwipeGesture -int 2
+    # 4-finger horizontal: switch between full-screen apps.
+    defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 2
+    # 3-finger horizontal: swipe between pages / back-forward in apps.
+    defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerHorizSwipeGesture -int 1
 
-# Same settings mirrored for Bluetooth trackpad (separate pref domain).
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
+    # Same settings mirrored for Bluetooth trackpad (separate pref domain).
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadTwoFingerFromRightEdgeSwipeGesture -int 0
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerVertSwipeGesture -int 2
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
+    defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
 
-# Set Firefox as the default browser (requires `brew install defaultbrowser`).
-echo "Setting Firefox as default browser..."
-echo "$SUDO_PASSWORD" | sudo -S defaultbrowser firefox 2>/dev/null
+    # Set Firefox as the default browser (requires `brew install defaultbrowser`).
+    echo "Setting Firefox as default browser..."
+    echo "$SUDO_PASSWORD" | sudo -S defaultbrowser firefox 2>/dev/null
 
-# — Dictation ————————————————————————————————————————————————————————————————
-# Enable dictation triggered by pressing the Fn key.
-echo "Applying macOS defaults: dictation..."
-defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 1
-defaults write com.apple.HIToolbox AppleFnUsageType -int 1
+    # — Dictation ————————————————————————————————————————————————————————————————
+    # Enable dictation triggered by pressing the Fn key.
+    echo "Applying macOS defaults: dictation..."
+    defaults write com.apple.HIToolbox AppleDictationAutoEnable -int 1
+    defaults write com.apple.HIToolbox AppleFnUsageType -int 1
 
-# — Menu bar clock ————————————————————————————————————————————————————————————
-echo "Applying macOS defaults: menu bar clock..."
-defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  h:mm:ss a"
-defaults write com.apple.menuextra.clock ShowSeconds -bool true
+    # — Menu bar clock ————————————————————————————————————————————————————————————
+    echo "Applying macOS defaults: menu bar clock..."
+    defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d  h:mm:ss a"
+    defaults write com.apple.menuextra.clock ShowSeconds -bool true
 
-# Set desktop wallpaper (requires `brew install wallpaper`).
-echo "Setting desktop wallpaper..."
-wallpaper set wallpaper.jpg
+    # Set desktop wallpaper (requires `brew install wallpaper`).
+    echo "Setting desktop wallpaper..."
+    wallpaper set wallpaper.jpg
 
-# Let the wallpaper get set
-sleep 5
+    # Let the wallpaper get set
+    sleep 5
+fi
 
 printf "Reboot now? [y/N] "
 read REPLY < /dev/tty
