@@ -40,14 +40,14 @@ cd ~/dots
 ./setup.sh
 ```
 
-The script never uses sudo. On a fresh machine Homebrew goes into `~/hb`, since the default `/opt/homebrew` needs sudo to create. If the Xcode Command Line Tools are missing, it opens Apple's installer for them and skips Homebrew until you rerun. Steps that need sudo print a `[skip] … needs sudo` line and move on:
+The script never uses sudo itself. On a fresh machine it asks whether Homebrew goes in `~/hb` or the default `/opt/homebrew`; for `/opt/homebrew`, Homebrew's installer asks for your password. `~/hb` needs no password, but Homebrew doesn't officially support it, and some packages (such as neovim, node and openssl) build from source there when `~/hb` is longer than `/opt/homebrew`. If the Xcode Command Line Tools are missing, it opens Apple's installer for them and skips Homebrew until you rerun. Steps that need sudo print a `[skip] … needs sudo` line and move on:
 - App Store apps
 - `.pkg` casks (Teams, Outlook, Krisp)
 - adding fish to `/etc/shells`. When that's skipped, Ghostty launches fish through a gitignored `ghostty/local` instead, so fish isn't your login shell but every terminal opens in it.
 
 Most steps are idempotent — re-running is safe.
 
-The first time it runs, it asks whether apps go in `~/Applications` or `/Applications`, then before each section (Homebrew, Ruby, SSH key, config symlinks, apps, `gh` login, fish login shell, Sink, macOS preferences) and skips any you decline. Answers are saved to `.setup-approvals` (gitignored, one `section=yes|no` line each; `home_applications=yes` means `~/Applications`), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need apps), so only decline those on a machine that already has them.
+The first time it runs, it asks whether apps go in `~/Applications` or `/Applications`, then before each section (Homebrew, Ruby, SSH key, config symlinks, apps, `gh` login, fish login shell, Sink, macOS preferences) and skips any you decline. Answers are saved to `.setup-approvals` (gitignored, one `section=yes|no` line each; `home_applications=yes` means `~/Applications`, `home_homebrew=yes` means `~/hb`), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need apps), so only decline those on a machine that already has them.
 
 ## Key tools and their configs
 
