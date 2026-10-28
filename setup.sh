@@ -16,8 +16,11 @@ export HOMEBREW_NO_SUDO=1
 # later runs don't ask again. Delete a line (or the file) to be asked again.
 # -----------------------------------------------------------------------------
 APPROVALS="$HOME/dots/.setup-approvals"
+saved_answer() {
+    grep "^$1=" "$APPROVALS" 2>/dev/null | cut -d= -f2
+}
 approved() {
-    _answer="$(grep "^$1=" "$APPROVALS" 2>/dev/null | cut -d= -f2)"
+    _answer="$(saved_answer "$1")"
     if [ -z "$_answer" ]; then
         printf "%s [y/N] " "$2"
         if ! read _reply < /dev/tty; then
@@ -37,7 +40,8 @@ approved() {
 
 # -----------------------------------------------------------------------------
 # App location
-# Where Homebrew casks and Run.app go; the apps and macos sections use $APPDIR.
+# Where Homebrew casks and Run.app go (also written to brew.env for casks);
+# the apps and macos sections use $APPDIR.
 # app_path finds an app there, falling back to /Applications for .pkg and App
 # Store apps, and for casks installed before ~/Applications was chosen.
 # -----------------------------------------------------------------------------
@@ -54,6 +58,16 @@ app_path() {
         echo "/Applications/$1.app"
     fi
 }
+
+# brew.env makes every cask install use $APPDIR, including ones run by hand
+# later. It can't expand variables, so the path is written out. Only that
+# line is replaced, keeping any other settings. Casks installed before this
+# keep their old location.
+echo "Pointing Homebrew casks at $APPDIR..."
+BREW_ENV="$HOME/.homebrew/brew.env"
+mkdir -p "$HOME/.homebrew"
+{ grep -v '^HOMEBREW_CASK_OPTS=' "$BREW_ENV" 2>/dev/null; echo "HOMEBREW_CASK_OPTS=--appdir=$APPDIR"; } > "$BREW_ENV.tmp"
+mv "$BREW_ENV.tmp" "$BREW_ENV"
 
 # -----------------------------------------------------------------------------
 # Homebrew
@@ -259,21 +273,84 @@ fi
 
 # -----------------------------------------------------------------------------
 # Apps
+# CLI tools share one approval (cli_tools); every GUI app has its own
+# (app_<name>: the app's name lowercased, spaces as _), which the macos section
+# checks too (see has_app). mas and claude come with the CLI tools.
 # -----------------------------------------------------------------------------
-if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, Run.app, Plannotator)?"; then
-    # — App location ————————————————————————————————————————————————————————————————
-    # brew.env makes every cask install use $APPDIR, including ones run by hand
-    # later. It can't expand variables, so the path is written out. Only that
-    # line is replaced, keeping any other settings. Casks installed before this
-    # keep their old location.
-    echo "Pointing Homebrew casks at $APPDIR..."
-    BREW_ENV="$HOME/.homebrew/brew.env"
-    mkdir -p "$HOME/.homebrew"
-    { grep -v '^HOMEBREW_CASK_OPTS=' "$BREW_ENV" 2>/dev/null; echo "HOMEBREW_CASK_OPTS=--appdir=$APPDIR"; } > "$BREW_ENV.tmp"
-    mv "$BREW_ENV.tmp" "$BREW_ENV"
+formula() {
+    if brew list "$1" > /dev/null 2>&1; then
+        echo "  [upgrade] $1"
+        brew upgrade "$@"
+    else
+        echo "  [install] $1"
+        brew install "$@"
+    fi
+}
+cask() {
+    _name="${1##*/}"
+    if brew list --cask "$_name" > /dev/null 2>&1; then
+        echo "  [upgrade] $_name"
+        brew upgrade --cask "$@"
+    else
+        echo "  [install] $_name"
+        brew install --cask "$@"
+    fi
+}
+# .pkg casks run Apple's installer as root, so they're only reported.
+pkg_cask() {
+    if brew list --cask "$1" > /dev/null 2>&1; then
+        echo "  [skip] $1 — already installed"
+    else
+        echo "  [skip] $1 — needs sudo"
+    fi
+}
+# mas needs root to install App Store apps, so they're only reported too.
+mas_install() {
+    if ! command -v mas > /dev/null; then
+        echo "  [skip] $2 — mas isn't installed (it comes with the CLI tools)"
+    elif mas list | grep -q "^$1 "; then
+        echo "  [skip] $2 — already installed"
+    else
+        echo "  [skip] $2 — needs sudo"
+    fi
+}
 
-    # — Run (https://github.com/thogg4/run) —————————————————————————————————————————
-    # Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
+# — CLI tools ————————————————————————————————————————————————————————————————————
+# fzf        — fuzzy finder (used standalone and by some nvim plugins)
+# ag         — silver searcher, fast code search
+# ripgrep    — used by Telescope live_grep inside neovim
+# gh         — GitHub CLI (used by create-pr/dependabot-prs/review skills)
+# worktrunk  — `wt` worktree CLI (required by the ruby-app-refactor skill)
+# herdr      — AI coding agent multiplexer (config linked in the symlinks section)
+# wallpaper  — CLI to set the desktop wallpaper (used later in this script)
+# defaultbrowser — CLI to set the default browser without a UI prompt
+# claude-code and 1password-cli are casks, but only install CLIs.
+if approved cli_tools "Install and upgrade CLI tools (Homebrew formulae, Claude Code, 1Password CLI)?"; then
+    echo "Installing CLI tools..."
+    formula fish
+    formula fzf
+    formula the_silver_searcher
+    formula ripgrep
+    formula nvim
+    formula mas
+    formula gh
+    formula worktrunk
+    formula herdr
+    formula libpq
+    formula openssl@3
+    formula libiconv
+    formula freetds
+    formula npm
+    formula wallpaper
+    formula defaultbrowser
+    formula xcodegen
+    cask claude-code
+    cask 1password-cli
+fi
+
+# — Run (https://github.com/thogg4/run) —————————————————————————————————————————
+# Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
+if approved app_run "Install Run.app?"; then
     if [ -d "$(app_path Run)" ]; then
         echo "  [skip] Run.app — already installed"
     else
@@ -284,107 +361,56 @@ if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, 
         cp -R "$RUN_MOUNT/Run.app" "$APPDIR/"
         hdiutil detach "$RUN_MOUNT" -quiet
     fi
+fi
 
-    # — Package installs ————————————————————————————————————————————————————————————
-    # CLI tools first, then GUI apps via --cask.
-    # fzf        — fuzzy finder (used standalone and by some nvim plugins)
-    # ag         — silver searcher, fast code search
-    # ripgrep    — used by Telescope live_grep inside neovim
-    # gh         — GitHub CLI (used by create-pr/dependabot-prs/review skills)
-    # worktrunk  — `wt` worktree CLI (required by the ruby-app-refactor skill)
-    # herdr      — AI coding agent multiplexer (config linked in the symlinks section)
-    # wallpaper  — CLI to set the desktop wallpaper (used later in this script)
-    # defaultbrowser — CLI to set the default browser without a UI prompt
-    # aerospace  — tiling window manager (tap required, not in core Homebrew)
-    # jordanbaird-ice — menu bar management
-    # orbstack   — lightweight Docker/Linux VM alternative to Docker Desktop
-    formula() {
-        if brew list "$1" > /dev/null 2>&1; then
-            echo "  [upgrade] $1"
-            brew upgrade "$@"
-        else
-            echo "  [install] $1"
-            brew install "$@"
-        fi
-    }
-    cask() {
-        _name="${1##*/}"
-        if brew list --cask "$_name" > /dev/null 2>&1; then
-            echo "  [upgrade] $_name"
-            brew upgrade --cask "$@"
-        else
-            echo "  [install] $_name"
-            brew install --cask "$@"
-        fi
-    }
-    # .pkg casks run Apple's installer as root, so they're only reported.
-    pkg_cask() {
-        if brew list --cask "$1" > /dev/null 2>&1; then
-            echo "  [skip] $1 — already installed"
-        else
-            echo "  [skip] $1 — needs sudo"
-        fi
-    }
-    # mas needs root to install App Store apps, so they're only reported too.
-    mas_install() {
-        if mas list | grep -q "^$1 "; then
-            echo "  [skip] $2 — already installed"
-        else
-            echo "  [skip] $2 — needs sudo"
-        fi
-    }
-
-    echo "Installing packages..."
-    formula fish
-    formula fzf
-    formula the_silver_searcher
-    formula ripgrep
-    formula nvim
-    formula mas
-    formula gh
-    formula worktrunk
-    formula herdr
-    cask discord
-    cask firefox
-    cask google-chrome
-    # 1Password won't launch from anywhere but /Applications.
+# — GUI apps —————————————————————————————————————————————————————————————————————
+# aerospace  — tiling window manager (tap required, not in core Homebrew)
+# ice        — menu bar management
+# orbstack   — lightweight Docker/Linux VM alternative to Docker Desktop
+approved app_discord "Install Discord?" && cask discord
+approved app_firefox "Install Firefox?" && cask firefox
+approved app_google_chrome "Install Google Chrome?" && cask google-chrome
+# 1Password won't launch from anywhere but /Applications.
+if approved app_1password "Install 1Password?"; then
     if [ -w /Applications ]; then
         cask 1password --appdir=/Applications
     else
         echo "  [skip] 1password — needs sudo"
     fi
-    cask 1password-cli
-    pkg_cask microsoft-teams
-    pkg_cask microsoft-outlook
-    cask slack
-    cask orbstack
-    cask nikitabobko/tap/aerospace
-    cask jordanbaird-ice
-    cask claude-code
-    cask ghostty
-    pkg_cask krisp
-    cask linear-linear
-    cask notion
-    cask bruno
-    cask postgres-unofficial
-    formula libpq
-    formula openssl@3
-    formula libiconv
-    formula freetds
-    formula npm
-    formula wallpaper
-    formula defaultbrowser
-    formula xcodegen
+fi
+approved app_microsoft_teams "Install Microsoft Teams?" && pkg_cask microsoft-teams
+approved app_microsoft_outlook "Install Microsoft Outlook?" && pkg_cask microsoft-outlook
+approved app_slack "Install Slack?" && cask slack
+approved app_orbstack "Install OrbStack?" && cask orbstack
+approved app_aerospace "Install AeroSpace?" && cask nikitabobko/tap/aerospace
+approved app_ice "Install Ice?" && cask jordanbaird-ice
+approved app_ghostty "Install Ghostty?" && cask ghostty
+approved app_krisp "Install Krisp?" && pkg_cask krisp
+approved app_linear "Install Linear?" && cask linear-linear
+approved app_notion "Install Notion?" && cask notion
+approved app_bruno "Install Bruno?" && cask bruno
+approved app_postgres "Install Postgres.app?" && cask postgres-unofficial
 
-    echo "Installing App Store apps..."
-    mas_install 1091189122 "Bear"
+# — App Store apps ———————————————————————————————————————————————————————————————
+approved app_bear "Install Bear (App Store)?" && mas_install 1091189122 "Bear"
+if approved app_xcode "Install Xcode (App Store) and add its MCP server to Claude Code?"; then
     mas_install 497799835 "Xcode"
-    claude mcp add --transport stdio xcode -- xcrun mcpbridge
+    if [ ! -d "$(app_path Xcode)" ]; then
+        echo "  [skip] Xcode MCP — Xcode isn't installed"
+    elif ! command -v claude > /dev/null; then
+        echo "  [skip] Xcode MCP — claude isn't installed (it comes with the CLI tools)"
+    else
+        claude mcp add --transport stdio xcode -- xcrun mcpbridge
+    fi
+fi
 
-    # — Plannotator (plan/code review UI) ————————————————————————————————————————
+# — Plannotator (plan/code review UI) ————————————————————————————————————————
+if approved app_plannotator "Install Plannotator and its Claude Code plugin?"; then
     echo "Installing Plannotator..."
     if ! /bin/bash -c "$(curl -fsSL https://plannotator.ai/install.sh)"; then
         echo "Plannotator install script failed, skipping marketplace/plugin setup." >&2
+    elif ! command -v claude > /dev/null; then
+        echo "  [skip] Plannotator plugin — claude isn't installed (it comes with the CLI tools)"
     else
         if claude plugin marketplace list | grep -q "backnotprop/plannotator"; then
             echo "Plannotator marketplace already added, skipping."
@@ -419,13 +445,13 @@ fi
 # Makes fish the login shell. chsh only accepts shells listed in /etc/shells,
 # and adding one there needs sudo, so when fish isn't listed Ghostty is pointed
 # at fish instead (through the gitignored ghostty/local include).
-# Checks fish exists first, since it's installed by the apps section and
+# Checks fish exists first, since it's installed with the apps section's CLI tools and
 # chsh-ing to a missing binary would break login.
 # -----------------------------------------------------------------------------
 if approved shell "Make fish your login shell?"; then
     FISH="$HOMEBREW_PREFIX/bin/fish"
     if [ ! -x "$FISH" ]; then
-        echo "fish isn't installed (it comes from the apps section), leaving the login shell alone." >&2
+        echo "fish isn't installed (it comes with the CLI tools in the apps section), leaving the login shell alone." >&2
     elif [ "$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')" = "$FISH" ]; then
         echo "  [skip] login shell — already fish"
     elif grep -qx "$FISH" /etc/shells; then
@@ -550,17 +576,33 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
     defaults write com.apple.dock persistent-apps -array
     defaults delete com.apple.dock persistent-others
 
-    dock_app() {
+    # Succeeds when the app was approved in the apps section and is on disk.
+    # Reads the saved answer rather than calling approved, so it never asks.
+    has_app() {
+        if [ "$(saved_answer "$1")" != yes ]; then
+            echo "  [skip] $2 — not approved"
+            return 1
+        fi
+        [ -d "$(app_path "$2")" ] && return
+        echo "  [skip] $2 — not installed"
+        return 1
+    }
+    # dock_path adds any .app; dock_app <key> <Name> adds a Homebrew/App Store
+    # app only when has_app says so.
+    dock_path() {
         defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://$1/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
     }
-    dock_app "$(app_path Bear)"
-    dock_app "$(app_path Linear)"
-    dock_app "$(app_path Firefox)"
-    dock_app "$(app_path Ghostty)"
-    dock_app "/System/Applications/Mail.app"
-    dock_app "$(app_path "Microsoft Teams")"
-    dock_app "/System/Applications/Messages.app"
-    dock_app "$(app_path Slack)"
+    dock_app() {
+        has_app "$1" "$2" && dock_path "$(app_path "$2")"
+    }
+    dock_app app_bear Bear
+    dock_app app_linear Linear
+    dock_app app_firefox Firefox
+    dock_app app_ghostty Ghostty
+    dock_path "/System/Applications/Mail.app"
+    dock_app app_microsoft_teams "Microsoft Teams"
+    dock_path "/System/Applications/Messages.app"
+    dock_app app_slack Slack
 
     # Dock stacks: Downloads folder and /Applications as right-side tiles
     # (/Applications even when apps go in ~/Applications, by choice).
@@ -576,21 +618,26 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
     # hidden:false = the app window is visible at login (not launched in background).
     echo "Setting login items..."
     osascript -e 'tell application "System Events" to delete every login item'
-    login_item() {
+    # Same split as the Dock: login_path for any .app, login_item <key> <Name>
+    # only when has_app says so.
+    login_path() {
         osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$1\", hidden:false}"
     }
-    login_item "$(app_path Firefox)"
-    login_item "/System/Applications/Messages.app"
-    login_item "/System/Applications/Mail.app"
-    login_item "$(app_path Ghostty)"
-    login_item "$(app_path Slack)"
-    login_item "$(app_path "Microsoft Teams")"
-    login_item "$(app_path Postgres)"
-    login_item "$(app_path Bear)"
-    login_item "$(app_path Krisp)"
-    login_item "$(app_path Linear)"
-    login_item "$(app_path Bruno)"
-    login_item "$(app_path Run)"
+    login_item() {
+        has_app "$1" "$2" && login_path "$(app_path "$2")"
+    }
+    login_item app_firefox Firefox
+    login_path "/System/Applications/Messages.app"
+    login_path "/System/Applications/Mail.app"
+    login_item app_ghostty Ghostty
+    login_item app_slack Slack
+    login_item app_microsoft_teams "Microsoft Teams"
+    login_item app_postgres Postgres
+    login_item app_bear Bear
+    login_item app_krisp Krisp
+    login_item app_linear Linear
+    login_item app_bruno Bruno
+    login_item app_run Run
 
     # — App Store —————————————————————————————————————————————————————————————————
     echo "Applying macOS defaults: App Store..."
@@ -632,9 +679,11 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
     defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 2
     defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
 
-    # Set Firefox as the default browser (requires `brew install defaultbrowser`).
-    echo "Setting Firefox as default browser..."
-    defaultbrowser firefox
+    # Set Firefox as the default browser (defaultbrowser comes with cli_tools).
+    if has_app app_firefox Firefox; then
+        echo "Setting Firefox as default browser..."
+        defaultbrowser firefox
+    fi
 
     # — Dictation ————————————————————————————————————————————————————————————————
     # Enable dictation triggered by pressing the Fn key.

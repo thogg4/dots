@@ -12,10 +12,10 @@ Running `setup.sh` once on a clean machine will:
 - Install Run.app (launcher) into the same apps folder from the bundled `run/Run.dmg` — it's not on Homebrew
 - Check Mac App Store apps via `mas` (installing them needs sudo, so missing ones are only reported)
 - Symlink all configs into place (see below)
-- Apply a comprehensive set of `defaults write` settings for macOS (Dock, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
-- Set Firefox as the default browser
+- Apply a comprehensive set of `defaults write` settings for macOS (Dock with only the apps you approved and that are installed, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
+- Set Firefox as the default browser (if you approved Firefox and it's installed)
 - Set the desktop wallpaper
-- Configure login items
+- Configure login items. Like the Dock, they only include apps you approved and that are installed
 
 ## Configs managed here
 
@@ -47,7 +47,7 @@ The script never uses sudo itself. On a fresh machine it asks whether Homebrew g
 
 Most steps are idempotent — re-running is safe.
 
-The first time it runs, it asks whether apps go in `~/Applications` or `/Applications`, then before each section (Homebrew, Ruby, SSH key, config symlinks, apps, `gh` login, fish login shell, Sink, macOS preferences) and skips any you decline. Answers are saved to `.setup-approvals` (gitignored, one `section=yes|no` line each; `home_applications=yes` means `~/Applications`, `home_homebrew=yes` means `~/hb`), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need apps), so only decline those on a machine that already has them.
+The first time it runs, it asks whether apps go in `~/Applications` or `/Applications`, then before each section (Homebrew, Ruby, SSH key, config symlinks, CLI tools, `gh` login, fish login shell, Sink, macOS preferences) and before each GUI app (Firefox, Slack, Run, Xcode, Plannotator, …), and skips any you decline. A declined app is also left out of the Dock and login items, and so is an approved one that isn't installed (like a `.pkg` cask skipped for sudo). Answers are saved to `.setup-approvals` (gitignored, one `key=yes|no` line each, `app_<name>` for apps; `home_applications=yes` means `~/Applications`, `home_homebrew=yes` means `~/hb`), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need CLI tools), so only decline those on a machine that already has them.
 
 ## Key tools and their configs
 
