@@ -8,6 +8,8 @@ A macOS dotfiles repo. Running `setup.sh` does a full machine bootstrap: install
 
 Each section of `setup.sh` (homebrew, ruby, ssh, symlinks, apps, gh, shell, sink, macos) is wrapped in `if approved <key> "<question>"; then`, which asks once and saves the answer to the gitignored `.setup-approvals` (`key=yes|no` lines), so re-runs don't prompt. Wrap any new section the same way.
 
+`setup.sh` never uses sudo (it exports `HOMEBREW_NO_SUDO=1`); a step that would need it prints `  [skip] <name> — needs sudo` instead. Homebrew is `/opt/homebrew` on older machines and `~/hb` on ones set up without sudo, so don't hardcode either. In `setup.sh` use `$HOMEBREW_PREFIX`; `fish/config.fish` and the sink plist templates check both.
+
 ## How configs are applied
 
 Every config is tracked in this repo and symlinked into place by `setup.sh`. Adding a new config means:
@@ -54,7 +56,7 @@ LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-lan
 
 ## Ghostty terminal
 
-Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor.
+Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor. It ends with `config-file = ?local`, an optional gitignored `ghostty/local` for per-machine settings. `setup.sh` writes `command = <brew>/bin/fish` there when fish can't become the login shell without sudo.
 
 ## herdr
 

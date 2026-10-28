@@ -4,18 +4,9 @@
 # Run once after cloning this repo. Safe to re-run (most steps are idempotent).
 # =============================================================================
 
-printf "sudo password: "
-stty -echo
-read SUDO_PASSWORD
-stty echo
-printf "\n"
-
-# Validate the password up front so the script fails immediately if wrong.
-if ! echo "$SUDO_PASSWORD" | sudo -S true 2>/dev/null; then
-    echo "Incorrect password." >&2
-    exit 1
-fi
-echo "Password validated."
+# Runs without sudo. Steps that would need it print a "[skip] … needs sudo"
+# line instead, and Homebrew refuses anything that would prompt for it.
+export HOMEBREW_NO_SUDO=1
 
 # -----------------------------------------------------------------------------
 # Approvals
@@ -45,20 +36,37 @@ approved() {
 
 # -----------------------------------------------------------------------------
 # Homebrew
-# Install if missing, then upgrade everything that's already installed.
-# The arm64 prefix is /opt/homebrew; shellenv wires up PATH/MANPATH/etc.
+# Installs into ~/hb, since the default /opt/homebrew needs sudo to create.
+# The installer caps the prefix at /opt/homebrew's 13 bytes, which /Users/tim/hb
+# just fits. Older machines keep /opt/homebrew, so put whichever exists on PATH
+# first; shellenv wires up PATH/MANPATH/HOMEBREW_PREFIX.
 # -----------------------------------------------------------------------------
-if approved homebrew "Install Homebrew and upgrade installed packages?"; then
-    if ! brew --version > /dev/null 2>&1; then
-        echo "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    else
-        echo "Homebrew already installed."
+for _prefix in /opt/homebrew "$HOME/hb"; do
+    if [ -x "$_prefix/bin/brew" ]; then
+        eval "$("$_prefix/bin/brew" shellenv)"
+        break
     fi
-    echo "Upgrading Homebrew packages..."
-    brew upgrade
+done
+
+if approved homebrew "Install Homebrew and upgrade installed packages?"; then
+    if brew --version > /dev/null 2>&1; then
+        echo "Homebrew already installed, upgrading packages..."
+        brew upgrade
+    elif ! xcode-select -p > /dev/null 2>&1; then
+        # The installer needs git from the Command Line Tools, and only installs
+        # them itself with sudo. This opens Apple's installer dialog instead.
+        xcode-select --install
+        echo "  [skip] Homebrew — install the Command Line Tools in the dialog, then rerun setup.sh"
+    else
+        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" -- --path="$HOME/hb"
+        # Checked by result, since a failed download still exits 0 (bash -c "").
+        if [ -x "$HOME/hb/bin/brew" ]; then
+            echo 'eval "$($HOME/hb/bin/brew shellenv)"' >> $HOME/.zprofile
+            eval "$("$HOME/hb/bin/brew" shellenv)"
+        else
+            echo "Homebrew install failed; later sections that need it will fail too." >&2
+        fi
+    fi
 fi
 
 # -----------------------------------------------------------------------------
@@ -264,12 +272,20 @@ if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, 
             brew install --cask "$@"
         fi
     }
+    # .pkg casks run Apple's installer as root, so they're only reported.
+    pkg_cask() {
+        if brew list --cask "$1" > /dev/null 2>&1; then
+            echo "  [skip] $1 — already installed"
+        else
+            echo "  [skip] $1 — needs sudo"
+        fi
+    }
+    # mas needs root to install App Store apps, so they're only reported too.
     mas_install() {
         if mas list | grep -q "^$1 "; then
             echo "  [skip] $2 — already installed"
         else
-            echo "  [install] $2"
-            echo "$SUDO_PASSWORD" | sudo -S mas install "$1"
+            echo "  [skip] $2 — needs sudo"
         fi
     }
 
@@ -288,15 +304,15 @@ if approved apps "Install and upgrade apps (Homebrew formulae/casks, App Store, 
     cask google-chrome
     cask 1password
     cask 1password-cli
-    cask microsoft-teams
-    cask microsoft-outlook
+    pkg_cask microsoft-teams
+    pkg_cask microsoft-outlook
     cask slack
     cask orbstack
     cask nikitabobko/tap/aerospace
     cask jordanbaird-ice
     cask claude-code
     cask ghostty
-    cask krisp
+    pkg_cask krisp
     cask linear-linear
     cask notion
     cask bruno
@@ -350,18 +366,25 @@ fi
 
 # -----------------------------------------------------------------------------
 # Fish shell
-# Add fish to /etc/shells so chsh accepts it, then make it the login shell.
+# Makes fish the login shell. chsh only accepts shells listed in /etc/shells,
+# and adding one there needs sudo, so when fish isn't listed Ghostty is pointed
+# at fish instead (through the gitignored ghostty/local include).
 # Checks fish exists first, since it's installed by the apps section and
 # chsh-ing to a missing binary would break login.
 # -----------------------------------------------------------------------------
 if approved shell "Make fish your login shell?"; then
-    if [ -x /opt/homebrew/bin/fish ]; then
-        echo "Adding fish to /etc/shells..."
-        echo "$SUDO_PASSWORD" | sudo -S sh -c 'echo /opt/homebrew/bin/fish | tee -a /etc/shells' 2>/dev/null
-        echo "Setting fish as login shell..."
-        echo "$SUDO_PASSWORD" | sudo -S chsh -s /opt/homebrew/bin/fish "$USER" 2>/dev/null
-    else
+    FISH="$HOMEBREW_PREFIX/bin/fish"
+    if [ ! -x "$FISH" ]; then
         echo "fish isn't installed (it comes from the apps section), leaving the login shell alone." >&2
+    elif [ "$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')" = "$FISH" ]; then
+        echo "  [skip] login shell — already fish"
+    elif grep -qx "$FISH" /etc/shells; then
+        echo "Setting fish as login shell..."
+        chsh -s "$FISH"
+    else
+        echo "  [skip] login shell — adding fish to /etc/shells needs sudo"
+        echo "Pointing Ghostty at fish instead..."
+        printf 'command = %s\n' "$FISH" > "$HOME/dots/ghostty/local"
     fi
 fi
 
@@ -554,7 +577,7 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
 
     # Set Firefox as the default browser (requires `brew install defaultbrowser`).
     echo "Setting Firefox as default browser..."
-    echo "$SUDO_PASSWORD" | sudo -S defaultbrowser firefox 2>/dev/null
+    defaultbrowser firefox
 
     # — Dictation ————————————————————————————————————————————————————————————————
     # Enable dictation triggered by pressing the Fn key.
@@ -578,5 +601,5 @@ fi
 printf "Reboot now? [y/N] "
 read REPLY < /dev/tty
 case "$REPLY" in
-    y|Y) echo "$SUDO_PASSWORD" | sudo -S reboot ;;
+    y|Y) osascript -e 'tell application "System Events" to restart' ;;
 esac

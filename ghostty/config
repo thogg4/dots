@@ -9,3 +9,6 @@ keybind = cmd+shift+up=unbind
 keybind = cmd+shift+down=unbind
 # cmd+k goes to herdr, which clears just the focused pane.
 keybind = cmd+k=unbind
+# Per-machine overrides written by setup.sh (e.g. `command` when fish
+# can't be the login shell). Optional and gitignored.
+config-file = ?local

@@ -8,9 +8,9 @@ Running `setup.sh` once on a clean machine will:
 
 - Install **Homebrew** and upgrade any existing packages
 - Install **rbenv**, the latest stable Ruby, and the `kamal` gem
-- Install CLI tools (fish, fzf, ripgrep, ag, nvim, mas, libpq, …) and GUI apps via Homebrew casks (Firefox, Ghostty, Slack, 1Password, OrbStack, Linear, Notion, Bruno, Postgres, Krisp, and more)
+- Install CLI tools (fish, fzf, ripgrep, ag, nvim, mas, libpq, …) and GUI apps via Homebrew casks (Firefox, Ghostty, Slack, 1Password, OrbStack, Linear, Notion, Bruno, Postgres, and more; `.pkg` casks like Krisp are skipped, see below)
 - Install Run.app (launcher) from the bundled `run/Run.dmg` — it's not on Homebrew
-- Install Mac App Store apps via `mas`
+- Check Mac App Store apps via `mas` (installing them needs sudo, so missing ones are only reported)
 - Symlink all configs into place (see below)
 - Apply a comprehensive set of `defaults write` settings for macOS (Dock, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
 - Set Firefox as the default browser
@@ -40,7 +40,12 @@ cd ~/dots
 ./setup.sh
 ```
 
-The script asks for your sudo password once at the start and validates it before proceeding. Most steps are idempotent — re-running is safe.
+The script never uses sudo. On a fresh machine Homebrew goes into `~/hb`, since the default `/opt/homebrew` needs sudo to create. If the Xcode Command Line Tools are missing, it opens Apple's installer for them and skips Homebrew until you rerun. Steps that need sudo print a `[skip] … needs sudo` line and move on:
+- App Store apps
+- `.pkg` casks (Teams, Outlook, Krisp)
+- adding fish to `/etc/shells`. When that's skipped, Ghostty launches fish through a gitignored `ghostty/local` instead, so fish isn't your login shell but every terminal opens in it.
+
+Most steps are idempotent — re-running is safe.
 
 The first time it runs, it asks before each section (Homebrew, Ruby, SSH key, config symlinks, apps, `gh` login, fish login shell, Sink, macOS preferences) and skips any you decline. Answers are saved to `.setup-approvals` (gitignored, one `section=yes|no` line each), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need apps), so only decline those on a machine that already has them.
 
