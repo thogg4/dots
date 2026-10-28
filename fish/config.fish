@@ -51,7 +51,15 @@ function ctags
 end
 
 if status --is-interactive
-  eval (/opt/homebrew/bin/brew shellenv)
+  # /opt/homebrew on older machines, ~/hb on ones set up without sudo
+  for prefix in /opt/homebrew ~/hb
+    if test -x $prefix/bin/brew
+      eval ($prefix/bin/brew shellenv)
+      # Ghostty may launch fish while the login shell is still zsh
+      set -gx SHELL $prefix/bin/fish
+      break
+    end
+  end
 end
 
 status --is-interactive; and rbenv init - --no-rehash fish | source
