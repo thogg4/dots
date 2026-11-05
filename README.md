@@ -8,9 +8,9 @@ Running `setup.sh` once on a clean machine will:
 
 - Install **Homebrew** and upgrade any existing packages
 - Install **rbenv**, the latest stable Ruby, and the `kamal` gem
-- Install CLI tools (fish, fzf, ripgrep, ag, nvim, mas, libpq, …) and GUI apps via Homebrew casks (Firefox, Ghostty, Slack, 1Password, OrbStack, Linear, Notion, Bruno, Postgres, and more; `.pkg` casks like Krisp are skipped, see below). You choose whether casks go in `~/Applications` or `/Applications`. The choice is set in `~/.homebrew/brew.env`, so later `brew install --cask` runs go there too. Changing it later doesn't move apps that are already installed. 1Password always goes in `/Applications`, since it won't launch anywhere else. It's skipped if `/Applications` isn't writable
-- Install Run.app (launcher) into the same apps folder from the bundled `run/Run.dmg` — it's not on Homebrew
-- Check Mac App Store apps via `mas` (installing them needs sudo, so missing ones are only reported)
+- Install CLI tools (fish, fzf, ripgrep, ag, nvim, mas, libpq, …) and GUI apps via Homebrew casks into `/Applications` (Firefox, Ghostty, Slack, 1Password, OrbStack, Linear, Notion, Bruno, Postgres, and more)
+- Install Run.app (launcher) into `/Applications` from the bundled `run/Run.dmg` — it's not on Homebrew
+- Install Mac App Store apps via `mas`
 - Symlink all configs into place (see below)
 - Apply a comprehensive set of `defaults write` settings for macOS (Dock with only the apps you approved and that are installed, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
 - Set Firefox as the default browser (if you approved Firefox and it's installed)
@@ -40,14 +40,11 @@ cd ~/dots
 ./setup.sh
 ```
 
-The script never uses sudo itself. On a fresh machine it asks whether Homebrew goes in `~/hb` or the default `/opt/homebrew`; for `/opt/homebrew`, Homebrew's installer asks for your password. `~/hb` needs no password, but Homebrew doesn't officially support it, and some packages (such as neovim, node and openssl) build from source there when `~/hb` is longer than `/opt/homebrew`. If the Xcode Command Line Tools are missing, it opens Apple's installer for them and skips Homebrew until you rerun. Steps that need sudo print a `[skip] … needs sudo` line and move on:
-- App Store apps
-- `.pkg` casks (Teams, Outlook, Krisp)
-- adding fish to `/etc/shells`. When that's skipped, Ghostty launches fish through a gitignored `ghostty/local` instead, so fish isn't your login shell but every terminal opens in it.
+The script asks for your sudo password once at the start and keeps it cached for the rest of the run (Homebrew's installer, `.pkg` casks like Krisp, App Store apps, and adding fish to `/etc/shells` need it). Homebrew goes in `/opt/homebrew`.
 
 Most steps are idempotent — re-running is safe.
 
-The first time it runs, it asks whether apps go in `~/Applications` or `/Applications`, then before each section (Homebrew, Ruby, SSH key, config symlinks, CLI tools, `gh` login, fish login shell, Sink, macOS preferences) and before each GUI app (Firefox, Slack, Run, Xcode, Plannotator, …), and skips any you decline. A declined app is also left out of the Dock and login items, and so is an approved one that isn't installed (like a `.pkg` cask skipped for sudo). Answers are saved to `.setup-approvals` (gitignored, one `key=yes|no` line each, `app_<name>` for apps; `home_applications=yes` means `~/Applications`, `home_homebrew=yes` means `~/hb`), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need CLI tools), so only decline those on a machine that already has them.
+The first time it runs, it asks before each section (Homebrew, Ruby, SSH key, config symlinks, CLI tools, `gh` login, fish login shell, Sink, macOS preferences) and before each GUI app (Firefox, Slack, Run, Xcode, Plannotator, …), and skips any you decline. A declined app is also left out of the Dock and login items, and so is an approved one that isn't installed (like one whose install failed). Answers are saved to `.setup-approvals` (gitignored, one `key=yes|no` line each, `app_<name>` for apps), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need CLI tools), so only decline those on a machine that already has them.
 
 ## Key tools and their configs
 
