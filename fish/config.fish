@@ -52,17 +52,9 @@ function ctags
 end
 
 if status --is-interactive
-  # /opt/homebrew or ~/hb, whichever setup.sh installed
-  for prefix in /opt/homebrew ~/hb
-    if test -x $prefix/bin/brew
-      eval ($prefix/bin/brew shellenv)
-      # psql and friends; libpq is keg-only so brew doesn't link it
-      fish_add_path --path $prefix/opt/libpq/bin
-      # Ghostty may launch fish while the login shell is still zsh
-      set -gx SHELL $prefix/bin/fish
-      break
-    end
-  end
+  eval (/opt/homebrew/bin/brew shellenv)
+  # psql and friends; libpq is keg-only so brew doesn't link it
+  fish_add_path --path /opt/homebrew/opt/libpq/bin
 end
 
 status --is-interactive; and rbenv init - --no-rehash fish | source

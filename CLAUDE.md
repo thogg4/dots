@@ -8,9 +8,7 @@ A macOS dotfiles repo. Running `setup.sh` does a full machine bootstrap: install
 
 Each section of `setup.sh` (homebrew, ruby, ssh, symlinks, gh, shell, sink, macos) is wrapped in `if approved <key> "<question>"; then`, which asks once and saves the answer to the gitignored `.setup-approvals` (`key=yes|no` lines), so re-runs don't prompt. Wrap any new section the same way. In the apps section, CLI tools share one `cli_tools` approval (they include `mas` and `claude`, so steps that need those print a skip without it) and every GUI app has its own `app_<name>` one (the name lowercased, spaces as `_`). In the macos section, `dock_app app_<name> Name` and `login_item app_<name> Name` (and making Firefox the default browser) go through `has_app`, so an app is only added when it was approved and is on disk. `dock_path`/`login_path` take a raw path and are only for system apps like Mail. Give a new app its own approval and add it with `dock_app`/`login_item`.
 
-`setup.sh` never uses sudo itself (it exports `HOMEBREW_NO_SUDO=1`); a step that would need it prints `  [skip] <name> — needs sudo` instead. Homebrew is `/opt/homebrew` or `~/hb`, asked once at install (`home_homebrew=yes` means `~/hb`), so don't hardcode either. The one password prompt is Homebrew's own installer when `/opt/homebrew` is chosen; the Homebrew section's comments explain why `~/hb` is a git clone. In `setup.sh` use `$HOMEBREW_PREFIX`; `fish/config.fish` and the sink plist templates check both.
-
-Apps go in `$APPDIR`. setup.sh asks once whether that's `~/Applications` (`home_applications=yes`) or `/Applications` (`no`). Right after that choice, setup.sh sets the `HOMEBREW_CASK_OPTS=--appdir=$APPDIR` line (expanded) in `~/.homebrew/brew.env`, so every cask install lands there. 1Password is the exception (`--appdir=/Applications`, skipped without write access), since it won't launch anywhere else. `.pkg` casks and App Store apps always land in `/Applications`. `dock_app`/`login_item` find the app with `app_path Name` (use it for any other app path too). It returns `$APPDIR/Name.app` when the app is there and `/Applications/Name.app` otherwise, so apps installed before the choice still resolve.
+`setup.sh` asks for the sudo password once at the top (`sudo -v`) and a background loop keeps the ticket alive until it exits, so steps that need root just call `sudo` (`mas install`, `/etc/shells`, `chsh`; Homebrew's installer and `.pkg` casks reuse the ticket). Homebrew is `/opt/homebrew` and apps are `/Applications`.
 
 ## How configs are applied
 
@@ -29,7 +27,7 @@ Current symlinks:
 - `gitconfig` → `~/.gitconfig`
 - `gitmessage` → `~/.gitmessage`
 - `herdr/config.toml` → `~/.config/herdr/config.toml` (only the file; the rest of `~/.config/herdr` is sockets, logs, and session state)
-- `run/config` → `~/.config/run/config`, `run/urls` → `~/.config/run/urls` (Run.app's config and saved urls; `run/Run.dmg` is installed to `$APPDIR` by `setup.sh` since it's not on Homebrew; `history` is per-machine runtime state and isn't tracked)
+- `run/config` → `~/.config/run/config`, `run/urls` → `~/.config/run/urls` (Run.app's config and saved urls; `run/Run.dmg` is installed to `/Applications` by `setup.sh` since it's not on Homebrew; `history` is per-machine runtime state and isn't tracked)
 
 ## Neovim architecture
 
@@ -58,7 +56,7 @@ LSP servers are managed by Mason and auto-installed: `ruby-lsp`, `typescript-lan
 
 ## Ghostty terminal
 
-Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor. It ends with `config-file = ?local`, an optional gitignored `ghostty/local` for per-machine settings. `setup.sh` writes `command = <brew>/bin/fish` there when fish can't become the login shell without sudo.
+Config at `ghostty/config`. Theme: `TokyoNight Night`. Background opacity 0.85, non-blinking block cursor.
 
 ## herdr
 

@@ -4,10 +4,13 @@
 # Run once after cloning this repo. Safe to re-run (most steps are idempotent).
 # =============================================================================
 
-# Runs without sudo. Steps that would need it print a "[skip] … needs sudo"
-# line instead, and Homebrew refuses anything that would prompt for it. The one
-# password prompt is Homebrew's own installer, if you put it in /opt/homebrew.
-export HOMEBREW_NO_SUDO=1
+# Ask for the sudo password once, then keep the cached ticket alive until the
+# script exits, so Homebrew, .pkg casks, mas, and /etc/shells don't ask again.
+# On exit, stop the loop and drop the ticket so nothing else inherits root.
+sudo -v || exit 1
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDO_KEEPALIVE=$!
+trap 'kill "$SUDO_KEEPALIVE" 2>/dev/null; sudo -k' EXIT
 
 # -----------------------------------------------------------------------------
 # Approvals
@@ -39,80 +42,27 @@ approved() {
 }
 
 # -----------------------------------------------------------------------------
-# App location
-# Where Homebrew casks and Run.app go (also written to brew.env for casks);
-# the apps and macos sections use $APPDIR.
-# app_path finds an app there, falling back to /Applications for .pkg and App
-# Store apps, and for casks installed before ~/Applications was chosen.
-# -----------------------------------------------------------------------------
-if approved home_applications "Install apps into ~/Applications instead of /Applications?"; then
-    APPDIR="$HOME/Applications"
-else
-    APPDIR=/Applications
-fi
-echo "Apps go in $APPDIR."
-app_path() {
-    if [ -d "$APPDIR/$1.app" ]; then
-        echo "$APPDIR/$1.app"
-    else
-        echo "/Applications/$1.app"
-    fi
-}
-
-# brew.env makes every cask install use $APPDIR, including ones run by hand
-# later. It can't expand variables, so the path is written out. Only that
-# line is replaced, keeping any other settings. Casks installed before this
-# keep their old location.
-echo "Pointing Homebrew casks at $APPDIR..."
-BREW_ENV="$HOME/.homebrew/brew.env"
-mkdir -p "$HOME/.homebrew"
-{ grep -v '^HOMEBREW_CASK_OPTS=' "$BREW_ENV" 2>/dev/null; echo "HOMEBREW_CASK_OPTS=--appdir=$APPDIR"; } > "$BREW_ENV.tmp"
-mv "$BREW_ENV.tmp" "$BREW_ENV"
-
-# -----------------------------------------------------------------------------
 # Homebrew
-# Goes in /opt/homebrew or ~/hb, asked once at install. ~/hb is a git clone,
-# since the installer caps the prefix at /opt/homebrew's 13 bytes. Past that
-# length bottles built for /opt/homebrew compile from source and brew doctor
-# calls the setup unsupported (Tier 3). Put whichever exists on PATH first;
-# shellenv wires up PATH/MANPATH/HOMEBREW_PREFIX.
+# Install if missing, then upgrade everything that's already installed.
+# The arm64 prefix is /opt/homebrew; shellenv wires up PATH/MANPATH/etc.
 # -----------------------------------------------------------------------------
-for _prefix in /opt/homebrew "$HOME/hb"; do
-    if [ -x "$_prefix/bin/brew" ]; then
-        eval "$("$_prefix/bin/brew" shellenv)"
-        break
-    fi
-done
+if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 if approved homebrew "Install Homebrew and upgrade installed packages?"; then
     if brew --version > /dev/null 2>&1; then
         echo "Homebrew already installed, upgrading packages..."
         brew upgrade
-    elif ! xcode-select -p > /dev/null 2>&1; then
-        # Both installs need git from the Command Line Tools, and the installer
-        # only installs them itself with sudo. This opens Apple's dialog instead.
-        xcode-select --install
-        echo "  [skip] Homebrew — install the Command Line Tools in the dialog, then rerun setup.sh"
     else
-        if approved home_homebrew "Install Homebrew into ~/hb instead of /opt/homebrew?"; then
-            _prefix="$HOME/hb"
-            echo "Cloning Homebrew into $_prefix..."
-            git clone https://github.com/Homebrew/brew "$_prefix" &&
-                "$_prefix/bin/brew" update --force --quiet
-        else
-            _prefix=/opt/homebrew
-            echo "Installing Homebrew into $_prefix (the installer asks for your password)..."
-            # The installer only asks for the password with HOMEBREW_NO_SUDO
-            # unset and a TTY on stdin.
-            env -u HOMEBREW_NO_SUDO /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/tty
-        fi
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" < /dev/tty
         # Checked by result, since a failed download still exits 0 (bash -c "").
-        if [ -x "$_prefix/bin/brew" ]; then
-            echo "eval \"\$($_prefix/bin/brew shellenv)\"" >> "$HOME/.zprofile"
-            eval "$("$_prefix/bin/brew" shellenv)"
+        if [ -x /opt/homebrew/bin/brew ]; then
+            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zprofile"
+            eval "$(/opt/homebrew/bin/brew shellenv)"
         else
-            echo "Homebrew install into $_prefix failed; later sections that need it will fail too." >&2
-            echo "Rerun to try again, or delete the home_homebrew line from $APPROVALS to pick the other location (/opt/homebrew needs an admin account)." >&2
+            echo "Homebrew install failed; later sections that need it will fail too." >&2
         fi
     fi
 fi
@@ -155,11 +105,11 @@ if approved ruby "Install rbenv, the latest Ruby, and the kamal gem?"; then
 fi
 
 # -----------------------------------------------------------------------------
-# Base directories (config, Claude, SSH, work, and the apps folder)
+# Base directories (config, Claude, SSH, work)
 # mkdir is intentionally without -p so it fails loudly if something unexpected
 # is already at that path (e.g. a file instead of a directory).
 # -----------------------------------------------------------------------------
-for dir in "$HOME/.config" "$HOME/.claude" "$HOME/.ssh" "$HOME/work" "$APPDIR"; do
+for dir in "$HOME/.config" "$HOME/.claude" "$HOME/.ssh" "$HOME/work"; do
     if [ -d "$dir" ]; then
         echo "$dir already exists, skipping."
     else
@@ -296,22 +246,16 @@ cask() {
         brew install --cask "$@"
     fi
 }
-# .pkg casks run Apple's installer as root, so they're only reported.
-pkg_cask() {
-    if brew list --cask "$1" > /dev/null 2>&1; then
-        echo "  [skip] $1 — already installed"
-    else
-        echo "  [skip] $1 — needs sudo"
-    fi
-}
-# mas needs root to install App Store apps, so they're only reported too.
+# mas needs root to install App Store apps.
 mas_install() {
     if ! command -v mas > /dev/null; then
         echo "  [skip] $2 — mas isn't installed (it comes with the CLI tools)"
-    elif mas list | grep -q "^$1 "; then
+    # mas list right-aligns IDs, so shorter ones have leading spaces.
+    elif mas list | grep -q "^ *$1 "; then
         echo "  [skip] $2 — already installed"
     else
-        echo "  [skip] $2 — needs sudo"
+        echo "  [install] $2"
+        sudo mas install "$1"
     fi
 }
 
@@ -351,14 +295,14 @@ fi
 # — Run (https://github.com/thogg4/run) —————————————————————————————————————————
 # Not distributed via Homebrew, so it's installed from a bundled .dmg instead.
 if approved app_run "Install Run.app?"; then
-    if [ -d "$(app_path Run)" ]; then
+    if [ -d /Applications/Run.app ]; then
         echo "  [skip] Run.app — already installed"
     else
         echo "  [install] Run.app"
         RUN_MOUNT="$(mktemp -d)"
         rmdir "$RUN_MOUNT"
         hdiutil attach "$HOME/dots/run/Run.dmg" -nobrowse -readonly -noverify -quiet -mountpoint "$RUN_MOUNT"
-        cp -R "$RUN_MOUNT/Run.app" "$APPDIR/"
+        cp -R "$RUN_MOUNT/Run.app" /Applications/
         hdiutil detach "$RUN_MOUNT" -quiet
     fi
 fi
@@ -370,22 +314,15 @@ fi
 approved app_discord "Install Discord?" && cask discord
 approved app_firefox "Install Firefox?" && cask firefox
 approved app_google_chrome "Install Google Chrome?" && cask google-chrome
-# 1Password won't launch from anywhere but /Applications.
-if approved app_1password "Install 1Password?"; then
-    if [ -w /Applications ]; then
-        cask 1password --appdir=/Applications
-    else
-        echo "  [skip] 1password — needs sudo"
-    fi
-fi
-approved app_microsoft_teams "Install Microsoft Teams?" && pkg_cask microsoft-teams
-approved app_microsoft_outlook "Install Microsoft Outlook?" && pkg_cask microsoft-outlook
+approved app_1password "Install 1Password?" && cask 1password
+approved app_microsoft_teams "Install Microsoft Teams?" && cask microsoft-teams
+approved app_microsoft_outlook "Install Microsoft Outlook?" && cask microsoft-outlook
 approved app_slack "Install Slack?" && cask slack
 approved app_orbstack "Install OrbStack?" && cask orbstack
 approved app_aerospace "Install AeroSpace?" && cask nikitabobko/tap/aerospace
 approved app_ice "Install Ice?" && cask jordanbaird-ice
 approved app_ghostty "Install Ghostty?" && cask ghostty
-approved app_krisp "Install Krisp?" && pkg_cask krisp
+approved app_krisp "Install Krisp?" && cask krisp
 approved app_linear "Install Linear?" && cask linear-linear
 approved app_notion "Install Notion?" && cask notion
 approved app_bruno "Install Bruno?" && cask bruno
@@ -395,7 +332,7 @@ approved app_postgres "Install Postgres.app?" && cask postgres-unofficial
 approved app_bear "Install Bear (App Store)?" && mas_install 1091189122 "Bear"
 if approved app_xcode "Install Xcode (App Store) and add its MCP server to Claude Code?"; then
     mas_install 497799835 "Xcode"
-    if [ ! -d "$(app_path Xcode)" ]; then
+    if [ ! -d /Applications/Xcode.app ]; then
         echo "  [skip] Xcode MCP — Xcode isn't installed"
     elif ! command -v claude > /dev/null; then
         echo "  [skip] Xcode MCP — claude isn't installed (it comes with the CLI tools)"
@@ -442,25 +379,27 @@ fi
 
 # -----------------------------------------------------------------------------
 # Fish shell
-# Makes fish the login shell. chsh only accepts shells listed in /etc/shells,
-# and adding one there needs sudo, so when fish isn't listed Ghostty is pointed
-# at fish instead (through the gitignored ghostty/local include).
+# Add fish to /etc/shells so chsh accepts it, then make it the login shell.
 # Checks fish exists first, since it's installed with the apps section's CLI tools and
 # chsh-ing to a missing binary would break login.
 # -----------------------------------------------------------------------------
 if approved shell "Make fish your login shell?"; then
-    FISH="$HOMEBREW_PREFIX/bin/fish"
+    FISH=/opt/homebrew/bin/fish
     if [ ! -x "$FISH" ]; then
         echo "fish isn't installed (it comes with the CLI tools in the apps section), leaving the login shell alone." >&2
     elif [ "$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')" = "$FISH" ]; then
         echo "  [skip] login shell — already fish"
-    elif grep -qx "$FISH" /etc/shells; then
-        echo "Setting fish as login shell..."
-        chsh -s "$FISH"
     else
-        echo "  [skip] login shell — adding fish to /etc/shells needs sudo"
-        echo "Pointing Ghostty at fish instead..."
-        printf 'command = %s\n' "$FISH" > "$HOME/dots/ghostty/local"
+        if ! grep -qx "$FISH" /etc/shells; then
+            echo "Adding fish to /etc/shells..."
+            echo "$FISH" | sudo tee -a /etc/shells > /dev/null
+        fi
+        if grep -qx "$FISH" /etc/shells; then
+            echo "Setting fish as login shell..."
+            sudo chsh -s "$FISH" "$USER"
+        else
+            echo "Couldn't add fish to /etc/shells, leaving the login shell alone." >&2
+        fi
     fi
 fi
 
@@ -583,7 +522,7 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
             echo "  [skip] $2 — not approved"
             return 1
         fi
-        [ -d "$(app_path "$2")" ] && return
+        [ -d "/Applications/$2.app" ] && return
         echo "  [skip] $2 — not installed"
         return 1
     }
@@ -593,7 +532,7 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
         defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file://$1/</string><key>_CFURLStringType</key><integer>15</integer></dict></dict></dict>"
     }
     dock_app() {
-        has_app "$1" "$2" && dock_path "$(app_path "$2")"
+        has_app "$1" "$2" && dock_path "/Applications/$2.app"
     }
     dock_app app_bear Bear
     dock_app app_linear Linear
@@ -604,8 +543,7 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
     dock_path "/System/Applications/Messages.app"
     dock_app app_slack Slack
 
-    # Dock stacks: Downloads folder and /Applications as right-side tiles
-    # (/Applications even when apps go in ~/Applications, by choice).
+    # Dock stacks: Downloads folder and /Applications as right-side tiles.
     defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>arrangement</key><integer>3</integer><key>file-data</key><dict><key>_CFURLString</key><string>file://${HOME}/Downloads/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
     defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-type</key><string>directory-tile</string><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>file:///Applications/</string><key>_CFURLStringType</key><integer>15</integer></dict><key>showas</key><integer>2</integer></dict></dict>"
 
@@ -624,7 +562,7 @@ if approved macos "Apply macOS preferences (defaults, Dock, login items, default
         osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"$1\", hidden:false}"
     }
     login_item() {
-        has_app "$1" "$2" && login_path "$(app_path "$2")"
+        has_app "$1" "$2" && login_path "/Applications/$2.app"
     }
     login_item app_firefox Firefox
     login_path "/System/Applications/Messages.app"
