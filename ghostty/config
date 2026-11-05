@@ -11,3 +11,5 @@ keybind = cmd+shift+down=unbind
 keybind = cmd+k=unbind
 # cmd+t goes to herdr, which opens a new tab.
 keybind = cmd+t=unbind
+# cmd+w goes to herdr, which closes the active tab.
+keybind = cmd+w=unbind
