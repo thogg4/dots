@@ -11,6 +11,3 @@
 
 claude/skills/synced
 claude/skills/.trash
-
-# setup.sh remembers per-machine section approvals here.
-/.setup-approvals

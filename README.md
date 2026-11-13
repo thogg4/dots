@@ -12,10 +12,10 @@ Running `setup.sh` once on a clean machine will:
 - Install Run.app (launcher) into `/Applications` from the bundled `run/Run.dmg` — it's not on Homebrew
 - Install Mac App Store apps via `mas`
 - Symlink all configs into place (see below)
-- Apply a comprehensive set of `defaults write` settings for macOS (Dock with only the apps you approved and that are installed, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
-- Set Firefox as the default browser (if you approved Firefox and it's installed)
+- Apply a comprehensive set of `defaults write` settings for macOS (Dock with only the apps that are installed, Finder, keyboard, trackpad, screenshots, Bluetooth audio, Spotlight, Dictation, menu bar clock)
+- Set Firefox as the default browser (if it's installed)
 - Set the desktop wallpaper
-- Configure login items. Like the Dock, they only include apps you approved and that are installed
+- Configure login items. Like the Dock, they only include apps that are installed
 
 ## Configs managed here
 
@@ -40,11 +40,11 @@ cd ~/dots
 ./setup.sh
 ```
 
-The script asks for your sudo password once at the start and keeps it cached for the rest of the run (Homebrew's installer, `.pkg` casks like Krisp, App Store apps, and adding fish to `/etc/shells` need it). Homebrew goes in `/opt/homebrew`.
+The script asks for your sudo password once at the start (Homebrew's installer, `.pkg` casks like Krisp, App Store apps, and adding fish to `/etc/shells` need it). Homebrew resets sudo's cached login whenever a `brew` command first needs root, so instead of relying on that cache the script hands sudo the password through a `SUDO_ASKPASS` helper. The password sits in a private temp file and is deleted as soon as the last step that needs root is done. Homebrew goes in `/opt/homebrew`.
 
-Most steps are idempotent — re-running is safe.
+Every section and app runs, with no per-step questions. The only other prompts are the SSH key passphrase, the `gh` login, and whether to reboot at the end.
 
-The first time it runs, it asks before each section (Homebrew, Ruby, SSH key, config symlinks, CLI tools, `gh` login, fish login shell, Sink, macOS preferences) and before each GUI app (Firefox, Slack, Run, Xcode, Plannotator, …), and skips any you decline. A declined app is also left out of the Dock and login items, and so is an approved one that isn't installed (like one whose install failed). Answers are saved to `.setup-approvals` (gitignored, one `key=yes|no` line each, `app_<name>` for apps), so later runs don't ask again. Delete a line, or the whole file, to be asked again. Later sections rely on tools from earlier ones (most need Homebrew; `gh` login, the fish login shell and the macOS preferences need CLI tools), so only decline those on a machine that already has them.
+Most steps are idempotent — re-running is safe. A re-run re-applies everything, including rebuilding the Dock and login items.
 
 ## Key tools and their configs
 
