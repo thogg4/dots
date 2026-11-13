@@ -14,7 +14,9 @@
     "ruby-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
     "plannotator@plannotator": true,
-    "dev-workflow@deseretbook": true
+    "dev-workflow@deseretbook": false,
+    "cycle-retro@deseretbook": true,
+    "field-guide@deseretbook": true
   },
   "extraKnownMarketplaces": {
     "deseretbook": {
