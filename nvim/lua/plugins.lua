@@ -671,8 +671,8 @@ require("lazy").setup({
     "coder/claudecode.nvim",
     lazy = false, -- load at startup so the pane can auto-open
     keys = {
-      { "<C-Y>", "<cmd>ClaudeCode<CR>", mode = { "n", "t" }, desc = "Toggle Claude Code pane" },
-      { "<Leader>as", "<cmd>ClaudeCodeSend<CR>", mode = "v", desc = "Send selection to Claude" },
+      { "<C-Y>",      "<cmd>ClaudeCode<CR>",     mode = { "n", "t" }, desc = "Toggle Claude Code pane" },
+      { "<Leader>as", "<cmd>ClaudeCodeSend<CR>", mode = "v",          desc = "Send selection to Claude" },
     },
     opts = {
       -- acceptEdits auto-applies Claude's file edits without a prompt; other
@@ -690,20 +690,20 @@ require("lazy").setup({
       -- Auto-open the Claude pane on startup, keeping focus in the editor.
       -- Skipped when there's no UI (headless) and for one-shot editor uses
       -- like git commit messages, where a Claude session is unwanted noise.
-      vim.api.nvim_create_autocmd("VimEnter", {
-        callback = function()
-          if #vim.api.nvim_list_uis() == 0 then return end
-          local first_arg = vim.fn.argv(0) or ""
-          if first_arg:match("COMMIT_EDITMSG") or first_arg:match("git%-rebase%-todo") then return end
-          vim.cmd("ClaudeCode")
-          vim.cmd.wincmd("p")
-          -- Opening focuses the terminal and queues insert mode; cancel it
-          -- both ways (pending startinsert + scheduled callback) so nvim
-          -- starts in normal mode in the editor window.
-          vim.cmd.stopinsert()
-          vim.schedule(vim.cmd.stopinsert)
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("VimEnter", {
+      --   callback = function()
+      --     if #vim.api.nvim_list_uis() == 0 then return end
+      --     local first_arg = vim.fn.argv(0) or ""
+      --     if first_arg:match("COMMIT_EDITMSG") or first_arg:match("git%-rebase%-todo") then return end
+      --     vim.cmd("ClaudeCode")
+      --     vim.cmd.wincmd("p")
+      --     -- Opening focuses the terminal and queues insert mode; cancel it
+      --     -- both ways (pending startinsert + scheduled callback) so nvim
+      --     -- starts in normal mode in the editor window.
+      --     vim.cmd.stopinsert()
+      --     vim.schedule(vim.cmd.stopinsert)
+      --   end,
+      -- })
     end,
   },
 
