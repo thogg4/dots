@@ -19,7 +19,7 @@ RSpec.describe Sink::Manifest do
   end
 
   def scan
-    described_class.new({ 'notes' => @root }, @state_dir).scan
+    Sink::Manifest.new({ 'notes' => @root }, @state_dir).scan
   end
 
   describe '#scan' do
@@ -35,46 +35,41 @@ RSpec.describe Sink::Manifest do
       end
     end
 
-    context 'when the sync dir contains the hidden tombstone file' do
-      it 'excludes it from the listed files' do
-        write_file('a.txt')
-        File.write(File.join(@root, Sink::Manifest::TOMBSTONE_FILENAME), '{}')
-
-        expect(scan.dirs['notes'].map(&:rel_path)).to eq(['a.txt'])
-      end
-    end
-
     context 'when a file present in a previous scan has since been deleted from disk' do
-      it 'records a tombstone for it and persists it to the hidden tombstone file in the sync dir' do
+      it 'records a tombstone for it that later scans still report' do
         write_file('a.txt')
         scan # establishes the previous-state snapshot
 
         File.delete(File.join(@root, 'a.txt'))
-        result = scan
 
-        expect(result.tombstones['notes']).to have_key('a.txt')
+        after_delete = scan
+        later        = scan
 
-        on_disk = JSON.parse(File.read(File.join(@root, Sink::Manifest::TOMBSTONE_FILENAME)))
-        expect(on_disk).to have_key('a.txt')
+        expect(after_delete.tombstones['notes'].map(&:rel_path)).to eq(['a.txt'])
+        expect(later.tombstones['notes'].map(&:rel_path)).to eq(['a.txt'])
       end
     end
 
-    context 'when the hidden tombstone file already has entries on disk' do
-      it 'loads them into tombstones without needing a prior scan' do
-        File.write(File.join(@root, Sink::Manifest::TOMBSTONE_FILENAME), JSON.generate('old.txt' => 123.0))
+    context 'when a tombstone was recorded for the dir before any scan' do
+      it 'includes it in tombstones' do
+        Sink::Manifest.record_tombstone(@state_dir, 'notes', 'old.txt', 123.0)
 
-        expect(scan.tombstones['notes']).to eq('old.txt' => 123.0)
+        expect(scan.tombstones['notes']).to eq([Sink::Manifest::Tombstone.new(rel_path: 'old.txt', deleted_at: 123.0)])
       end
     end
   end
 
   describe '.to_json / .from_json' do
-    it 'round-trips file entries without carrying tombstones over the wire' do
+    it 'round-trips file entries and tombstones' do
       write_file('a.txt', 'hello')
+      write_file('b.txt')
+      scan # establishes the previous-state snapshot
+      File.delete(File.join(@root, 'b.txt'))
 
-      round_tripped = described_class.from_json(scan.to_json)
+      round_tripped = Sink::Manifest.from_json(scan.to_json)
 
       expect(round_tripped.dirs['notes'].map(&:rel_path)).to eq(['a.txt'])
+      expect(round_tripped.tombstones['notes'].map(&:rel_path)).to eq(['b.txt'])
     end
   end
 end

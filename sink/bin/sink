@@ -16,7 +16,7 @@ else
     sink — directory sync daemon
 
     Usage:
-      sink server     Start the sync server (managed by launchd)
+      sink server     Start the sync server
       sink sync       Push local changes to known peers (fast tier)
       sink reconcile  Full two-way sync with all known peers (safety-net tier)
       sink status     Show cached peers
