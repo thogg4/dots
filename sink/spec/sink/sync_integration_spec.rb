@@ -69,12 +69,8 @@ RSpec.describe 'sink sync' do
     File.write(abs, content)
   end
 
-  def tombstones_on_disk(root)
-    JSON.parse(File.read(File.join(root, Sink::Manifest::TOMBSTONE_FILENAME)))
-  end
-
   describe 'deleting a file on one peer' do
-    it 'deletes it on the other peer and converges both hidden tombstone files' do
+    it 'deletes it on the other peer and records the tombstone there too' do
       start_peers
       write_file(@a_root, 'a.txt')
       sync_as(@a_config) # b now has a.txt too
@@ -84,8 +80,9 @@ RSpec.describe 'sink sync' do
       sync_as(@a_config) # a detects + records the deletion, pushes it to b
 
       expect(File.exist?(File.join(@b_root, 'a.txt'))).to be false
-      expect(tombstones_on_disk(@a_root)).to have_key('a.txt')
-      expect(tombstones_on_disk(@b_root)).to have_key('a.txt')
+
+      b_tombstones = Sink::Manifest.new({ 'notes' => @b_root }, @b_state).scan.tombstones['notes']
+      expect(b_tombstones.map(&:rel_path)).to include('a.txt')
     end
   end
 

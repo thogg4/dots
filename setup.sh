@@ -408,10 +408,14 @@ sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.client.plist.tem
   > $HOME/Library/LaunchAgents/com.sink.client.plist
 sed "s|__HOME__|$HOME|g" $HOME/dots/sink/launch_agents/com.sink.reconcile.plist.template \
   > $HOME/Library/LaunchAgents/com.sink.reconcile.plist
-launchctl load -w $HOME/Library/LaunchAgents/com.sink.server.plist 2>/dev/null || true
+# The server is installed but stopped and disabled so it never starts on its own. To run it:
+#   launchctl enable gui/$(id -u)/com.sink.server
+#   launchctl load ~/Library/LaunchAgents/com.sink.server.plist
+launchctl bootout "gui/$(id -u)/com.sink.server" 2>/dev/null || true
+launchctl disable "gui/$(id -u)/com.sink.server"
 launchctl load -w $HOME/Library/LaunchAgents/com.sink.client.plist 2>/dev/null || true
 launchctl load -w $HOME/Library/LaunchAgents/com.sink.reconcile.plist 2>/dev/null || true
-echo "Sink loaded. Edit ~/.config/sink/config.yml to add sync_dirs."
+echo "Sink client and reconcile loaded; server disabled. Edit ~/.config/sink/config.yml to add sync_dirs."
 
 # -----------------------------------------------------------------------------
 # macOS System Preferences — close the GUI so defaults writes take effect
